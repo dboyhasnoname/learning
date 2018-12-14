@@ -272,8 +272,168 @@ false: n
 string: '12345
 ```
 
+## YAML – Full Length Example 
+
+```
+defaults: &defaults
+ adapter: mongodb
+ host: localhost
+development:
+ database: personal_app_aws
+ <<: *defaults
+test:
+ database: myapp_aws
+ <<: *defaults
+ ```
+
+The above yaml converted to JSON.
+
+```
+{
+    "defaults": {
+        "adapter": "mongodb",
+        "host": "localhost"
+    },
+    "development": {
+        "database": "personal_app_aws",
+        "adapter": "postgres",
+        "host": "localhost"
+    },
+    "test": {
+        "database": "myapp_aws",
+        "adapter": "mongodb",
+        "host": "localhost"
+    }
+}
+ ```
+
+ **The defaults key with a prefix of “ <<: *” is included as and when required with no need to write the same code snippet repeatedly.**
 
 
+## YAML – Processes 
+
+* YAML follows a standard procedure for Process flow. 
+* The native data structure in YAML includes simple representations such as nodes. It is also called as Representation Node Graph.
+* It includes **mapping**, **sequence** and **scalar** quantities which is being serialized to create a serialization tree.
+
+The processing of YAML information includes three stages: 
+1. Representation 
+   - sequence
+   - mapping
+   - scalar 
+2. Serialization,
+3. Presentation 
+4. Parsing.
+
+### Representation
+> **Sequence**
+
+Sequence refers to the ordered number of entries, which maps the unordered association of key value pair. 
+
+```
+product:
+    - sku : BL394D
+      quantity : 4
+      description : Vase
+      price : 4450.00
+    - sku : BL4438H
+      quantity : 1
+      description : Super Boot
+      price : 12392.00
+ ```
+
+ > **Mapping**
+
+represents dictionary data structure or hash table.
+
+```
+batchLimit: 1000
+threadCountLimit: 2
+key: value
+keyMapping: <What goes here?>
+```
+
+> **Scalars**
+
+represent standard values of strings, integers, dates and atomic data types. Note
+that YAML also includes nodes which specify the data type structure. For more information
+on scalars, please refer to the chapter 6 of this tutorial.
+
+### Serialization
+
+Serialization process is required in YAML that eases human friendly key order and anchor
+names. The result of serialization is a YAML serialization tree. It can be traversed to
+produce a series of event calls of YAML data.
+
+```
+consumer:
+  class: 'AppBundle\Entity\consumer'
+  attributes:
+    filters: ['customer.search', 'customer.order', 'customer.boolean']
+  collectionOperations:
+    get:
+      method: 'GET'
+        normalization_context:
+          groups: ['customer_list']
+  itemOperations:
+    get:
+      method: 'GET'
+      normalization_context:
+        groups: ['customer_get']
+ ```
+
+ ### Presentation
+
+* The final output of YAML serialization is called presentation.
+* It represents a character stream in a human friendly manner.
+* YAML processor includes various presentation details for creating stream, handling indentation and formatting content. 
+
+```
+{
+    "consumer": {
+    "class": "AppBundle\\Entity\\consumer",
+    "attributes": {
+        "filters": [
+            "customer.search",
+             "customer.order",
+             "customer.boolean"
+         ]
+    },
+    "collectionOperations": {
+         "get": {
+            "method": "GET",
+            "normalization_context": {
+                "groups": [
+                    "customer_list"
+                ]
+            }
+        }
+    },
+    "itemOperations": {
+        "get": {
+            "method": "GET",
+            "normalization_context": {
+                "groups": [
+                    "customer_get"
+                 ]
+            }
+        }
+    }
+  }
+}    
+ ```
+
+ ### Parsing
+
+* Parsing is the inverse process of presentation; it includes a stream of characters and
+creates a series of events. It discards the details introduced in the presentation process
+which causes serialization events.
+* Parsing procedure can fail due to ill-formed input.
+* It is basically a procedure to check whether YAML is well-formed or not.
+* YAML lint is the online parser of YAML and helps in parsing the YAML structure to check
+whether it is valid or not. 
+* The official link for YAML lint is mentioned below:
+http://www.yamllint.com/
 
 
 
