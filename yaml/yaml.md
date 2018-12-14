@@ -207,5 +207,74 @@ _The following example shows the mapping between sequences:_
 : [ 2001-07-02, 2001-08-12, 2001-08-14]
 ```
 
+## YAML – Scalars and Tags 
+
+* Scalars in YAML are written in block format using a literal type which is denoted as(|).
+* It denotes line breaks count. In YAML, scalars are written in folded style (>) where each line
+denotes a folded space which ends with an empty line or more indented line.
+
+The folded newlines are preserved for more indented lines and blank lines as shown below:
+
+```
+>
+Virat Kohli completed another
+fine season with great stats.
+1663 Home Runs
+93.288 Batting Average
+What a year!
+```
+
+* YAML flow scalars include plain styles and quoted styles. The double quoted style includes various escape sequences. Flow scalars can include multiple lines; line breaks are always folded in this structure
+
+```
+plain:
+This unquoted scalar
+spans many lines.
+quoted: "So does this
+quoted scalar.\n"
+```
+
+* In YAML, untagged nodes are specified with a specific type of the application. The examples
+of tags specification generally use **seq**, **map** and **str** types for YAML tag repository. The
+tags are represented as examples which are mentioned as below:
+
+### Integer tags
+
+These tags include integer values in them. They are also called as numeric tags.
+
+```
+canonical: 12345
+decimal: +12,345
+sexagecimal: 3:25:45
+octal: 014
+hexadecimal: 0xC
+```
+
+### Floating point numbers
+These tags include decimal and exponential values. They are also called as exponential tags.
+
+```
+canonical: 1.23015e+3
+exponential: 12.3015e+02
+sexagecimal: 20:30.15
+fixed: 1,230.15
+negative infinity: -.inf
+not a number: .NaN
+```
+
+### Miscellaneous Tags
+It includes a variety of integer, floating and string values embedded in them. Hence it is called miscellaneous tags.
+
+```
+null: ~
+true: y
+false: n
+string: '12345
+```
+
+
+
+
+
 
 
