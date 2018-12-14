@@ -321,7 +321,7 @@ The processing of YAML information includes three stages:
    - sequence
    - mapping
    - scalar 
-2. Serialization,
+2. Serialization
 3. Presentation 
 4. Parsing.
 
@@ -434,6 +434,58 @@ which causes serialization events.
 whether it is valid or not. 
 * The official link for YAML lint is mentioned below:
 http://www.yamllint.com/
+
+
+## Syntax Characters 
+
+```
+
+_  It denotes a block sequence entry
+?  It denotes a mapping key
+:  It denotes a mapping value
+,  It denotes flow collection entry
+[  It starts a flow sequence
+]  It ends a flow sequence
+{  It starts a flow mapping
+}  It ends a flow mapping
+#  It denotes the comments
+&  It denotes node’s anchor property
+*  It denotes alias node
+!  It denotes node’s tag
+|  It denotes a literal block scalar
+>  It denotes a folded block scalar
+‘  Single quote surrounds a quoted flow scalar
+“  Double quote surrounds double quoted flow scalar
+%  It denotes the directive used
+
+```
+_example_
+
+```
+%YAML 1.1
+---
+!!map {
+? !!str "sequence"
+: !!seq [
+!!str "one", !!str "two"
+],
+? !!str "mapping"
+: !!map {
+? !!str "sky" : !!str "blue",
+? !!str "sea" : !!str "green",
+}
+}
+# This represents
+# only comments.
+---
+!!map1 {
+? !!str "anchored"
+: !local &A1 "value",
+? !!str "alias"
+: *A1,
+}
+!!str "text"
+```
 
 
 
