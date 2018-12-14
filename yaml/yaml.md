@@ -70,8 +70,8 @@ _Example of Intended Block_
 invoice: 108
 date : 2051-01-23
 bill-to: &id001
-    given : Chris
-    family : Dumars
+    given : Baba 
+    family : bottleopenerwala
     address:
         lines: |
             458 Mumbai II.
@@ -127,3 +127,85 @@ Above example refers to the set of error messages which a user can user just by 
  Comments must not appear inside scalars.
  YAML does not include any way to escape the hash symbol (#) so within multi-line string so there is no way to divide the comment from the raw string value.
 ```
+
+## YAML – Collections and Structures 
+
+* YAML includes block collections which use indentation for scope. 
+* Here, each entry begins with a new line.
+* Block sequences in collections indicate each entry with a dash and space(-).
+* In YAML, block collections styles are not denoted by any specific indicator.
+* Block collection in YAML can distinguished from other scalar quantities with an identification of
+key value pair included in them.
+* Mappings are the representation of key value as included in JSON structure.
+* It is used often in multi-lingual support systems and creation of API in mobile applications.
+* Mappings use key value pair representation with the usage of colon and space (:).
+
+_Examples:_
+
+* example of sequence of scalars, for example a list of ball players 
+
+```
+- Mark Mehta
+- James Shama
+- Ken Gulati
+```
+
+* mapping scalars to scalars:
+
+```
+hr: 87
+avg: 0.298
+no_clue: 149
+```
+
+* mapping scalars to sequences:
+
+```
+Tamil_Nadu:
+- Smabhar
+- Idli
+- Vada
+national:
+- Khichdi
+- Gulab Jamun
+- Butter Chicken
+```
+
+* Collections can be used for sequence mapping
+
+```
+-
+name: Mark Mishra
+hr: 87
+avg: 0.278
+-
+name: James Pandey
+hr: 63
+avg: 0.288
+```
+
+
+* With collections, YAML includes flow styles using explicit indicators instead of using indentation to denote space.
+* The flow sequence in collections is written as comma separated list enclosed in square brackets.
+* The best illustration for collection which is included in PHP frameworks like symphony.
+
+` [Go, PHP, Python] `
+
+* These collections are stored in documents.
+* The separation of documents in YAML is denoted with three hyphens or dashes (---). 
+* The end of document is marked with three dots (…).
+
+* A question mark with a combination of space indicates a complex mapping in structure.
+* Within a block collection, a user can include structure with a dash, colon and question
+mark. 
+
+_The following example shows the mapping between sequences:_
+
+```
+- 2001-07-23
+? [ New Delhi Titans,Mumbai Braves ]
+: [ 2001-07-02, 2001-08-12, 2001-08-14]
+```
+
+
+
