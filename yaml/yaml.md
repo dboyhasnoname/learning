@@ -486,7 +486,11 @@ _example_
 }
 !!str "text"
 ```
+References:
 
+* https://www.tutorialspoint.com/yaml/yaml_tutorial.pdf 
+* http://folk.ntnu.no/haugwarb/Programming/YAML/YAML_for_ruby.pdf 
+* https://lzone.de/cheat-sheet/YAML 
 
 
 
