@@ -356,8 +356,7 @@ keyMapping: <What goes here?>
 > **Scalars**
 
 represent standard values of strings, integers, dates and atomic data types. Note
-that YAML also includes nodes which specify the data type structure. For more information
-on scalars, please refer to the chapter 6 of this tutorial.
+that YAML also includes nodes which specify the data type structure. 
 
 ### Serialization
 
