@@ -118,5 +118,22 @@ _Handling an HTTP request with a custom web application using additional AWS ser
 
 ![interacting with AWS API](img/interacting_with_aws_api.jpeg)
 
+## AWS account
+
+[Steps](https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/AboutAWSAccounts.html)
+
+![aws ui explaination](img/aws_mgmt_ui_exp.jpeg)
+
+## Creating a key pair
+
+To access a virtual server in AWS, we need a key pair consisting of a private key and a public key. The public key will be uploaded to AWS and inserted into the virtual server. The private key is ours; it’s like our password, but much more secure. Protect the private key as if it’s a password. It’s our secret, so don’t lose it—we can’t retrieve it.
+
+Steps:
+
+```
+EC2 Dashboard > Network & Security > Key Pairs > Click Create Key Pair > Name the Key Pair mykey >  download file called mykey.pem > run chmod 400 mykey.pem in the terminal
+
+```
+
 
 
