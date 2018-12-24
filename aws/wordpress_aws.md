@@ -31,11 +31,11 @@ _Flow diagram of blog creation_
 
 _Steps on GUI_
 
-![Step 1](img/create_blog_1.jpeg)
-![Step 2](img/create_blog_2.jpeg)
-![Step 3](img/create_blog_3.jpeg)
-![Step 4](img/create_blog_4.jpeg)
-![Step 5](img/create_blog_5.jpeg)
+![Step 1](img/create_blog_1.jpg)
+![Step 2](img/create_blog_2.jpg)
+![Step 3](img/create_blog_3.jpg)
+![Step 4](img/create_blog_4.jpg)
+![Step 5](img/create_blog_5.jpg)
 
 _Output on GUI while blog is being created_
 
@@ -59,5 +59,5 @@ _Output on GUI while blog is being created_
 
 ## Delete Blog
 
-![Step 1](img/delete_blog_1.jpeg)
-![Step 2](img/delete_blog_2.jpeg)
+![Step 1](img/delete_blog_1.jpg)
+![Step 2](img/delete_blog_2.jpg)
