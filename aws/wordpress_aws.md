@@ -31,16 +31,28 @@ _Flow diagram of blog creation_
 
 _Steps on GUI_
 
+1. Step 1
 ![Step 1](img/create_blog_1.jpg)
+
+2. Step 2
 ![Step 2](img/create_blog_2.jpg)
+
+3. Step 3
 ![Step 3](img/create_blog_3.jpg)
+
+4. Step 4
 ![Step 4](img/create_blog_4.jpg)
+
+5. Step 5
 ![Step 5](img/create_blog_5.jpg)
+
 
 _Output on GUI while blog is being created_
 
 ![Output on GUI](img/stack_completion.jpeg)
+
 ![Stack Output on GUI](img/stack_output.jpeg)
+
 ![resource](img/resources_blog.jpeg)
 
 ## Resources created
@@ -60,4 +72,5 @@ _Output on GUI while blog is being created_
 ## Delete Blog
 
 ![Step 1](img/delete_blog_1.jpg)
+
 ![Step 2](img/delete_blog_2.jpg)
