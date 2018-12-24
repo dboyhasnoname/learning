@@ -1,4 +1,4 @@
-# AWS learnings
+# AWS learning
 
 ## What is Amazon Web Services?
 
@@ -120,7 +120,7 @@ _Handling an HTTP request with a custom web application using additional AWS ser
 
 ## AWS account
 
-[Steps](https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/AboutAWSAccounts.html)
+[Steps to create AWS account](https://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/AboutAWSAccounts.html)
 
 ![aws ui explaination](img/aws_mgmt_ui_exp.jpeg)
 
@@ -134,6 +134,6 @@ Steps:
 EC2 Dashboard > Network & Security > Key Pairs > Click Create Key Pair > Name the Key Pair mykey >  download file called mykey.pem > run chmod 400 mykey.pem in the terminal
 
 ```
-
+_For windows the steps may be different. Click [here](https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-key-pairs.html) to check._
 
 
