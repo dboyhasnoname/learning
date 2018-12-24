@@ -48,50 +48,51 @@ For example, the instance type t2.micro tells you the following:
 
 3.  The size is micro, indicating that the instance is very small.
 
-_choosing OS for VS_
+## Manual steps to creat ec2 instance
+
+1. **_choosing OS for VS_**
 
 ![choose OS](img/choose_os_vm.jpeg)
 
-_choosing instance type_
+2. **_choosing instance type_**
 
 ![choose instance type](img/choose_instance_type.jpeg)
 
-_configure instance details_
+3. **_configure instance details_**
 
 ![configure instance](img/configure_instance_details.jpeg)
 
-_choose storage_
+4. **_choose storage_**
 
 ![choose storage](img/choose_storage.jpeg)
 
-_add tag_
+5. **_add tag_**
 
 Tags help us to organize resources on AWS. A tag is nothing more than a key-value pair. Add at least a Name tag to the resources to help us find our stuff later. 
 
 ![add tag](img/add_tag_ec2.jpeg)
 
-_confgure security_
+6. **_confgure security_**
 
 ![configure security](img/configure_security_ec2.jpeg)
 
-_review and launch_
+7. **_review and launch_**
 
 ![review and launch](img/review_launch_ec2.jpeg)
 
-_select/create kye-pair_
+*. **_select/create kye-pair_**
 
 ![select key pair](img/choose_kye_pair_ec2.jpeg)
 
-_ec2 launch_
+9. **_ec2 launch_**
 
 ![ec2 launch](img/launched_ec2.jpeg)
 
-
-_ec2 instance launched!_
+10. **_ec2 instance launched!_**
 
 ![ec2 launched](img/ec2_instance.jpeg)
 
-_ssh to the ec2 instance_
+11. **_ssh to the ec2 instance_**
 
 ```
 $ ssh -i "mykey.pem" ubuntu@ec2-3-82-247-35.compute-1.amazonaws.com
@@ -178,7 +179,7 @@ ubuntu@ip-172-31-94-226:~$
 
 ```
 
-_check system logs_
+11. **_check system logs_**
 
 Select ec2 intance > Actions > Instance Settings > Get System Logs
 
