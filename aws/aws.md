@@ -41,7 +41,7 @@ AWS is a public cloud. Cloud computing services also have several classification
 
 * **Software as a service (SaaS)** —Combines infrastructure and software running in the cloud, including office applications like Amazon WorkSpaces, Google Apps for Work, and Microsoft Office 365
 
-## Compairsion of hosting an appication in DC vs AWS
+## Comparsion of hosting an appication in DC vs AWS
 
 ![dc vs aws](img/aws_dc_comparison.jpeg)
 
@@ -104,16 +104,16 @@ _Handling an HTTP request with a custom web application using additional AWS ser
 1. **Management console**- web-based Management Console to interact with AWS.
 2. **Command-line interface**- CLI is typically used to automate tasks on AWS.
 3. **SDKs**- SDKs are typically used to integrate AWS services into applications. AWS provides SDKs for:
-    > Android
-    > Browsers (JavaScript)
-    > iOS
-    > Java
-    > .NET
-    > Node.js (JavaScript)
-    > PHP
-    > Python
-    > Ruby
-    > Go
+    > - Android
+    > - Browsers (JavaScript)
+    > - iOS
+    > - Java
+    > - .NET
+    > - Node.js (JavaScript)
+    > - PHP
+    > - Python
+    > - Ruby
+    > - Go
 4. **Blueprints**- a description of your system containing all services and dependencies. The blueprint doesn’t say anything about the necessary steps or the order to achieve the described system.A blueprint removes much of the burden from you because you no longer need to worry about dependencies during system creation—the blueprint automates the entire process. 
 
 ![interacting with AWS API](img/interacting_with_aws_api.jpeg)
