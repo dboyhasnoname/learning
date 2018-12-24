@@ -50,7 +50,11 @@ AWS is a public cloud. Cloud computing services also have several classification
 1. **Innovative and fast-growing platform** 
 2. **Services solve common problems** -  Common problems such as load balancing, queuing, sending email, and storing files are solved for us by AWS services. We don’t need to reinvent the wheel. 
 3. **Enabling automation** - Because AWS has an API, we can automate everything: we can write code to create networks, start virtual server clusters, or deploy a relational database. Automation increases reliability and improves efficiency.
-4. **Flexible capacity (scalability)** - Flexible capacity frees us from planning. We can scale from one server to thousands of servers. Out storage can grow from gigabytes to petabytes. We no longer need to predict your future capacity needs for the coming months and years.
+4. **Flexible capacity (scalability)** - Flexible capacity frees us from planning. We can scale from one server to thousands of servers. Out storage can grow from gigabytes to petabytes. We no longer need to predict 
+
+
+
+r future capacity needs for the coming months and years.
 5. **Built for failure (reliability)** - Most AWS services are fault-tolerant or highly available. 
 6. **Reducing time to market**
 7. **Worldwide**
@@ -75,6 +79,44 @@ Below is an example of billing in a network:
 
 ## Comparison of cloud providers
 
-![cpare cloud providers](img/comparison_cloud_providers.jpeg)
+![compare cloud providers](img/comparison_cloud_providers.jpeg)
+
+## AWS Services
+
+The AWS cloud is composed of hardware and software services accessible via an API.
+
+![aws services](img/aws_services.jpeg)
+
+1. **Compute services** offer computing power and memory. You can start virtual servers and use them to run your applications.
+2. **App services** offer solutions for common use cases like message queues, topics, and searching large amounts of data to integrate into your applications.
+3. **Enterprise services** offer independent solutions such as mail servers and directory services.
+4. **Deployment and administration services** work on top of the services mentioned so far. They help you grant and revoke access to cloud resources, monitor your virtual servers, and deploy applications.
+5. **Storage** is needed to collect, persist, and archive data. AWS offers different storage options: an object store or a network-attached storage solution for use with virtual servers.
+6. **Database** storage has some advantages over simple storage solutions when you need to manage structured data. AWS offers solutions for relational and NoSQL databases.
+7. **Networking services** are an elementary part of AWS. You can define private networks and use a well-integrated DNS.
+
+_Handling an HTTP request with a custom web application using additional AWS services_
+
+![aws service example](img/aws_service_example.jpeg)
+
+## Interacting with AWS
+
+1. **Management console**- web-based Management Console to interact with AWS.
+2. **Command-line interface**- CLI is typically used to automate tasks on AWS.
+3. **SDKs**- SDKs are typically used to integrate AWS services into applications. AWS provides SDKs for:
+    > Android
+    > Browsers (JavaScript)
+    > iOS
+    > Java
+    > .NET
+    > Node.js (JavaScript)
+    > PHP
+    > Python
+    > Ruby
+    > Go
+4. **Blueprints**- a description of your system containing all services and dependencies. The blueprint doesn’t say anything about the necessary steps or the order to achieve the described system.A blueprint removes much of the burden from you because you no longer need to worry about dependencies during system creation—the blueprint automates the entire process. 
+
+![interacting with AWS API](img/interacting_with_aws_api.jpeg)
+
 
 
