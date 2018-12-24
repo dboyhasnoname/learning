@@ -45,5 +45,36 @@ AWS is a public cloud. Cloud computing services also have several classification
 
 ![dc vs aws](img/aws_dc_comparison.jpeg)
 
+## Benefits of AWS
+
+1. **Innovative and fast-growing platform** 
+2. **Services solve common problems** -  Common problems such as load balancing, queuing, sending email, and storing files are solved for us by AWS services. We don’t need to reinvent the wheel. 
+3. **Enabling automation** - Because AWS has an API, we can automate everything: we can write code to create networks, start virtual server clusters, or deploy a relational database. Automation increases reliability and improves efficiency.
+4. **Flexible capacity (scalability)** - Flexible capacity frees us from planning. We can scale from one server to thousands of servers. Out storage can grow from gigabytes to petabytes. We no longer need to predict your future capacity needs for the coming months and years.
+5. **Built for failure (reliability)** - Most AWS services are fault-tolerant or highly available. 
+6. **Reducing time to market**
+7. **Worldwide**
+8. **Complaince** - ISO 27001, FedRAMP & DoD CSM, PCI DSS Level 1, ISO 9001.
+
+## Free [tier](http://aws.amazon.com/free)
+
+Here is what’s included in the Free Tier:
+
+* 750 hours (roughly a month) of a small virtual server running Linux or Windows. This means we can run one virtual server the whole month or we can run 750 virtual servers for one hour.
+* 750 hours (or roughly a month) of a load balancer.
+* Object store with 5 GB of storage.
+* Small database with 20 GB of storage, including backup.
+
+Below is an example of billing in a network:
+
+![billing example](img/billing_method.jpeg)
+
+* Based on hours of usage —If we use a server for 61 minutes, that’s usually counted as 2 hours.
+* Based on traffic —Traffic can be measured in gigabytes or in number of requests.
+* Based on storage usage —Usage can be either provisioned capacity (for example, 50 GB volume no matter how much we use) or real usage (such as 2.3 GB used).
+
+## Comparison of cloud providers
+
+![cpare cloud providers](img/comparison_cloud_providers.jpeg)
 
 
