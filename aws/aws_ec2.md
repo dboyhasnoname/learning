@@ -32,7 +32,7 @@ The current generations of virtual servers on AWS use hardware-assisted virtuali
 
 A virtual server run by an AMI based on HVM uses a fully virtualized set of hardware and can take advantage of hardware extensions that provide fast access to the underlying hardware.
 
-_**Using a 3.8+ kernel for your virtual Linux servers will provide the best performance. To do so, we should use at least Amazon Linux 13.09, Ubuntu 14.04, or RHEL7.**_
+_**Using a 3.8+ kernel for wer virtual Linux servers will provide the best performance. To do so, we should use at least Amazon Linux 13.09, Ubuntu 14.04, or RHEL7.**_
 
 ## Instance types and families
 
@@ -40,7 +40,7 @@ The names for different instance types are all structured in the same way. The i
 
 AWS releases new instance types and families from time to time; the different versions are called and marked as generations. The instance size defines the capacity of CPU, memory, storage, and networking.
 
-For example, the instance type t2.micro tells you the following:
+For example, the instance type t2.micro tells we the following:
 
 1.  The instance family is **t**. It groups small, cheap virtual servers with low baseline CPU performance but with the ability to burst significantly over baseline CPU performance for a short time.
 
@@ -80,7 +80,7 @@ Tags help us to organize resources on AWS. A tag is nothing more than a key-valu
 
 ![review and launch](img/review_launch_ec2.jpeg)
 
-*. **_select/create kye-pair_**
+8. **_select/create key-pair_**
 
 ![select key pair](img/choose_kye_pair_ec2.jpeg)
 
@@ -98,7 +98,7 @@ Tags help us to organize resources on AWS. A tag is nothing more than a key-valu
 $ ssh -i "mykey.pem" ubuntu@ec2-3-82-247-35.compute-1.amazonaws.com
 The authenticity of host 'ec2-3-82-247-35.compute-1.amazonaws.com (3.82.247.35)' can't be established.
 ECDSA key fingerprint is SHA256:sXAgU0UvP3JMJql2M6gfPVGRtj/WgQZNBMxMLz+hIT4.
-Are you sure you want to continue connecting (yes/no)? yes
+Are we sure we want to continue connecting (yes/no)? yes
 Warning: Permanently added 'ec2-3-82-247-35.compute-1.amazonaws.com,3.82.247.35' (ECDSA) to the list of known hosts.
 Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1021-aws x86_64)
 
@@ -184,4 +184,68 @@ ubuntu@ip-172-31-94-226:~$
 Select ec2 intance > Actions > Instance Settings > Get System Logs
 
 ![get logs](img/ec2_system_logs.jpeg)
+
+
+12. **_Monitoring ec2_**
+
+![monitoring ec2](img/monitoring_ec2.jpeg)
+
+
+## CRUD Operations
+
+* **Start** We can always start a stopped virtual server. If we want to create a completely new server, we’ll need to launch a virtual server.
+
+* **Stop** we can always stop a running virtual server. A stopped virtual server isn’t billed and can be started later. If we’re using network-attached storage, out data persists. A stopped virtual server doesn’t incur charges, except for attached resources like network-attached storage.
+
+* **Reboot** —Have we tried turning it off and on again? If we need to reboot wer virtual server, this action will help. We won’t lose any data when rebooting a virtual server, and all software is still installed after a reboot.
+
+* **Terminate** —Terminating a virtual server means deleting it. We can’t start a virtual server that we’ve already terminated. The virtual server is deleted, together with dependencies like network-attached storage and public and private IP addresses.
+
+**_A terminated virtual server doesn’t incur charges._** 
+
+![ec2 crud](img/crud_ec2.jpeg)
+
+
+## Note:
+
+1. You can change the instance type only when the ec2 instance is in stopped state.
+
+Stop ec2 > Actions > Instance Settings > Change Instance Type
+
+![change instance type](img/change_instance_type_ec2.jpeg)
+
+2. A key-pair generated is limited to the region.
+
+
+## Installing apache on ec2
+
+While configuring Security group we need to add one more rule as HTTP. All values will be in default.
+
+Once the instance is created, just run below(for ubuntu):
+
+1. sudo apt-get update
+2. sufo apt-get install pache2 apache2-doc apache2-utils
+3. sudo service start apache2
+4. hit the public ip of instance on port 80: http://13.232.43.29:80. Below page will appear in browser:
+
+![apache](img/apache_ec2.jpeg)
+
+
+## Allocating a public IP to running instance.
+
+Allocating a public IP address can be useful if we need to make sure the endpoint to our application doesn’t change, even if we have to replace the virtual server behind the scenes.
+
+Go to EC2 dashboard > Network Security > Elastic IPs > Allocate new address > Scope VPC > Click Allocate > Select IP > Associate address > Select Instance and Pirvate IP > Click Associate
+
+![allocate IP](img/elasticip_ec2.jpeg)
+
+The allocated IP will reflect in EC2 instance.
+
+![allocated IP](img/elasticip_ec2_2.jpeg)
+
+## Spot requests
+
+With a spot instance, we bid for unused capacity in the AWS cloud. A spot market is a market where standardized products are traded for immediate delivery. The price of the products on the market depend on supply and demand. On the AWS spot market, the traded products are virtual servers, and they’re delivered by starting a virtual server.
+
+If the current spot price is lower than your maximum price for a specific virtual server in a specific data center, your spot request will be fulfilled, and a virtual server will start. If the current spot price exceeds your bid, your virtual server will be terminated (not stopped) by AWS after two minutes.
 
