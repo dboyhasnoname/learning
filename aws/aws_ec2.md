@@ -230,7 +230,7 @@ Once the instance is created, just run below(for ubuntu):
 
 ![apache](img/apache_ec2.jpeg)
 
-We can put a index.html file in /var/www/html and access the website.
+We can put a custom page index.html file in /var/www/html and access the website.
 
 ![custom page](img/apache_ec2_page.jpeg)
 
