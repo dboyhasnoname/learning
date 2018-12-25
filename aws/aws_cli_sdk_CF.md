@@ -268,21 +268,33 @@ A template has following components:
 3.  **Parameters**
     - Parameters are used to customize a template with values: for example, domain name, customer ID, and database password. 
     - A parameter has at least a name and a type.
-
+<br><br>
     ![parameter structure](img/parameter_structure_cf.jpg)
 <br><br>
     Valid parameter types:
+<br><br>
     ![valid parameter types](img/paramter_types_cf.jpeg)
 <br><br>
     Parameter properties:
-
+<br><br>    
     ![parameter properties](img/parameter_properties_cf.jpeg)
 <br><br>
+    A parameter section of a CloudFormation template could look like this:
+<br><br>
+    ![paramter section](img/parameter_section_cf.jpg)
+<br><br>    
 4.  **Resources**
     - A resource is the smallest block you can describe. Examples are a virtual server, a load balancer, or an elastic IP address.
     - A resource has at least a name, a type, and some properties.
+<br><br>
+    ![resource structure](img/resource_structure_cf.jpg)    
 
-5.  **Outputs**— An output is comparable to a parameter, but the other way around. An output returns something from your template, such as the public name of an EC2 server.
+5.  **Outputs**
+    - An output is comparable to a parameter, but the other way around. An output returns something from your template, such as the public name of an EC2 server.
+    - A CloudFormation template’s output includes at least a name (like parameters and resources) and a value.
+<br><br>
+    ![output](img/output_cf.jpg)
+
 
 
 
