@@ -12,7 +12,7 @@ AWS provides infrastructure that can be controlled via an interface called an ap
 
 Calling the API directly using plain HTTPS requests is inconvenient. That's why we use the command-line interface or SDKs.
 
-##JIML
+## JIML
 
 JSON Infrastructure Markup Language
 
@@ -67,6 +67,8 @@ JSON Infrastructure Markup Language
 }
 ```
 
+
+
 How JIML works:
 
 1.  Parse the JSON input.
@@ -74,9 +76,14 @@ How JIML works:
 3.  The JIML interpreter derives a linear flow of commands from the dependency graph by traversing the tree from the bottom (leaves) to the top (root). The commands are expressed in a pseudo language.
 4.  The commands in pseudo language are translated into AWS API calls by the JIML runtime.
 
+
+
 ![JIML interpretation](img/jiml_interpretation.jpg)
 
+
+
 **Command flow**
+
 
 ![JIML command flow](img/jiml_command_flow.jpg)
 
