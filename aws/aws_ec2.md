@@ -230,6 +230,10 @@ Once the instance is created, just run below(for ubuntu):
 
 ![apache](img/apache_ec2.jpeg)
 
+We can put a index.html file in /var/www/html and access the website.
+
+![custom page](img/apache_ec2_page.jpeg)
+
 
 ## Allocating a public IP to running instance.
 
@@ -242,6 +246,7 @@ Go to EC2 dashboard > Network Security > Elastic IPs > Allocate new address > Sc
 The allocated IP will reflect in EC2 instance.
 
 ![allocated IP](img/elasticip_ec2_2.jpeg)
+
 
 ## Spot requests
 
