@@ -4,12 +4,13 @@
     "Parameters": {
         "KeyName": {
             "Description": "Key name for the ec2 instance",
-            "Type": "AWS::EC2::KeyPair:KeyName",
+            "Type": "AWS::EC2::KeyPair::KeyName",
             "Default": "mykey"
         },
-        "VPCName": {
+        "VPC": {
             "Description": "VPC name for the ec2 instance",
-            "Type": "AWS::EC2::VPC::Id"
+            "Type": "AWS::EC2::VPC::Id",
+            "Default": "vpc-7c72a006"
         },
         "Subnet": {
             "Description": "Subnet name for the ec2 instance",

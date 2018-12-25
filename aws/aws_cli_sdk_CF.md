@@ -295,6 +295,10 @@ A template has following components:
 <br><br>
     ![output](img/output_cf.jpg)
 
+An example of CloudFormation Template: [ec2.json](CloudFormation/ec2.json). Its semi-automated template in which Stack Name, subnet ID etc needs to be passed manually.
+
+
+
 
 
 
