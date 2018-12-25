@@ -18,7 +18,7 @@ JSON Infrastructure Markup Language
 
 
 ![JIML](img/jiml_example.jpg)
-
+<br><br>
 **Sample JIML for an infra setup**
 
 ```
@@ -75,11 +75,11 @@ How JIML works:
 4.  The commands in pseudo language are translated into AWS API calls by the JIML runtime.
 
 ![JIML interpretation](img/jiml_interpretation.jpg)
-
+<br><br>
 **Command flow**
 
 ![JIML command flow](img/jiml_command_flow.jpg)
-
+<br><br>
 
 # AWS CLI
 
@@ -91,7 +91,7 @@ Steps for [installation](https://docs.aws.amazon.com/cli/latest/userguide/cli-ch
 
 ### CLI Configuration
 
-Open terminal and type awsconfigure
+Open terminal and type `aws configure`
 
 ```
 $ aws configure
@@ -104,7 +104,7 @@ Default output format [None]: json
 The user needs to be attached with access policy for authorization.
 
 ![user policy](img/user_policy.jpeg)
-
+<br><br>
 Once configutation is done we can test the cli:
 
 ```
@@ -182,7 +182,7 @@ $ aws ec2 describe-regions
 
 ## JMESPath
 
-One important feature of the CLI needs explanation before you can begin. The --query option uses JMESPath, which is a query language for JSON, to extract data from the result. This can be useful because usually you only need a specific field from the result.
+One important feature of the CLI. The --query option uses JMESPath, which is a query language for JSON, to extract data from the result. This can be useful because usually we only need a specific field from the result.
 
 example:
 
@@ -225,9 +225,66 @@ AWS offers software development kits (SDKs) for a number of programming language
 
 An AWS SDK is a convenient way to make calls to the AWS API from programming languages. The SDK takes care of things like authentication, retry on error, HTTPS communication, and JSON (de)serialization.
 
-This module is not being explained much here. For more details of one of the SDK e.g, click [here](https://aws.amazon.com/sdk-for-go/)
+This module is not being explained much here. For more details of one of the SDK e.g, Go SDK click [here](https://aws.amazon.com/sdk-for-go/)
 
 # AWS CloudFormation
+
+AWS CloudFormation is a service that helps us model and set up our Amazon Web Services resources so that we spend less time managing those resources and more time focusing on our applications that run in AWS.
+
+* _There is no additional charge for AWS CloudFormation._
+* CloudFormation is based on templates know as blueprints.
+* A template is a description of the infrastructure in JSON that can be interpreted by CloudFormation.
+* The idea of describing something rather than listing the necessary actions is called a descriptive approach. Descriptive means we tell CloudFormation how the infrastructure should look and how it’s connected. 
+
+## Benefits of CloudFormation
+
+1. It’s a consistent way to describe infrastructure on AWS.
+2. It can handle dependencies.
+3. It’s replicable. Is the test environment an exact copy of your production environment? Using CloudFormation, we can create two identical infrastructures and keep them in sync.
+4. It’s customizable. We can insert custom parameters into CloudFormation to customize our templates as you wish.
+5. It’s testable. Infrastructure is testable if we can create it from a template. Just start a new infrastructure, run the tests, and shut it down again.
+6. It’s updatable. CloudFormation supports updates to the infrastructure. It will figure out the parts of the template that have changed and apply those changes as smoothly as possible to the infrastructure.
+7. minimizes human failure. 
+8. It’s the documentation for the infrastructure. A CloudFormation template is a JSON document. One can treat it as code and use a version control system like Git to keep track of the changes.
+9. Free! Free! Free!
+
+## Anatomy of a CloudFormation template
+
+A basic template looks like the following listing:
+
+![template structure](img/template_structure_cf.jpg)
+<br><br>
+A template has following components:
+
+1. **Format version**
+    - The latest template format version is 2010-09-09, and this is currently the only valid value.
+    - Specify this; the default is the latest version, which will cause problems if a new format version is introduced in the future.
+    - **_The only valid AWSTemplateFormatVersion value at the moment is "2010-09-09"_**
+
+2.  **Description**
+    - What is this template about? 
+    - Not manadatory.
+
+3.  **Parameters**
+    - Parameters are used to customize a template with values: for example, domain name, customer ID, and database password. 
+    - A parameter has at least a name and a type.
+
+    ![parameter structure](img/parameter_structure_cf.jpg)
+<br><br>
+    Valid parameter types:
+    ![valid parameter types](img/paramter_types_cf.jpeg)
+<br><br>
+    Parameter properties:
+
+    ![parameter properties](img/parameter_properties_cf.jpeg)
+<br><br>
+4.  **Resources**
+    - A resource is the smallest block you can describe. Examples are a virtual server, a load balancer, or an elastic IP address.
+    - A resource has at least a name, a type, and some properties.
+
+5.  **Outputs**— An output is comparable to a parameter, but the other way around. An output returns something from your template, such as the public name of an EC2 server.
+
+
 
 
 
