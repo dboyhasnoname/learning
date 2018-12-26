@@ -125,7 +125,9 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
  OptionName=EnvironmentType,Value=SingleInstance \
  --solution-stack-name "$SolutionStackName" \
  --version-label 1.5.2
+```
 
+```
 {
     "ApplicationName": "etherpad", 
     "EnvironmentName": "etherpad", 
