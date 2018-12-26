@@ -298,8 +298,17 @@ A template has following components:
 An example of CloudFormation Template: [ec2.json](CloudFormation/ec2.json). Its semi-automated template in which Stack Name, subnet ID etc needs to be passed manually.
 
 
+## COMPARING DEPLOYMENT TOOLS
 
+We can deploy infra on AWS using tools like CloudFormation, Beanstalk, OpsWorks etc. Here is a comaprison:
 
+<br>
+
+![comparison](img/deployment_comparision.jpg)
+
+<br>
+
+![deployment services](img/deployment_services_aws.jpeg)
 
 
 
