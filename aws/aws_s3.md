@@ -27,9 +27,15 @@ The Amazon S3 object store is one of the oldest services on AWS. Amazon S3 is an
 * We can store any kind of data, such as images, documents, and binaries, as long as the size of a single object doesn’t exceed **5 TB**. 
 * We have to pay for every GB you store in S3, and we also incur minor costs for every request and transferred data.
 
+---
+
 > S3 uses buckets to group objects. 
+
 > A bucket is a container for objects. 
+
 > We can create up to 100 buckets, each of which has a globally unique name. _By unique we really mean - we have to choose a bucket name that isn’t used by any other AWS customer in any other region._
+
+---
 
 Typical use cases are as follows:
 
