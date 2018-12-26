@@ -206,5 +206,13 @@ We can get details about the etherpad env if we go to beanstalk service on AWS
 
 ![ether pad monitoring](img/etherpad_monitoring.jpeg)
 
+<br>
+
+## Cleanup
+
+1. `aws elasticbeanstalk terminate-environment --environment-name etherpad`
+2. `aws elasticbeanstalk describe-environments --environment-names etherpad`. Wait until Status has changed to Terminated, and then proceed with the following command:
+3. `aws elasticbeanstalk delete-application --application-name etherpad`
+
 
 
