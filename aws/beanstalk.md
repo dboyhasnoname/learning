@@ -45,6 +45,7 @@ An error occurred (AccessDenied) when calling the CreateApplication operation: U
 
 1. **command to create an application for the Elastic Beanstalk service:**
 <br>
+
 ```
 aws elasticbeanstalk create-application --application-name etherpad
 {
@@ -71,6 +72,7 @@ aws elasticbeanstalk create-application --application-name etherpad
     }
 }
 ```
+
 <br>
 2. **create a new version of your Etherpad application with the following command:**
 
@@ -82,6 +84,7 @@ aws elasticbeanstalk create-application-version \
 <br>
 Output:
 <br>
+
 ```
 {
     "ApplicationVersion": {
@@ -118,6 +121,7 @@ OptionName=EnvironmentType,Value=SingleInstance \
 
 Output:
 <br>
+
 ```
 $ aws elasticbeanstalk create-environment --environment-name etherpad \
  --application-name etherpad \
@@ -182,6 +186,7 @@ aws elasticbeanstalk describe-environments --environment-names etherpad
     ]
 }
 ```
+
 <br>
 We can get details about the etherpad env if we got to beanstalk service on AWS
 <br>
