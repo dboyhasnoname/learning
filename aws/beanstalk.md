@@ -40,8 +40,11 @@ aws elasticbeanstalk create-application --application-name etherpad
 
 An error occurred (AccessDenied) when calling the CreateApplication operation: User: arn:aws:iam::4359456772825:user/xxxxxxxxxxxx is not authorized to perform: elasticbeanstalk:CreateApplication on resource: arn:aws:elasticbeanstalk:us-east-1:4359456772825:application/etherpad
 ```
+
+### Steps
+
 1. **command to create an application for the Elastic Beanstalk service:**
-<br><br>
+<br>
 ```
 aws elasticbeanstalk create-application --application-name etherpad
 {
@@ -68,7 +71,7 @@ aws elasticbeanstalk create-application --application-name etherpad
     }
 }
 ```
-<br><br>
+<br>
 2. **create a new version of your Etherpad application with the following command:**
 
 ```
@@ -77,7 +80,6 @@ aws elasticbeanstalk create-application-version \
 --source-bundle S3Bucket=mukund-blog-state-store,S3Key=etherpad.zip
 ```
 <br>
-
 Output:
 <br>
 ```
@@ -113,9 +115,9 @@ OptionName=EnvironmentType,Value=SingleInstance \
 --solution-stack-name "$SolutionStackName" \
 --version-label 1.5.2
 ```
-<br><br>
+<br>
 Output:
-<br><br>
+<br>
 ```
 $ aws elasticbeanstalk create-environment --environment-name etherpad \
  --application-name etherpad \
@@ -123,7 +125,7 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
  OptionName=EnvironmentType,Value=SingleInstance \
  --solution-stack-name "$SolutionStackName" \
  --version-label 1.5.2
- 
+
 {
     "ApplicationName": "etherpad", 
     "EnvironmentName": "etherpad", 
@@ -143,5 +145,49 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
     "DateCreated": "2018-12-26T07:40:50.746Z"
 }
 ```
+<br>
+A new EC2 instance is created:
+<br>
+![etherpad ec2 instance](img/etherpad_instance.jpeg)
+<br>
+Once the instance is up and running, we can describe the env:
+<br>
+```
+aws elasticbeanstalk describe-environments --environment-names etherpad
+{
+    "Environments": [
+        {
+            "ApplicationName": "etherpad", 
+            "EnvironmentName": "etherpad", 
+            "VersionLabel": "1.5.2", 
+            "Status": "Ready", 
+            "EnvironmentArn": "arn:aws:elasticbeanstalk:us-east-1:825796472415:environment/etherpad/etherpad", 
+            "EnvironmentLinks": [], 
+            "PlatformArn": "arn:aws:elasticbeanstalk:us-east-1::platform/Node.js running on 64bit Amazon Linux/4.7.1", 
+            "EndpointURL": "54.158.141.0", 
+            "SolutionStackName": "64bit Amazon Linux 2018.03 v4.7.1 running Node.js", 
+            "EnvironmentId": "e-ytfpnymxmf", 
+            "CNAME": "etherpad.gjusrbnewy.us-east-1.elasticbeanstalk.com", 
+            "AbortableOperationInProgress": false, 
+            "Tier": {
+                "Version": "1.0", 
+                "Type": "Standard", 
+                "Name": "WebServer"
+            }, 
+            "Health": "Green", 
+            "DateUpdated": "2018-12-26T07:43:28.758Z", 
+            "DateCreated": "2018-12-26T07:40:50.729Z"
+        }
+    ]
+}
+```
+<br>
+We can get details about the etherpad env if we got to beanstalk service on AWS console.
+<br>
+
+![bean stalk service etherpad](img/beanstalk_service_etherpad.jpeg)
+<br><br>
+![ether pad monitoring](img/etherpad_monitoring.jpeg)
+
 
 
