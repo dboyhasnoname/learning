@@ -158,6 +158,7 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
 A new EC2 instance is created:
 
 <br>
+
 ![etherpad ec2 instance](img/etherpad_instance.jpeg)
 
 Once the instance is up and running, we can describe the env:
