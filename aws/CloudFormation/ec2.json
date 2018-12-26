@@ -34,29 +34,46 @@
 			"Properties": {
 				"GroupDescription": "My security group",
 				"VpcId": {"Ref": "VPC"},
-				"SecurityGroupIngress": [{
-					"CidrIp": "0.0.0.0/0",
-					"FromPort": 22,
-					"IpProtocol": "tcp",
-					"ToPort": 22
-				}]
+				"SecurityGroupIngress": [
+                    {"IpProtocol" : "tcp","FromPort" : "80","ToPort" : "80","CidrIp" : "0.0.0.0/0"},
+                    {"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0"}
+                ]
 			}
 		},
-		"Server": {
+		"WebServer": {
 			"Type": "AWS::EC2::Instance",
 			"Properties": {
 				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
 				"InstanceType": {"Ref": "InstanceType"},
 				"KeyName": {"Ref": "KeyName"},
 				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
-				"SubnetId": {"Ref": "Subnet"}
+                "SubnetId": {"Ref": "Subnet"},
+                "UserData": {
+                    "Fn::Base64": {
+                      "Fn::Join": [
+                        "\n",
+                        [
+                          "#!/bin/bash -xe",
+                          "sudo yum update -y",
+                          "sudo yum install httpd -y",
+                          "sudo /etc/init.d/httpd start",
+                          "echo \"<html><body><h1>Awesome !!!</h1>\" > /var/www/html/index.html",
+                          "echo \"</body></html>\" >> /var/www/html/index.html"
+                        ]
+                      ]
+                    }
+                }
 			}
 		}        
     },
 	"Outputs": {
 		"PublicName": {
-			"Value": {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+			"Value": {"Fn::GetAtt": ["WebServer", "PublicDnsName"]},
 			"Description": "Public name (connect via SSH as user ec2-user)"
-		}
+        },
+        "URL" : {
+            "Description" : "URL of the sample website",
+            "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ]}]]}
+        }        
 	}         
 }
