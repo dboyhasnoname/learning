@@ -543,6 +543,116 @@ The -A option is important to enable AgentForwarding; agent forwarding lets you 
 
 <br>
 
+# CREATING A PRIVATE NETWORK IN THE CLOUD: VIRTUAL PRIVATE CLOUD (VPC)
+
+* By creating a Virtual Private Cloud (VPC), we get your own private network on AWS. 
+* Private means we can use the address ranges 10.0.0.0/8, 172.16.0.0/12, or 192.168.0.0/16 to design a network that isn’t necessarily connected to the public internet. 
+* We can create subnets, route tables, access control lists (ACLs), and gateways to the internet or a VPN endpoint. A subnet allows us to separate concerns:
+
+    - Create a new subnet for the databases, web servers, caching servers, or application servers, or whenever we can separate two systems.
+    - Another rule of thumb is that we should have at least two subnets: public and private.
+    - A public subnet has a route to the internet; a private subnet doesn’t. 
+    - Web servers should be in the public subnet, and the database resides in the private subnet.
+
+## VPC creation
+
+* The VPC uses the address space 10.0.0.0/16. To separate concerns, we’ll create two public subnets and one private subnet in the VPC:
+    1. 10.0.1.0/24 public SSH bastion host subnet
+    2. 10.0.2.0/24 public Varnish web cache subnet
+    3. 10.0.3.0/24 private Apache web server subnet
+
+* Network ACLs restrict traffic that goes from one subnet to another like a firewall. The SSH bastion host can be implemented with these ACLs:
+
+    1. SSH from 0.0.0.0/0 to 10.0.1.0/24 is allowed.
+    2. SSH from 10.0.1.0/24 to 10.0.2.0/24 is allowed.
+    3. SSH from 10.0.1.0/24 to 10.0.3.0/24 is allowed.
+
+* To allow traffic to the Varnish web cache and the HTTP servers, additional ACLs are required:
+
+    1. HTTP from 0.0.0.0/0 to 10.0.2.0/24 is allowed.
+    2. HTTP from 10.0.2.0/24 to 10.0.3.0/24 is allowed.
+
+
+VPC with three subnets to secure a web application
+
+![VPC architecture](img/vpc_aws_architecture.jpg)
+
+<br>
+
+The template: [vpc.json](CloudFormation/vpc.json)
+
+**Steps:**
+
+1. **Creating the VPC and an internet gateway (IGW)**
+
+> The first resources in the template are the VPC and the internet gateway (IGW). The IGW will translate the public IP addresses of your virtual servers to their private IP addresses using network address translation (NAT). All public IP addresses used in the VPC are controlled by this IGW:
+
+![IGW](img/vpc_igw.jpg)
+
+<br>
+
+2. **Defining the public bastion host subnet**
+
+> The bastion host subnet will only run a single machine to secure SSH access:
+
+![bastion host vpc](img/vpc_bastion_host.jpg)
+
+<br>
+
+> The definition of the ACL follows:
+
+![acl vpc](img/vpc_acl.jpg)
+
+<br>
+> There’s an important difference between security groups and ACLs: security groups are stateful, but ACLs aren’t. If we allow an inbound port on a security group, the outbound response that belongs to a request on the inbound port is allowed as well. A security group rule will work as we expect it to. If we open inbound port 22 on a security group, we can connect via SSH.
+
+> That’s not true for ACLs. If we open inbound port 22 on an ACL for your subnet, we can’t connect via SSH. In addition, we need to allow outbound ephemeral ports because sshd (SSH daemon) accepts connections on port 22 but uses an ephemeral port for communication with the client. Ephemeral ports are selected from the range starting at 1024 and ending at 65535.
+
+> If we want to make a SSH connection from within the subnet, we have to open outbound port 22 and inbound ephemeral ports as well. If we aren’t familiar with all this, we should go with security groups and allow everything on the ACL level.
+
+3. **Adding the private Apache web server subnet**
+
+> The subnet for the Varnish web cache is similar to the bastion host subnet because it’s also a public subnet; that’s why we’ll skip it. We’ll continue with the private subnet for the Apache web server:
+
+![apache webserver subnet](img/vpc_apache_server_subnet.jpg)
+
+<br>
+
+> The only difference between a public and a private subnet is that a private subnet doesn’t have a route to the IGW. Traffic between subnets of a VPC is always routed by default. We can’t remove the routes between the subnets. If we want to prevent traffic between subnets in a VPC, we need to use ACLs attached to the subnets.
+
+4. **Launching servers in the subnets**
+
+> Subnets are ready and we can continue with the EC2 instances. First we describe the bastion host:
+
+![bastion host server](img/vpc_bastion_host_server.jpg)
+
+<br>
+
+> The Varnish server looks similar. But again, the private Apache web server differs in configuration:
+
+![varnish server vpc](img/varnish_server_vpc.jpg)
+
+<br>
+
+_Installing Apache won’t work because the private subnet has no route to the internet._
+
+5. **Accessing the internet from private subnets via a NAT server**
+
+> Public subnets have a route to the internet gateway. We can use a similar mechanism to provide internet access for private subnets without having a direct route to the internet: use a NAT server in a public subnet, and create a route from your private subnet to the NAT server. 
+
+> A NAT server is a virtual server that handles network address translation. Internet traffic from the  private subnet will access the internet from the public IP address of the NAT server.
+
+> Traffic from EC2 instances to other AWS services that are accessed via the API (Object Store S3, NoSQL database DynamoDB) will go through the NAT instance. This can quickly become a major bottleneck. If the EC2 instances need to communicate heavily with the internet, the NAT instance is most likely not a good idea. So we consider launching these instances in a public subnet instead.
+
+> To keep concerns separated, we’ll create a new subnet for the NAT server.
+
+<br>
+
+![subnet NAT server](img/subnet_Nat_vpc.jpg)
+
+
+
+
 
 
 
