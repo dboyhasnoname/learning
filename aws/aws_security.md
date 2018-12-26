@@ -537,7 +537,7 @@ If the update is completed with above template, the stack shows three outputs:
 
 Now connect to BastionHostPublicName via SSH using ssh -i mykey.pem -A ec2-user@$BastionHostPublicName. 
 
-The -A option is important to enable AgentForwarding; agent forwarding lets you authenticate with the same key you used to log in to the bastion host for further SSH logins initiated from the bastion host.
+The -A option is important to enable AgentForwarding; agent forwarding lets you authenticate with the same key you used to log in to the bastion host for further SSH logins initiated from the bastion host. Refer this [link](https://www.oodlestechnologies.com/blogs/SSH-bastion-host-on-AWS)
 
 ![bastion host login](img/bastion_host_login.jpg)
 
@@ -604,6 +604,7 @@ The template: [vpc.json](CloudFormation/vpc.json)
 ![acl vpc](img/vpc_acl.jpg)
 
 <br>
+
 > There’s an important difference between security groups and ACLs: security groups are stateful, but ACLs aren’t. If we allow an inbound port on a security group, the outbound response that belongs to a request on the inbound port is allowed as well. A security group rule will work as we expect it to. If we open inbound port 22 on a security group, we can connect via SSH.
 
 > That’s not true for ACLs. If we open inbound port 22 on an ACL for your subnet, we can’t connect via SSH. In addition, we need to allow outbound ephemeral ports because sshd (SSH daemon) accepts connections on port 22 but uses an ephemeral port for communication with the client. Ephemeral ports are selected from the range starting at 1024 and ending at 65535.
@@ -649,6 +650,108 @@ _Installing Apache won’t work because the private subnet has no route to the i
 <br>
 
 ![subnet NAT server](img/subnet_Nat_vpc.jpg)
+
+<br>
+
+Once the VPC is created, we can see it in the GUI:
+
+![VPC output](img/vpc_creation_ouput.jpeg)
+
+<br>
+
+SSH into bastion server:
+
+```
+$ ssh -i mykey.pem -A ec2-user@ec2-34-207-229-64.compute-1.amazonaws.com
+The authenticity of host 'ec2-34-207-229-64.compute-1.amazonaws.com (34.207.229.64)' can't be established.
+ECDSA key fingerprint is SHA256:csGj98E6YmUSfTudKe6FdhDkoAioxHz68HQXqG+MEDA.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'ec2-34-207-229-64.compute-1.amazonaws.com,34.207.229.64' (ECDSA) to the list of known hosts.
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2015.03-release-notes/
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+[ec2-user@ip-10-0-1-211 ~]$ hostname
+ip-10-0-1-211
+[ec2-user@ip-10-0-1-211 ~]$ 
+```
+
+<br>
+
+When we try to login to the Varnish server form outside, it fails:
+
+```
+$ ssh -i mykey.pem  -o ConnectTimeout=10 ec2-user@ec2-52-205-29-54.compute-1.amazonaws.com
+ssh: connect to host ec2-52-205-29-54.compute-1.amazonaws.com port 22: Operation timed out
+```
+
+<br>
+
+Before we use the bastion server to access rest of the servers, we need to add the key so that it can be forwared inside the bastion server:
+
+```
+$ ssh-add mykey.pem 
+Identity added: mykey.pem (mykey.pem)
+
+$ ssh-add -l
+2048 SHA256:PzFazEVgwkmGZVqECYbHBnHgtz26tV/9RORMseBWVj0 mykey.pem (RSA)
+
+$ ssh -A ec2-user@ec2-34-207-229-64.compute-1.amazonaws.com
+Last login: Wed Dec 26 17:43:13 2018 from 103.103.57.141
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2015.03-release-notes/
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+[ec2-user@ip-10-0-1-211 ~]$
+
+[ec2-user@ip-10-0-1-211 ~]$ ssh ec2-user@10.0.3.29
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2015.03-release-notes/
+40 package(s) needed for security, out of 124 available
+Run "sudo yum update" to apply all updates.
+Amazon Linux version 2018.03 is available.
+[ec2-user@ip-10-0-3-29 ~]$ exit
+
+[ec2-user@ip-10-0-1-211 ~]$ ssh ec2-user@10.0.2.194
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2015.03-release-notes/
+40 package(s) needed for security, out of 124 available
+Run "sudo yum update" to apply all updates.
+Amazon Linux version 2018.03 is available.
+[ec2-user@ip-10-0-2-194 ~]$ exit
+
+
+[ec2-user@ip-10-0-1-211 ~]$ ssh ec2-user@ec2-52-205-29-54.compute-1.amazonaws.com
+Last login: Wed Dec 26 17:51:01 2018 from ip-10-0-1-211.ec2.internal
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2015.03-release-notes/
+40 package(s) needed for security, out of 124 available
+Run "sudo yum update" to apply all updates.
+Amazon Linux version 2018.03 is available.
+[ec2-user@ip-10-0-2-194 ~]$
+
+```
+
+<br>
+
 
 
 
