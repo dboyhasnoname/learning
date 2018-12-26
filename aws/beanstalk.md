@@ -74,6 +74,7 @@ aws elasticbeanstalk create-application --application-name etherpad
 ```
 
 <br>
+
 2. **create a new version of your Etherpad application with the following command:**
 
 ```
@@ -81,8 +82,11 @@ aws elasticbeanstalk create-application-version \
 --application-name etherpad --version-label 1.5.2 \
 --source-bundle S3Bucket=mukund-blog-state-store,S3Key=etherpad.zip
 ```
+
 <br>
+
 Output:
+
 <br>
 
 ```
@@ -149,8 +153,10 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
     "DateCreated": "2018-12-26T07:40:50.746Z"
 }
 ```
+<br>
 
 A new EC2 instance is created:
+
 <br>
 ![etherpad ec2 instance](img/etherpad_instance.jpeg)
 
