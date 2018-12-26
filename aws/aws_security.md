@@ -690,7 +690,7 @@ ssh: connect to host ec2-52-205-29-54.compute-1.amazonaws.com port 22: Operation
 
 <br>
 
-Before we use the bastion server to access rest of the servers, we need to add the key so that it can be forwared inside the bastion server:
+Before we use the bastion server to access rest of the servers, we need to add the SSH pem key of the bastion host to the SSH agent so that it can be forwared inside the bastion serverc which will be used to ssh servers in VPC:
 
 ```
 $ ssh-add mykey.pem 
