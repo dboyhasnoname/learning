@@ -195,11 +195,15 @@ aws elasticbeanstalk describe-environments --environment-names etherpad
 ```
 
 <br>
-We can get details about the etherpad env if we got to beanstalk service on AWS
+
+We can get details about the etherpad env if we go to beanstalk service on AWS
+
 <br>
 
 ![bean stalk service etherpad](img/beanstalk_service_etherpad.jpeg)
+
 <br><br>
+
 ![ether pad monitoring](img/etherpad_monitoring.jpeg)
 
 
