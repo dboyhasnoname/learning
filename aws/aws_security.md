@@ -387,6 +387,162 @@ But sometimes it makes sense to define a range of allowed IP addresses. For exam
 
 ## Allowing SSH traffic from a source security group
 
+If we want to control traffic from one AWS resource (like an EC2 instance) to another, security groups are powerful. We can control network traffic based on whether the source or destination belongs to a specific security group. For example, we can define that a MySQL database can only be accessed if the traffic comes from your web servers, or that only your web cache servers are allowed to access the web servers.
+
+To explore the power of rules based on a source security group, let’s look at the concept of a _bastion host_ for SSH access (some people call it a _jump box_). The trick is that only one server, the bastion host, can be accessed via SSH from the internet (it should be restricted to a specific source IP address). All other servers can only be reached via SSH from the bastion host. This approach has two advantages:
+
+We have only one entry point into the system, and that entry point does nothing but SSH. The chances of this box being hacked are small.
+
+If one of the web servers, mail servers, FTP servers, and so on, is hacked, the attacker can’t jump from that server to all the other servers.
+
+To implement the concept of a bastion host, we must follow these two rules:
+
+1. Allow SSH access to the bastion host from 0.0.0.0/0 or a specific source address.
+2. Allow SSH access to all other servers only if the traffic source is the bastion host.
+
+![bastion host](img/bastion_host.jpg)
+
+<br>
+
+The following listing shows the SSH rule that allows traffic from a specific source security group:
+
+```
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "AWS in Action: chapter 6 (firewall 5)",
+	"Parameters": {
+		"KeyName": {
+			"Description": "Key Pair name",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Default": "mykey"
+		},
+		"VPC": {
+			"Description": "Just select the one and only default VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		},
+		"Subnet": {
+			"Description": "Just select one of the available subnets",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"IpForSSH": {
+			"Description": "Your public IP address to allow SSH access",
+			"Type": "String"
+		}
+	},
+	"Mappings": {
+		"EC2RegionMap": {
+			"us-east-1": {"AmazonLinuxAMIHVMEBSBacked64bit": "ami-1ecae776"}
+		}
+	},
+	"Resources": {
+		"SecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "My security group",
+				"VpcId": {"Ref": "VPC"}
+			}
+		},
+		"AllowInboundICMP": {
+			"Type": "AWS::EC2::SecurityGroupIngress",
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroup"},
+				"IpProtocol": "icmp",
+				"FromPort": "-1",
+				"ToPort": "-1",
+				"CidrIp": "0.0.0.0/0"
+			}
+		},
+		"AllowInboundSSH": {
+			"Type": "AWS::EC2::SecurityGroupIngress",
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroup"},
+				"IpProtocol": "tcp",
+				"FromPort": "22",
+				"ToPort": "22",
+				"CidrIp": {"Fn::Join": ["", [{"Ref": "IpForSSH"}, "/32"]]}
+			}
+		},
+		"SecurityGroupPrivate": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "My security group",
+				"VpcId": {"Ref": "VPC"}
+			}
+		},
+		"AllowPrivateInboundSSH": {
+			"Type": "AWS::EC2::SecurityGroupIngress",
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroupPrivate"},
+				"IpProtocol": "tcp",
+				"FromPort": "22",
+				"ToPort": "22",
+				"SourceSecurityGroupId": {"Ref": "SecurityGroup"}
+			}
+		},
+		"BastionHost": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		},
+		"Server1": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroupPrivate"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		},
+		"Server2": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroupPrivate"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		}
+	},
+	"Outputs": {
+		"BastionHostPublicName": {
+			"Value": {"Fn::GetAtt": ["BastionHost", "PublicDnsName"]},
+			"Description": "Bastion host public name (connect via SSH as user ec2-user)"
+		},
+		"Server1PublicName": {
+			"Value": {"Fn::GetAtt": ["Server1", "PublicDnsName"]},
+			"Description": "Server1 public name"
+		},
+		"Server2PublicName": {
+			"Value": {"Fn::GetAtt": ["Server2", "PublicDnsName"]},
+			"Description": "Server2 public name"
+		}
+	}
+}
+```
+
+<br>
+
+If the update is completed with above template, the stack shows three outputs:
+
+* **BastionHostPublicName** —Use the bastion host to connect via SSH from your computer.
+* **Server1PublicName** —You can connect to this server only from the bastion host.
+* **Server2PublicName** —You can connect to this server only from the bastion host.
+
+Now connect to BastionHostPublicName via SSH using ssh -i mykey.pem -A ec2-user@$BastionHostPublicName. 
+
+The -A option is important to enable AgentForwarding; agent forwarding lets you authenticate with the same key you used to log in to the bastion host for further SSH logins initiated from the bastion host.
+
+![bastion host login](img/bastion_host_login.jpg)
+
+<br>
+
 
 
 
