@@ -153,5 +153,183 @@ $ aws iam create-access-key --user-name awsuser
 }
 ```
 
+# CONTROLLING NETWORK TRAFFIC TO AND FROM YOUR VIRTUAL SERVER
+
+![ssh request flow](img/ssh_request_flow_aws.jpg)
+
+<br>
+
+**Source vs. destination**
+
+_Inbound security-group rules_ filter based on the source of the network traffic. The source is either an IP address or a security group. Thus you can allow inbound traffic only from specific source IP address ranges.
+
+_Outbound security-group rules_ filter based on the destination of the network traffic. The destination is either an IP address or a security group. You can allow outbound traffic to only specific destination IP address ranges.
+
+**AWS is responsible for the firewall, but we’re responsible for the rules.** By default, all inbound traffic is denied and all outbound traffic is allowed.
+
+## Controlling traffic to virtual servers with security groups
+
+A security group can be associated with AWS resources like EC2 instances. It’s common for EC2 instances to have more than one security group associated with them and for the same security group to be associated with many EC2 instances.
+
+A security group follows a set of rules. A rule can allow network traffic based on the following:
+
+1. Direction (inbound or outbound)
+2. IP protocol (TCP, UDP, ICMP)
+3. Source/destination IP address
+4. Port
+5. Source/destination security group (works only in AWS)
+
+Example of empty security group associated with a EC2 instance:
+
+```
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "AWS in Action: chapter 6 (firewall 1)",
+	"Parameters": {
+		"KeyName": {
+			"Description": "Key Pair name",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Default": "mykey"
+		},
+		"VPC": {
+			"Description": "Just select the one and only default VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		},
+		"Subnet": {
+			"Description": "Just select one of the available subnets",
+			"Type": "AWS::EC2::Subnet::Id"
+		}
+	},
+	"Mappings": {
+		"EC2RegionMap": {
+			"us-east-1": {"AmazonLinuxAMIHVMEBSBacked64bit": "ami-1ecae776"}
+		}
+	},
+	"Resources": {
+		"SecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "My security group",
+				"VpcId": {"Ref": "VPC"}
+			}
+		},
+		"Server": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		}
+	},
+	"Outputs": {
+		"PublicName": {
+			"Value": {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+			"Description": "Public name (connect via SSH as user ec2-user)"
+		}
+	}
+}
+```
+
+<br>
+
+## Allowing ICMP traffic
+
+If we want to ping an EC2 instance from your computer, you must allow inbound Internet Control Message Protocol (ICMP) traffic. By default, all inbound traffic is blocked.
+
+```
+$ ping ec2-52-5-109-147.compute-1.amazonaws.com
+PING ec2-52-5-109-147.compute-1.amazonaws.com (52.5.109.147): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+
+```
+
+<br>
+
+We need to add a rule to the security group that allows inbound traffic, where the protocol equals ICMP.
+
+```
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "AWS in Action: chapter 6 (firewall 2)",
+	"Parameters": {
+		"KeyName": {
+			"Description": "Key Pair name",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Default": "mykey"
+		},
+		"VPC": {
+			"Description": "Just select the one and only default VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		},
+		"Subnet": {
+			"Description": "Just select one of the available subnets",
+			"Type": "AWS::EC2::Subnet::Id"
+		}
+	},
+	"Mappings": {
+		"EC2RegionMap": {
+			"us-east-1": {"AmazonLinuxAMIHVMEBSBacked64bit": "ami-1ecae776"}
+		}
+	},
+	"Resources": {
+		"SecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "My security group",
+				"VpcId": {"Ref": "VPC"}
+			}
+		},
+		"AllowInboundICMP": {                           #ICMP role description
+			"Type": "AWS::EC2::SecurityGroupIngress",   # Type of inound rule
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroup"},    # Connects the rule with s security group
+				"IpProtocol": "icmp",                   # Specifies protocol
+				"FromPort": "-1",                       # -1 means all ports
+				"ToPort": "-1",                         
+				"CidrIp": "0.0.0.0/0"                   #0.0.0.0/o means it can be pinged from any source IP
+			}
+		},
+		"Server": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		}
+	},
+	"Outputs": {
+		"PublicName": {
+			"Value": {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+			"Description": "Public name (connect via SSH as user ec2-user)"
+		}
+	}
+}
+```
+
+<br>
+
+After applying this rule:
+
+```
+$ ping ec2-52-5-109-147.compute-1.amazonaws.com
+PING ec2-52-5-109-147.compute-1.amazonaws.com (52.5.109.147): 56 data bytes
+64 bytes from 52.5.109.147: icmp_seq=0 ttl=49 time=112.222 ms
+64 bytes from 52.5.109.147: icmp_seq=1 ttl=49 time=121.893 ms
+[...]
+round-trip min/avg/max/stddev = 112.222/117.058/121.893/4.835 ms
+```
+
+<br>
+
+
+
+
 
 
