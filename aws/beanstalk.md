@@ -115,7 +115,7 @@ OptionName=EnvironmentType,Value=SingleInstance \
 --solution-stack-name "$SolutionStackName" \
 --version-label 1.5.2
 ```
-<br>
+
 Output:
 <br>
 ```
@@ -125,9 +125,7 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
  OptionName=EnvironmentType,Value=SingleInstance \
  --solution-stack-name "$SolutionStackName" \
  --version-label 1.5.2
-```
 
-```
 {
     "ApplicationName": "etherpad", 
     "EnvironmentName": "etherpad", 
@@ -147,13 +145,14 @@ $ aws elasticbeanstalk create-environment --environment-name etherpad \
     "DateCreated": "2018-12-26T07:40:50.746Z"
 }
 ```
-<br>
+
 A new EC2 instance is created:
 <br>
 ![etherpad ec2 instance](img/etherpad_instance.jpeg)
-<br>
+
 Once the instance is up and running, we can describe the env:
 <br>
+
 ```
 aws elasticbeanstalk describe-environments --environment-names etherpad
 {
@@ -184,7 +183,7 @@ aws elasticbeanstalk describe-environments --environment-names etherpad
 }
 ```
 <br>
-We can get details about the etherpad env if we got to beanstalk service on AWS console.
+We can get details about the etherpad env if we got to beanstalk service on AWS
 <br>
 
 ![bean stalk service etherpad](img/beanstalk_service_etherpad.jpeg)
