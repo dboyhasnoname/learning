@@ -315,7 +315,7 @@ We need to add a rule to the security group that allows inbound traffic, where t
 
 <br>
 
-After applying this rule:
+After applying this rule we can ping the instance:
 
 ```
 $ ping ec2-52-5-109-147.compute-1.amazonaws.com
@@ -327,6 +327,66 @@ round-trip min/avg/max/stddev = 112.222/117.058/121.893/4.835 ms
 ```
 
 <br>
+
+## Allowing SSH traffic
+
+Below rule needs to be added in above snippet in Resources section:
+
+```
+		"AllowInboundSSH": {
+			"Type": "AWS::EC2::SecurityGroupIngress",
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroup"},
+				"IpProtocol": "tcp",
+				"FromPort": "22",
+				"ToPort": "22",
+				"CidrIp": "0.0.0.0/0"
+			}
+		}
+```        
+<br>
+
+## Allowing SSH traffic from a source IP address
+
+Security group that allows SSH only from specific IP address. Used $IpForSSH/32 as a value
+
+```
+Below code will go in Parameters setion:
+
+		"IpForSSH": {
+			"Description": "Your public IP address to allow SSH access",
+			"Type": "String"
+		}
+
+Below code needs to be added in Resources section of above snippet:
+
+		"AllowInboundSSH": {
+			"Type": "AWS::EC2::SecurityGroupIngress",
+			"Properties": {
+				"GroupId": {"Ref": "SecurityGroup"},
+				"IpProtocol": "tcp",
+				"FromPort": "22",
+				"ToPort": "22",
+				"CidrIp": {"Fn::Join": ["", [{"Ref": "IpForSSH"}, "/32"]]}
+			}
+		}
+
+```       
+
+<br>
+
+**What’s the difference between public and private IP addresses?**
+
+On our local network, we use private IP addresses that start with 192.168.0.*. e.g My laptop uses 192.168.0.10, and my iPad uses 192.168.0.20. But if I access the internet, I have the same public IP (such as 79.241.98.155) for my laptop and iPad. That’s because only my internet gateway (the box that connects to the internet) has a public IP address, and all requests are redirected by the gateway (if you want to dive deep into this, search for network address translation). Our local network doesn’t know about this public IP address. My laptop and iPad only know that the internet gateway is reachable under 192.168.0.1 on the private network.
+
+**Classless Inter-Domain Routing (CIDR)**
+
+We may wonder what /32 means in above example. An IP address is 4 bytes or 32 bits long. The /32 defines how many bits (32, in this case) should be used to form a range of addresses. If we want to define the exact IP address that’s allowed, we must use all 32 bits.
+
+But sometimes it makes sense to define a range of allowed IP addresses. For example, we can use 10.0.0.0/8 to create a range between 10.0.0.0 and 10.255.255.255, 10.0.0.0/16 to create a range between 10.0.0.0 and 10.0.255.255, or 10.0.0.0/24 to create a range between 10.0.0.0 and 10.0.0.255. we aren’t required to use the binary boundaries (8, 16, 24, 32), but they’re easier for most people to understand. We already used 0.0.0.0/0 to create a range that contains every possible IP address.
+
+## Allowing SSH traffic from a source security group
+
 
 
 
