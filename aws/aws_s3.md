@@ -97,13 +97,13 @@ download: s3://mukund-learning-aws/ansible/README.md to test/README.md
 
 $ ls -lrt test/
 total 8
--rw-r--r--  1 mukund_bihari  staff  1328 Dec 27 00:16 README.md
-drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 meta
-drwxr-xr-x  4 mukund_bihari  staff   128 Dec 27 00:19 tests
-drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 handlers
-drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 defaults
-drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 vars
-drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 tasks
+-rw-r--r--  1 mukund_xxxxxxxx  staff  1328 Dec 27 00:16 README.md
+drwxr-xr-x  3 mukund_xxxxxxxx  staff    96 Dec 27 00:19 meta
+drwxr-xr-x  4 mukund_xxxxxxxx  staff   128 Dec 27 00:19 tests
+drwxr-xr-x  3 mukund_xxxxxxxx  staff    96 Dec 27 00:19 handlers
+drwxr-xr-x  3 mukund_xxxxxxxx  staff    96 Dec 27 00:19 defaults
+drwxr-xr-x  3 mukund_xxxxxxxx  staff    96 Dec 27 00:19 vars
+drwxr-xr-x  3 mukund_xxxxxxxx  staff    96 Dec 27 00:19 tasks
 
 ```
 
@@ -111,7 +111,161 @@ drwxr-xr-x  3 mukund_bihari  staff    96 Dec 27 00:19 tasks
 
 ## Versioning for objects
 
+By default, S3 versioning is disabled for every bucket. Suppose we use the following steps to upload two objects:
 
+1.  Add an object with key City_name and data 1.
+
+2.  Add an object with key City_name and data 2.
+
+If downloaded, also known as get, the object with key City_name, we’ll download data 2. _The old data 1 doesn’t exist anymore._
+
+We can change this behavior by turning on versioning for a bucket. The following command activates versioning for your bucket:
+
+```
+aws s3api put-bucket-versioning --bucket mukund-learning-aws \
+--versioning-configuration Status=Enabled
+```
+
+<br>
+
+```
+$ aws s3api list-object-versions --bucket mukund-learning-aws
+{
+    "Versions": [
+        {
+            "LastModified": "2018-12-26T18:46:26.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"433d370732878937b5cf7bdbf13b76d6\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/README.md", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 1328
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:25.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"92570869104cf76cc4a89bd35af903eb\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/defaults/main.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 28
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:27.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"25e672f63b66c7146a35a1c14cbd980f\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/handlers/main.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 28
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:27.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"6c6f6154a02e76a961409e5eb770d615\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/meta/main.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 1777
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:27.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"2a8bdaa9e9e0d2ce169988a7ba3d17fb\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/tasks/main.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 25
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:26.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"ff9555a021b549d18f9dc73454b903c8\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/tests/inventory", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 11
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:26.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"7790682a1bd2cf842348fab79701a78c\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/tests/test.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 62
+        }, 
+        {
+            "LastModified": "2018-12-26T18:46:26.000Z", 
+            "VersionId": "null", 
+            "ETag": "\"1065d1b3d0bfc42885612685609f61be\"", 
+            "StorageClass": "STANDARD", 
+            "Key": "ansible/vars/main.yml", 
+            "Owner": {
+                "DisplayName": "xxxxxxxxmukund", 
+                "ID": "d782fc12585603a89690e1574826fc16722ee81fb1e7ec028cacf1a989837001"
+            }, 
+            "IsLatest": true, 
+            "Size": 24
+        }
+    ]
+}
+```
+
+<br>
+
+After the version was enabled, one extra directory was created in test/ and then sync command:
+
+```
+$ aws s3 sync test/ s3://mukund-learning-aws/ansible 
+upload: test/tasks_version1/main.yml to s3://mukund-learning-aws/ansible/tasks_version1/main.yml
+```
+
+3. Cleanup:
+
+```
+$ aws s3 rb --force s3://mukund-learning-aws
+delete: s3://mukund-learning-aws/ansible/meta/main.yml
+delete: s3://mukund-learning-aws/ansible/README.md
+delete: s3://mukund-learning-aws/ansible/tasks/main.yml
+delete: s3://mukund-learning-aws/ansible/handlers/main.yml
+delete: s3://mukund-learning-aws/ansible/vars/main.yml
+delete: s3://mukund-learning-aws/ansible/tests/inventory
+delete: s3://mukund-learning-aws/ansible/tests/test.yml
+delete: s3://mukund-learning-aws/ansible/defaults/main.yml
+delete: s3://mukund-learning-aws/ansible/tasks_version1/main.yml
+remove_bucket failed: s3://mukund-learning-aws An error occurred (BucketNotEmpty) when calling the DeleteBucket operation: The bucket you tried to delete is not empty. You must delete all versions in the bucket.
+```
+
+_If versioning is turned on for bucket, removing the bucket will cause a BucketNotEmpty error. Use the Management Console to delete the bucket. Some times even a empty bucket with versioning does not gets deleted. In this case simply try enablig/disabling the versioning from UI and then deleting the bucket._
 
 
 
