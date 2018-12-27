@@ -119,7 +119,7 @@ By default, S3 versioning is disabled for every bucket. Suppose we use the follo
 
 If downloaded, also known as get, the object with key City_name, we’ll download data 2. _The old data 1 doesn’t exist anymore._
 
-We can change this behavior by turning on versioning for a bucket. The following command activates versioning for your bucket:
+We can change this behavior by turning on versioning for a bucket. The following command activates versioning for the bucket:
 
 ```
 aws s3api put-bucket-versioning --bucket mukund-learning-aws \
@@ -265,7 +265,121 @@ delete: s3://mukund-learning-aws/ansible/tasks_version1/main.yml
 remove_bucket failed: s3://mukund-learning-aws An error occurred (BucketNotEmpty) when calling the DeleteBucket operation: The bucket you tried to delete is not empty. You must delete all versions in the bucket.
 ```
 
-_If versioning is turned on for bucket, removing the bucket will cause a BucketNotEmpty error. Use the Management Console to delete the bucket. Some times even a empty bucket with versioning does not gets deleted. In this case simply try enablig/disabling the versioning from UI and then deleting the bucket._
+_If versioning is turned on for bucket, removing the bucket will cause a BucketNotEmpty error. Use the Management Console to delete the bucket. Some times even a empty bucket with versioning does not gets deleted. In this case simply try enabling/disabling the versioning from UI and then deleting the bucket._
+
+
+# Amazon Glacier
+
+Amazon Glacier is a storage service optimized for infrequently used data, or "cold data." Amazon Glacier is an extremely low-cost storage service that provides durable storage with security features for data archiving and backup.
+
+![Amazon Glacier](img/amazon_glacier.jpeg)
+
+<br>
+
+We can use Glacier as a standalone service accessible via HTTPS or use the integration into S3.
+
+Configruing buckets with lifecycle rules:
+
+![glacier config](img/glacier_config.jpeg)
+
+<br>
+
+## STORING OBJECTS PROGRAMMATICALLY
+
+* S3 is accessible over an API via HTTPS. 
+* This enables the integration of S3 with applications by making requests to the API programmatically. 
+* We can execute the following operations with the help of a SDK directly from your application:
+
+    1. Listing buckets and their objects
+    2. Creating, removing, updating, and deleting (CRUD) objects and buckets
+    3.  Managing access to and the cycle of objects
+
+* Integrating S3 into an application is a way to implement the concept of a stateless server. 
+
+## USING S3 FOR STATIC WEB HOSTING
+
+* We can host a static website with S3 and deliver static content like HTML, CSS, images (such as PNG and JPG), audio, and videos. 
+* We can’t execute server-side scripts like PHP or JSP, but it’s possible to deliver client-side scripts (such as JavaScript) from S3.
+* _Amazon S3 isn’t a CDN, but you can easily use S3 as the back end for the CDN service of AWS: Amazon CloudFront._
+* In addition, S3 offers the following features for hosting a static website:
+
+    1. Define a custom index document and error documents.
+    2. Define redirects for all or specific requests.
+    3. Set up a custom domain for S3 bucket.       
+
+**Configuring a bucket for static web hosting:**
+
+1. Create bucket:
+```
+$ aws s3 mb s3://$BucketName
+make_bucket: mukund-learning-aws
+
+```
+
+2. Place a static page on bucket:
+```
+$ aws s3 cp helloworld.html s3://$BucketName/helloworld.html
+upload: ./helloworld.html to s3://mukund-learning-aws/helloworld.html
+```
+
+3. Apply bucket policy for statuc page hosting:
+```
+GGN-142429-C02X70CGJHD5:chapter7 mukund_bihari$ aws s3api put-bucket-policy --bucket $BucketName --policy file://bucketpolicy.json
+$ aws s3 website s3://$BucketName --index-document helloworld.html
+```
+
+4. Accessing the website:
+```
+$ curl http://$BucketName.s3-website-us-east-1.amazonaws.com
+<html>
+	<head>
+		<title>Hello World!</title>
+	</head>
+	<body>
+		Hello World!
+	</body>
+$ 
+```
+
+<br>
+
+**bucketpolicy.json:** bucket policy hels control access to bucket objects globally.
+
+```
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid":"AddPerm",
+      "Effect":"Allow",                                  # allow access 
+      "Principal": "*",                                  # to everyone
+      "Action":["s3:GetObject"],                         # to download objects
+      "Resource":["arn:aws:s3:::mukund-learning-aws/*"]  # from the bucket
+    }
+  ]
+}
+```
+
+<br>
+
+5. Linking a custom domain to an S3 bucket:
+
+We can link a custom domain to an S3 bucket. For that we have add a CNAME record for the domain, pointing to the bucket’s S3 endpoint.
+
+---
+
+The CNAME record will only work if you comply with the following requirements:
+
+- The bucket name must match the CNAME record name. For example, if we want to create a CNAME for static.yourdomain.com, your bucket name must be static.yourdomain.com as well.
+- CNAME records won’t work for the primary domain name. We need to use a subdomain for CNAMEs like static or www, for example. 
+- If we want to link a primary domain name to an S3 bucket, we need to use the Route 53 DNS service from AWS.
+
+---
+
+
+
+
+
 
 
 
