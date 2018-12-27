@@ -228,6 +228,52 @@ Describing mysql rds db instance:
 
 ## CONTROLLING ACCESS TO A DATABASE
 
+![rds access ](img/rd_access.jpg)
+
+<br>
+
+* Controlling access to the configuration of the RDS database
+
+![rds iam policy](img/rds_iam_ploicy.jpg)
+
+* Controlling network access to the RDS database
+
+![rds firewall rules](img/rds_firewall_rules.jpg)
+
+* Controlling data access with the help of the user and access management of the database itself
+    - Limiting write access to a database to a few database users (for example, only for an application)
+    - Limiting access to specific tables to a few users (for example, to a department of the organization)
+    - Limiting access to tables to isolate different applications (for example, hosting multiple applications for different customers on the same database)
+
+## TWEAKING DATABASE PERFORMANCE
+
+An RDS database, or an SQL database in general, can only be scaled vertically. If the performance of the database becomes insufficient, we must increase the performance of the underlying hardware:
+
+1. Faster CPU
+2. More memory
+3. Faster I/O
+ 
+In comparison, an object store like S3 or a NoSQL-database like DynamoDB can be scaled horizontally. We can increase performance by adding more nodes to the cluster.
+
+RDS offers three different types of storage, as you already know from the block storage service EBS:
+
+1. General purpose (SSD)
+2. Provisioned IOPS (SSD)
+3. Magnetic
+
+* We should choose general purpose (SSD) or even provisioned IOPS (SSD) storage for production workloads.
+* If we need to guarantee a high level of read or write throughput, we should use the provisioned IOPS (SSD) option. 
+* The general purpose (SSD) option offers moderate baseline performance with the ability to burst. The throughput for general purpose (SSD) depends on the initialized storage size. 
+* Magnetic storage is an option if we need to store data at a low cost or if we don’t need to access it in a predictable, performant way. 
+
+## MONITORING A DATABASE
+
+RDS is a managed service. RDS publishes several metrics to AWS CloudWatch, a monitoring service for the AWS cloud. 
+
+![rds cloudwatch](img/rds_cloudwatch.jpg)
+
+
+
 
 
 
