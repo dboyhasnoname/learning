@@ -300,7 +300,7 @@ Configruing buckets with lifecycle rules:
 
 * We can host a static website with S3 and deliver static content like HTML, CSS, images (such as PNG and JPG), audio, and videos. 
 * We can’t execute server-side scripts like PHP or JSP, but it’s possible to deliver client-side scripts (such as JavaScript) from S3.
-* _Amazon S3 isn’t a CDN, but you can easily use S3 as the back end for the CDN service of AWS: Amazon CloudFront._
+* _Amazon S3 isn’t a CDN, but we can easily use S3 as the back end for the CDN service of AWS: Amazon CloudFront._
 * In addition, S3 offers the following features for hosting a static website:
 
     1. Define a custom index document and error documents.
@@ -343,7 +343,7 @@ $
 
 <br>
 
-**bucketpolicy.json:** bucket policy hels control access to bucket objects globally.
+**bucketpolicy.json:** bucket policy helps control access to bucket objects globally.
 
 ```
 {
@@ -375,6 +375,38 @@ The CNAME record will only work if you comply with the following requirements:
 - If we want to link a primary domain name to an S3 bucket, we need to use the Route 53 DNS service from AWS.
 
 ---
+
+#  INTERNALS OF THE OBJECT STORE
+
+## Ensuring data consistency
+
+* Creating, updating, or deleting an object on S3, this operation is atomic. 
+* This means reading an object after a create, an update, or a delete, we’ll never get corrupted or partial data. 
+* But it’s possible that a read will return the old data for a while. So S3 provides **eventual consistency.**
+
+* Read requests after uploading a new object will be consistent if we use the s3-external-1.amazonaws.com endpoint to access your S3 bucket in US Standard; the same is true for buckets in regions other than US Standard. But read requests after an update or delete will be eventually consistent.
+
+## Choosing the right keys
+
+* To improve I/O performance with S3, don’t use keys that start with the same characters.
+
+![s3 I/O performance](img/s3_io_performance.jpg)
+
+<br>
+
+* Using a slash (/) in the key name acts like creating a folder for your object. 
+
+---
+
+If we create an object with the key folder/object.png, the folder will become visible as folder if we’re browsing the bucket with a GUI like the Management Console, for example. But technically, the key of the object still is folder/object.png.
+
+---
+
+
+
+
+
+
 
 
 
