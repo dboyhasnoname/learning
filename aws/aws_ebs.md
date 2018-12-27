@@ -172,6 +172,220 @@ An EBS volume is a standalone resource. This means EBS volume can exist without 
 }
 ```
 
+<br>
+
+Once the stack is completed, we can see the volumes from CLI:
+
+```
+$ aws ec2 describe-volumes | jq '.Volumes[]'
+
+{
+  "AvailabilityZone": "us-east-1e",
+  "Attachments": [
+    {
+      "AttachTime": "2018-12-27T14:56:07.000Z",
+      "InstanceId": "i-03053b26643a3a2d5",
+      "VolumeId": "vol-0e2e05a7c307f6d9d",
+      "State": "attached",
+      "DeleteOnTermination": true,
+      "Device": "/dev/xvda"
+    }
+  ],
+  "Encrypted": false,
+  "VolumeType": "gp2",
+  "VolumeId": "vol-0e2e05a7c307f6d9d",
+  "State": "in-use",
+  "Iops": 100,
+  "SnapshotId": "snap-b772aec8",
+  "CreateTime": "2018-12-27T14:56:06.961Z",
+  "Size": 8
+}
+{
+  "AvailabilityZone": "us-east-1e",
+  "Attachments": [
+    {
+      "AttachTime": "2018-12-27T14:57:00.000Z",
+      "InstanceId": "i-03053b26643a3a2d5",
+      "VolumeId": "vol-03920178f3e49435e",
+      "State": "attached",
+      "DeleteOnTermination": false,
+      "Device": "/dev/xvdf"
+    }
+  ],
+  "Tags": [
+    {
+      "Value": "Volume",
+      "Key": "aws:cloudformation:logical-id"
+    },
+    {
+      "Value": "mukund",
+      "Key": "Name"
+    },
+    {
+      "Value": "arn:aws:cloudformation:us-east-1:825796472415:stack/ebs/3382db60-09e7-11e9-ba3c-0eaaceea2200",
+      "Key": "aws:cloudformation:stack-id"
+    },
+    {
+      "Value": "ebs",
+      "Key": "aws:cloudformation:stack-name"
+    }
+  ],
+  "Encrypted": false,
+  "VolumeType": "gp2",
+  "VolumeId": "vol-03920178f3e49435e",
+  "State": "in-use",
+  "Iops": 100,
+  "SnapshotId": "",
+  "CreateTime": "2018-12-27T14:56:41.447Z",
+  "Size": 5
+}
+```
+
+<br>
+
+We can check in the server:
+
+```
+[root@ip-172-31-77-152 ~]# fdisk -l
+WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+Disk /dev/xvda: 8589 MB, 8589934592 bytes, 16777216 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+
+
+#         Start          End    Size  Type            Name
+ 1         4096     16777182      8G  Linux filesyste Linux
+128         2048         4095      1M  BIOS boot parti BIOS Boot Partition
+
+Disk /dev/xvdf: 5368 MB, 5368709120 bytes, 10485760 sectors     <<<<< Attahced EBS volume as mentioned in ebs.json
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+```
+
+<br>
+
+Creating as FS:
+
+```
+[root@ip-172-31-77-152 ~]# sudo mkfs -t ext4 /dev/xvdf
+mke2fs 1.42.12 (29-Aug-2014)
+Creating filesystem with 1310720 4k blocks and 327680 inodes
+Filesystem UUID: 3361b24f-0118-49c1-9472-419dcd8753ea
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376, 294912, 819200, 884736
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (32768 blocks): done
+Writing superblocks and filesystem accounting information: done 
+```
+
+<br>
+
+After the file system has been created, we can mount the device:
+
+```
+[root@ip-172-31-77-152 ~]# mkdir /mnt/volume/
+[root@ip-172-31-77-152 ~]# mount /dev/xvdf /mnt/volume/
+[root@ip-172-31-77-152 ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/xvda1      7.8G  1.1G  6.7G  14% /
+devtmpfs        490M   60K  490M   1% /dev
+tmpfs           499M     0  499M   0% /dev/shm
+/dev/xvdf       4.8G   10M  4.6G   1% /mnt/volume
+
+[root@ip-172-31-77-152 ~]# fdisk -l
+WARNING: fdisk GPT support is currently new, and therefore in an experimental phase. Use at your own discretion.
+
+Disk /dev/xvda: 8589 MB, 8589934592 bytes, 16777216 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: gpt
+
+
+#         Start          End    Size  Type            Name
+ 1         4096     16777182      8G  Linux filesyste Linux
+128         2048         4095      1M  BIOS boot parti BIOS Boot Partition
+
+Disk /dev/xvdf: 5368 MB, 5368709120 bytes, 10485760 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+```
+
+<br>
+
+## Tweaking performance
+
+EBS performance is a bit more complicated. Performance depends on the EC2 instance type and the EBS volume type.
+
+![ebs volume performance](img/ebs_vol_perf.jpeg)
+
+<br>
+
+EBS volume types differ
+
+![ebs vol types](img/eb_vol_types.jpeg)
+
+<br>
+
+
+EBS volumes are charged for based on the size of the volume, no matter how much you use of that size. If you provision a 100 GiB volume, you pay for 100 GiB even if you have no data on the volume. If you use magnetic volumes, you must also pay for every I/O operation you perform. A provisioned IOPS (SSD) volume is additionally charged for based on the provisioned IOPS. 
+
+**GiB and TiB**
+
+___
+
+The terms gibibyte (GiB) and tebibyte (TiB) aren’t used often; you’re probably more familiar with gigabyte and terabyte. But AWS uses them in some places. Here’s what they mean:
+
+1 GiB = 2^30 bytes = 1,073,741,824 bytes
+1 GiB is ~ 1.074 GB
+1 GB = 10^9 bytes = 1,000,000,000 bytes
+
+___
+
+* Use general-purpose (SSD) volumes as the default. If the workload requires more IOPS, then go with provisioned IOPS (SSD). Attach multiple EBS volumes to a single instance to increase overall capacity or for additional performance.
+
+* Increase performance by combining two (or more) volumes together in a software RAID0, also called **striping.** RAID0 means that if you have two disks, your data is distributed over those two disks, but data resides only on one disk. A software RAID can be created with mdadm in Linux.
+
+
+## Backing up your data
+
+* EBS volumes offer 99.999% availability, but we should still create backups from time to time. 
+
+* EBS offers an optimized, easy-to-use way of backing up EBS volumes with EBS snapshots. 
+
+* A snapshot is a block-level incremental backup that is saved on S3. 
+* If the volume is 5 GB in size and use is 1 GB of data, the first snapshot will be around 1 GB in size. After the first snapshot is created, only the changes will be saved to S3 to reduce the size of the backup. 
+* EBS snapshots are charged for based on how many gigabytes you use.
+
+## Creating snapshot
+
+Creating a snapshot of an attached, mounted volume is possible but can cause problems with writes that aren’t flushed to disk. If we must have to create a snapshot while the volume is in use, we can do so safely as follows:
+
+1.  Freeze all writes by running fsfreeze -f /mnt/volume/ on the server.
+
+2.  Create a snapshot.
+
+3.  Resume writes by running fsfreeze -u /mnt/volume/ on the server.
+
+4.  Wait until the snapshot is completed.
+
+We must only freeze when snapshot creation is requested. We must not freeze until the snapshot is completed.
+
+To restore a snapshot, we must create a new EBS volume based on that snapshot. While launching an EC2 instance from an AMI, AWS creates a new EBS volume (root volume) based on a snapshot (an AMI is a snapshot).
+
+# INSTANCE STORES
+
+
+
 
 
 
