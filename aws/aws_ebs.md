@@ -408,7 +408,9 @@ AWS offers SSD and HDD instance stores from 4 GB up to 48 TB:
 
  # Amazon Elastic File System(EFS)
 
-* Scalable, elastic, cloud-native file system for Linux
+* Scalable, elastic, cloud-native file system for Linux based on the Network File System version 4 (NFSv4) protocol.
+
+[**COMING SOON!**](https://aws.amazon.com/efs/)
 
 * Amazon Elastic File System (Amazon EFS) provides a simple, scalable, elastic file system for Linux-based workloads for use with AWS Cloud services and on-premises resources. 
 * It is built to scale on demand to petabytes without disrupting applications, growing and shrinking automatically as you add and remove files, so your applications have the storage they need – when they need it. 
@@ -419,7 +421,7 @@ AWS offers SSD and HDD instance stores from 4 GB up to 48 TB:
 * Amazon EFS is well suited to support a broad spectrum of use cases from highly parallelized, scale-out workloads that require the highest possible throughput to single-threaded, latency-sensitive workloads. 
 * Use cases such as lift-and-shift enterprise applications, big data analytics, web serving and content management, application development and testing, media and entertainment workflows, database backups, and container storage.
 
-[**COMING SOON!**](https://aws.amazon.com/efs/)
+
 
 
 The Amazon Elastic File System Infrequent Access storage class is cost-optimized for files not accessed every day, reducing costs by up to 85% compared to the EFS Standard storage class.
