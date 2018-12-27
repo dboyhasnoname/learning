@@ -28,7 +28,7 @@ AWS provides two kinds of block-level storage:
     - Instance storage is interesting if we’re optimizing for performance. 
 
 
-# NETWORK-ATTACHED STORAGE
+# NETWORK-ATTACHED STORAGE(EBS)
 
 * Elastic Block Store (EBS) provides network-attached, block-level storage with 99.999% availability.
 * EBS volumes are independent resources but can only be used when attached to an EC2 instance.
@@ -41,7 +41,136 @@ AWS provides two kinds of block-level storage:
     - Can be used like normal hard disks.
     - Are comparable to RAID1: data is saved to multiple disks in the background.
 
-    
+## Creating an EBS volume and attaching it to your server    
+
+An EBS volume is a standalone resource. This means EBS volume can exist without an EC2 server, but we need an EC2 server to use the EBS volume.
+
+```
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "mukund-learning-aws EBS learning",
+	"Parameters": {
+		"KeyName": {
+			"Description": "Key Pair name",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"Default": "mykey"
+		},
+		"VPC": {
+			"Description": "Just select the one and only default VPC",
+			"Type": "AWS::EC2::VPC::Id"
+		},
+		"Subnet": {
+			"Description": "Just select one of the available subnets",
+			"Type": "AWS::EC2::Subnet::Id"
+		},
+		"AttachVolume": {
+			"Description": "Should the volume be attached?",
+			"Type": "String",
+			"Default": "yes",
+			"AllowedValues": ["yes", "no"]
+		}
+	},
+	"Mappings": {
+		"EC2RegionMap": {
+			"us-east-1": {"AmazonLinuxAMIHVMEBSBacked64bit": "ami-1ecae776"}
+		}
+	},
+	"Conditions": {
+		"Attached": {"Fn::Equals": [{"Ref": "AttachVolume"}, "yes"]}
+	},
+	"Resources": {
+		"SecurityGroup": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"GroupDescription": "My security group",
+				"VpcId": {"Ref": "VPC"},
+				"SecurityGroupIngress": [{
+					"CidrIp": "0.0.0.0/0",
+					"FromPort": 22,
+					"IpProtocol": "tcp",
+					"ToPort": 22
+				}]
+			}
+		},
+		"IamRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": ["ec2.amazonaws.com"]
+							},
+							"Action": ["sts:AssumeRole"]
+						}
+					]
+				},
+				"Path": "/",
+				"Policies": [
+					{
+						"PolicyName": "ec2",
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [{
+								"Effect" : "Allow",
+								"Action" : ["ec2:DescribeVolumes", "ec2:CreateSnapshot", "ec2:DescribeSnapshots", "ec2:DeleteSnapshot"],
+								"Resource": "*"
+							}]
+						}
+					}
+				]
+			}
+		},
+		"IamInstanceProfile": {
+			"Type": "AWS::IAM::InstanceProfile",
+			"Properties": {
+				"Path": "/",
+				"Roles": [{"Ref": "IamRole"}]
+			}
+		},
+		"Server": {
+			"Type": "AWS::EC2::Instance",
+			"Properties": {
+				"IamInstanceProfile": {"Ref": "IamInstanceProfile"},
+				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
+				"InstanceType": "t2.micro",
+				"KeyName": {"Ref": "KeyName"},
+				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
+				"SubnetId": {"Ref": "Subnet"}
+			}
+		},
+		"Volume": {
+			"Type": "AWS::EC2::Volume",                                             # EBS Volume Description
+			"Properties": {
+				"AvailabilityZone": {"Fn::GetAtt": ["Server", "AvailabilityZone"]},
+				"Size": "5",                                                        # 5GB capacity
+				"VolumeType": "gp2"                                                 # SSD backed
+			}
+		},
+		"VolumeAttachment": {
+			"Type": "AWS::EC2::VolumeAttachment",                                   # Attach EBS volume to server
+			"Condition": "Attached",
+			"Properties": {
+				"Device": "/dev/xvdf",                                              # Device name
+				"InstanceId": {"Ref": "Server"},
+				"VolumeId": {"Ref": "Volume"}
+			}
+		}
+	},
+	"Outputs": {
+		"PublicName": {
+			"Value": {"Fn::GetAtt": ["Server", "PublicDnsName"]},
+			"Description": "Public name (connect via SSH as user ec2-user)"
+		},
+		"VolumeId": {
+			"Value": {"Ref": "Volume"},
+			"Description": "Volume id"
+		}
+	}
+}
+```
 
 
 
