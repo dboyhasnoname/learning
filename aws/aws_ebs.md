@@ -269,7 +269,7 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 <br>
 
-Creating as FS:
+Creating a FS:
 
 ```
 [root@ip-172-31-77-152 ~]# sudo mkfs -t ext4 /dev/xvdf
@@ -384,7 +384,48 @@ To restore a snapshot, we must create a new EBS volume based on that snapshot. W
 
 # INSTANCE STORES
 
+* An instance store provides block-level storage like a normal hard disk.
+* The instance store is part of an EC2 instance and available only if the instance is running; it won’t persist any data if we stop or terminate the instance. There is no built-in backup mechanism for instance store volumes. 
+* Instance store is not separately chrged; instance store charges are included in the EC2 instance price.
+* An instance store can be used to get the highest available I/O performance.
+* It can be used for caching, temporary processing, or applications that replicate data to several servers as some databases do. 
 
+![instance store](img/instace_store.jpg)
+
+<br>
+
+AWS offers SSD and HDD instance stores from 4 GB up to 48 TB:
+
+ ![instance store types](img/instance_store_offerings.jpeg)
+
+ <br>
+
+ # COMPARING BLOCK-LEVEL STORAGE SOLUTIONS
+
+ ![storage solutions](img/storage_comaprison.jpeg)
+
+ <br>
+
+ # Amazon Elastic File System(EFS)
+
+* Scalable, elastic, cloud-native file system for Linux
+
+* Amazon Elastic File System (Amazon EFS) provides a simple, scalable, elastic file system for Linux-based workloads for use with AWS Cloud services and on-premises resources. 
+* It is built to scale on demand to petabytes without disrupting applications, growing and shrinking automatically as you add and remove files, so your applications have the storage they need – when they need it. 
+* It is designed to provide massively parallel shared access to thousands of Amazon EC2 instances, enabling your applications to achieve high levels of aggregate throughput and IOPS with consistent low latencies. Amazon EFS is a fully managed service that requires no changes to your existing applications and tools, providing access through a standard file system interface for seamless integration. 
+* Amazon EFS is a regional service storing data within and across multiple Availability Zones (AZs) for high availability and durability. 
+* We can access our file systems across AZs, regions, and VPCs and share files between thousands of Amazon EC2 instances and on-premises servers via AWS Direct Connect or AWS VPN.
+
+* Amazon EFS is well suited to support a broad spectrum of use cases from highly parallelized, scale-out workloads that require the highest possible throughput to single-threaded, latency-sensitive workloads. 
+* Use cases such as lift-and-shift enterprise applications, big data analytics, web serving and content management, application development and testing, media and entertainment workflows, database backups, and container storage.
+
+[**COMING SOON!**](https://aws.amazon.com/efs/)
+
+
+The Amazon Elastic File System Infrequent Access storage class is cost-optimized for files not accessed every day, reducing costs by up to 85% compared to the EFS Standard storage class.
+
+
+        
 
 
 
