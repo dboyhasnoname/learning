@@ -376,7 +376,7 @@ The CNAME record will only work if you comply with the following requirements:
 
 ---
 
-#  INTERNALS OF THE OBJECT STORE
+#  Tricks of S3
 
 ## Ensuring data consistency
 
