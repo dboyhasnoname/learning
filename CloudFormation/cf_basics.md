@@ -21,7 +21,7 @@
 
 <br>
 
-1. In AWS CloudFormation; we canb write IaC scripts in:
+1. In AWS CloudFormation; we can write IaC scripts in:
     1. JSON, 
     2. YAML 
 
@@ -60,31 +60,24 @@ We can use Git to manage IaC scripts. Once the scripts are released, we can push
 
 * Automate: We have the option to automate template generation using a programming language or a tool of our choice. We also have the option to automate stack creation from the templates using the CloudFormation API, AWS SDKs, or AWS CLI.
 
+#### A Template has the following high level JSON Structure:
+
 ```
 {
-
     "Description" : "A text description for the template usage",
-
     "Parameters": {
-
         // A set of inputs used to customize the template per deployment
-
     },
 
     "Resources" : {
-
         // The set of AWS resources and relationships between them
-
     },
 
     "Outputs" : {
-
         // A set of values to be made visible to the stack creator
-
     },
 
     "AWSTemplateFormatVersion" : "2010-09-09"
-
 }
 ```
 
@@ -96,55 +89,30 @@ Example in JSON:
 {
 
     "Description" : "Create an EC2 instance running the Amazon Linux 32 bit AMI.",
-
     "Parameters" : {
-
         "KeyPair" : {
-
             "Description" : "The EC2 Key Pair to allow SSH access to the instance",
-
             "Type" : "String"
-
         }
-
     },
-
     "Resources" : {
-
         "Ec2Instance" : {
-
             "Type" : "AWS::EC2::Instance",
-
             "Properties" : {
-
                 "KeyName" : { "Ref" : "KeyPair" },
-
                 "ImageId" : "ami-3b355a52"
-
             }
-
         }
-
     },
-
     "Outputs" : {
-
         "InstanceId" : {
-
             "Description" : "The InstanceId of the newly created EC2 instance",
-
             "Value" : {
-
                 "Ref" : "Ec2Instance"
-
             }
-
         }
-
     },
-
     "AWSTemplateFormatVersion" : "2010-09-09"
-
 }   
 ```
 
