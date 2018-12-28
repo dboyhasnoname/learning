@@ -142,7 +142,15 @@ Outputs:
 AWSTemplateFormatVersion: "2010-09-09"
 ```
 
+<br>
 
+## Creating templates through UI
+
+Go to service CloudFormation and click Design template:
+
+![desing tempalte cf](img/cf_desgin_template.jpeg)
+
+<br>
 
 
 

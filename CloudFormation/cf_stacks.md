@@ -1,4 +1,4 @@
-# CloudFormation stacks
+# CloudFormation Stacks
 
 * A stack is a collection of AWS resources that you can manage as a single unit.
 
@@ -24,7 +24,7 @@ The CloudFormation stack consists of two stacks: B1 and B2. Inside the B1 Stack,
 
 <br>
 
-# CloudFormation StackSets
+## CloudFormation StackSets
 
 - CloudFormation StackSet is designed to enable you to create CloudFormation stacks in AWS accounts across regions by using a single AWS CloudFormation template. 
 
@@ -53,13 +53,13 @@ logical relationships between stack sets, stack operations, and stacks.
 
 ## Stack set operations
 
-**Create stack set**:
+1. **Create stack set**:
 
 * Creating a new stack set includes specifying an AWS CloudFormation template that we want to use to create stacks, specifying the target accounts in which you want to create stacks, and identifying the AWS regions in which we want to deploy stacks in your target accounts. 
 
 * A stack set ensures consistent deployment of the same stack resources, with the same settings, to all specified target accounts within the regions you choose.
 
-**Update stack set**
+2. **Update stack set**
 
 * When we update a stack set, we push changes out to stacks in our stack set. 
 * We can update a stack set in one of the following ways. Note that our template updates always affect all stacks; you cannot selectively update the template for some stacks in the stack set, but not others.
@@ -70,7 +70,7 @@ logical relationships between stack sets, stack operations, and stacks.
 
     - Add stacks in existing or additional target accounts, across existing or additional regions.
 
-**Delete stacks:**
+3. **Delete stacks:**
 
 * When we delete stacks, we are removing a stack and all its associated resources from the target accounts you specify, within the regions we specify. We can delete stacks in the following ways.
 
@@ -82,7 +82,7 @@ logical relationships between stack sets, stack operations, and stacks.
 
     - Delete all stacks in your stack set, in preparation for deleting your entire stack set.
 
-**Delete stack set**
+4. **Delete stack set**
 
 We can delete your stack set only when there are no stack instances in it.    
 
@@ -99,13 +99,7 @@ The following table describes status codes for stack instances within stack sets
 
 <br>
 
-## Creating templates through UI
 
-Go to service CloudFormation and click Design template:
-
-![desing tempalte cf](img/cf_desgin_template.jpeg)
-
-<br>
 
 
 
