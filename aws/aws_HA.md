@@ -45,3 +45,70 @@ A virtual server must fulfill the following requirements if you want to use the 
 2. The instance family must be c3 (compute optimized), c4 (compute optimized), m3 (general), r3 (memory optimized), or t2 (burstable performance). Earlier instance families aren’t supported (such as t1).
 3. The EC2 instance must use EBS volumes exclusively because data on instance storage would be lost after a recovery of the instance.
 
+### Creating a CloudWatch alarm:
+
+A CloudWatch alarm consists of the following:
+
+1. A metric that monitors data (health check, CPU usage, and so on)
+2. A rule defining a threshold based on a statistical function over a period of time
+3. Actions to trigger if the state of the alarm changes (such as triggering a recovery of an EC2 instance if the state changes to ALARM)
+
+The following states are available for an alarm:
+
+1. OK —Everything is fine; the threshold hasn’t been reached.
+2. INSUFFICIENT_DATA —There isn’t enough data to evaluate the alarm.
+3. ALARM —Something is broken: the threshold has been overstepped.
+
+Sample CloudWatch alarm:
+
+![cloudwatch alarm](img/cloudwatch_alarm.jpg)
+
+
+## Monitoring and recovering a jenkins server based on a CloudWatch alarm
+
+```
+$ aws cloudformation create-stack --stack-name jenkins \
+--template-url https://s3.amazonaws.com/mukund-learning-aws-jenkins-setup/jenkins.json \
+--parameters ParameterKey=JenkinsAdminPassword,ParameterValue=iwonttellu108
+
+{
+    "StackId": "arn:aws:cloudformation:us-east-1:825796472415:stack/jenkins/cb9bded0-0a67-11e9-b5ce-12a3b4ca1ea2"
+}
+$
+```
+
+<br>
+
+![jenkins setup 1](img/jenkins_setup_1.jpg)
+
+<br>
+
+![jenkins setup 2](img/jenkins_setup_2.jpeg)
+
+<br>
+
+![jenkins setup 3](img/jenkins_setup_3.jpeg)
+
+<br>
+
+Alarm in the CLoudWatch
+
+![alarm cloudwatch](img/jenkins_cloudwatch_alarm.jpeg)
+
+<br>
+
+![alarm 2](img/jenkins_alarm.jpeg)
+
+<br>
+
+Recovery
+
+![alarm3](img/jenkins_alarm_2.jpeg)
+
+<br>
+
+##  Availability zones: multiple data centers per region
+
+
+
+
