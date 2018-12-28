@@ -1,6 +1,6 @@
 # NoSQL database service: DynamoDB
 
-### Why do we needNoSQL DB?
+### Why do we need NoSQL DB?
 
 Scaling a traditional, relational database is difficult because transactional guarantees (atomicity, consistency, isolation, and durability, also known as **ACID**) require communication among all nodes of the database. The more nodes are added, the slower the database becomes, because more nodes must coordinate transactions between each other. The way to tackle this has been to use databases that don’t adhere to these guarantees. They’re called NoSQL databases.
 
