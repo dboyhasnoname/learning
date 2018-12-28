@@ -239,6 +239,47 @@ Disaster recovery is easier and cheaper in the cloud than in a traditional data 
 
 ![rto rpo compare](img/comparison_tro_rpo.jpeg)
 
+# FAULT TOLERANCE
+
+It’s important to differentiate among services that guarantee the following:
+
+* Nothing (single point of failure) —No requests are served in case of failure.
+* High availability —In case of failure, it takes some time until requests are served as before.
+* Fault-tolerance —In case of failure, requests are served as before without any availability issues.
+
+Following are the guarantees of the AWS services covered in this book in detail. Single point of failure (SPOF) means this service will fail if, for example, a hardware failure occurs:
+
+1. **Amazon Elastic Compute Cloud (EC2) instance** — A single EC2 instance can fail for many reasons: hardware failure, network problems, availability-zone problems, and so on. Use auto-scaling groups to have a fleet of EC2 instances serve requests in a redundant way to achieve high availability or fault-tolerance.
+
+2. **Amazon Relational Database Service (RDS)** single instance — A single RDS instance can fail for many reasons: hardware failure, network problems, availability zone problems, and so on. Use Multi-AZ mode to achieve high availability.
+
+
+Highly available (HA) means that when a failure occurs the service won’t be available for a short time but will come back automatically:
+
+1. **Elastic Network Interface (ENI)** — A network interface is bound to an AZ (availability zone), so if this AZ goes down, our network interface is down.
+2. **Amazon Virtual Private Cloud (VPC) subnet** — A VPC subnet is bound to an AZ, so if this AZ goes down, your subnet is down. Use multiple subnets in different AZs to remove the dependency on a single AZ.
+3. **Amazon Elastic Block Store (EBS) volume**— An EBS volume is bound to an AZ, so if this AZ goes down, your volume is unavailable (your data won’t be lost). You can create EBS snapshots from time to time so you can recreate an EBS volume in another AZ.
+4. **Amazon Relational Database Service (RDS) Multi-AZ instance** — When running in Multi-AZ mode, a short downtime (one minute) is expected if an issue occurs with the master instance while changing DNS records to switch to the standby instance.
+
+
+Fault-tolerant means that if a failure occurs, you won’t notice it:
+
+- Elastic Load Balancing (ELB), deployed to at least two AZs
+- Amazon EC2 Security Group
+- Amazon Virtual Private Cloud (VPC) with an ACL and a route table
+- Elastic IP Address (EIP)
+- Amazon Simple Storage Service (S3)
+- Amazon Elastic Block Store (EBS) snapshot
+- Amazon DynamoDB
+- Amazon CloudWatch
+- Auto-scaling group
+- Amazon Simple Queue Service (SQS)
+- AWS Elastic Beanstalk
+- AWS OpsWorks
+- AWS CloudFormation
+- AWS Identity and Access Management (IAM, not bound to a single region; if you create an IAM user, that user is available in all regions)
+
+
 
 
 
