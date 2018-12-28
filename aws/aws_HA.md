@@ -169,6 +169,8 @@ To configure auto-scaling, you need to create two parts of the configuration:
 
 <br>
 
+Configuring an auto-scaling group and a launch configuration
+
 ![autoscaling config](img/auotscaling_config.jpeg)
 
 <br>
@@ -180,6 +182,64 @@ Jenkins CI server with auto-scaling in two availability zones
 <br>
 
 ![autoscaling az 2](img/autoscaling_4.jpg)
+
+<br>
+
+## Pitfall: network-attached storage recovery
+
+* The EBS service offers network-attached storage for virtual servers. 
+* EC2 instances are linked to a subnet, which is linked to an availability zone. 
+* EBS volumes are also located in a single availability zone. 
+* If the virtual server is started in another availability zone because of an outage, the data stored on the EBS volume is no longer available.
+
+<br>
+
+![pitfall ebs](img/pitfall_ebs-1.jpg)
+
+<br>
+
+There are multiple solutions to this problem:
+
+1. Outsource the state of your virtual server to a managed service that uses multiple availability zones by default: relational database service (RDS), DynamoDB (NoSQL database), or S3 (object store).
+2. Create snapshots of your EBS volumes, and use these snapshots if a virtual server needs to recover in another availability zone. EBS snapshots are stored on S3 to be available in multiple availability zones.
+3. Use a distributed third-party storage solution to store your data in multiple availability zones: GlusterFS, DRBD, MongoDB, and so on.
+
+## Pitfall: network interface recovery
+
+If a virtual server has to be started in another availability zone to recover from a data center outage, it must be started in another subnet. It’s not possible to use the same private IP address for the new virtual server.
+
+![pitfall ip](img/pitfall_network_ip.jpg)
+
+<br>
+
+There are different possibilities to provide a static endpoint when using auto-scaling to build high availability for a single virtual server:
+
+1. Allocate an Elastic IP, and associate this public IP address during the bootstrap of the virtual server.
+2. Create or update a DNS entry linking to the current public or private IP address of the virtual server. For this approach we may need to link a domain with the Route 53 (DNS) service.
+3. Use an Elastic Load Balancer (ELB) as a static endpoint that forwards requests to the current virtual server.
+
+Below is an example of elastic ip approach:
+
+![elastic ip jenkins](img/jenkins_elastic_ip.jpg)
+
+<br>
+
+# DISASTER-RECOVERY 
+
+Disaster recovery is easier and cheaper in the cloud than in a traditional data center, but it increases the complexity and therefore the initial and operating costs of your system. The recovery time objective (RTO) and recovery point objective (RPO) are standard for defining the importance of disaster recovery for a system from the business point of view.
+
+* **The recovery time objective (RTO)** is the time it takes for a system to recover from a failure; it’s the length of time until the system service level is reached after an outage. In the example with a Jenkins server, the RTO would be the time until a new virtual server is started and Jenkins is installed and running after an outage of a virtual server or an entire data center.
+
+* **The recovery point objective (RPO)** is the acceptable data-loss time caused by a failure. The amount of data loss is measured in time. If an outage happens at 10:00 AM and the system recovers with a data snapshot from 09:00 AM, the time span of the data loss is one hour. In the example with a Jenkins server using auto-scaling, the RPO would be the maximum time span between two EBS snapshots. Configuration and results from Jenkins jobs that changed after the last EBS snapshot would be lost in case of a recovery in another data center.
+
+
+![rto rpo](img/rto_rpo.jpg)
+
+<br>
+
+![rto rpo compare](img/comparison_tro_rpo.jpeg)
+
+
 
 
 
