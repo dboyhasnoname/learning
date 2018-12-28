@@ -30,12 +30,12 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
 					}
 				]
 			}
 		},
-		"Subnet": {
+		"SubnetA": {
 			"Type": "AWS::EC2::Subnet",
 			"Properties": {
 				"VpcId": {
@@ -46,7 +46,23 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
+					}
+				]
+			}
+		},
+		"SubnetB": {
+			"Type": "AWS::EC2::Subnet",
+			"Properties": {
+				"VpcId": {
+					"Ref": "VPC"
+				},
+				"AvailabilityZone": {"Fn::Select": ["1", {"Fn::GetAZs": ""}]},
+				"CidrBlock": "10.0.1.0/24",
+				"Tags": [
+					{
+						"Key": "Name",
+						"Value": "jenkins"
 					}
 				]
 			}
@@ -57,7 +73,7 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
 					}
 				]
 			}
@@ -82,7 +98,7 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
 					}
 				]
 			}
@@ -98,13 +114,24 @@
 					"Ref": "InternetGateway"
 				}
 			},
-			"DependsOn": "GatewayToInternet"			
+			"DependsOn": "GatewayToInternet"
 		},
-		"RouteTableAssociation": {
+		"RouteTableAssociationA": {
 			"Type": "AWS::EC2::SubnetRouteTableAssociation",
 			"Properties": {
 				"SubnetId": {
-					"Ref": "Subnet"
+					"Ref": "SubnetA"
+				},
+				"RouteTableId": {
+					"Ref": "RouteTable"
+				}
+			}
+		},
+		"RouteTableAssociationB": {
+			"Type": "AWS::EC2::SubnetRouteTableAssociation",
+			"Properties": {
+				"SubnetId": {
+					"Ref": "SubnetB"
 				},
 				"RouteTableId": {
 					"Ref": "RouteTable"
@@ -120,7 +147,7 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
 					}
 				]
 			}
@@ -244,18 +271,29 @@
 				}
 			}
 		},
-		"NetworkAclAssociation": {
+		"NetworkAclAssociationA": {
 			"Type": "AWS::EC2::SubnetNetworkAclAssociation",
 			"Properties": {
 				"SubnetId": {
-					"Ref": "Subnet"
+					"Ref": "SubnetA"
 				},
 				"NetworkAclId": {
 					"Ref": "NetworkAcl"
 				}
 			}
 		},
-		"SecurityGroup": {
+		"NetworkAclAssociationB": {
+			"Type": "AWS::EC2::SubnetNetworkAclAssociation",
+			"Properties": {
+				"SubnetId": {
+					"Ref": "SubnetB"
+				},
+				"NetworkAclId": {
+					"Ref": "NetworkAcl"
+				}
+			}
+		},
+		"SecurityGroupJenkins": {
 			"Type": "AWS::EC2::SecurityGroup",
 			"Properties": {
 				"GroupDescription": "SecurityGroupforjenkins",
@@ -265,7 +303,7 @@
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins"
 					}
 				],
 				"SecurityGroupIngress": [
@@ -290,67 +328,51 @@
 				]
 			}
 		},
-		"ElasticIP": {
-			"Type": "AWS::EC2::EIP",
+		"LaunchConfiguration": {
+			"Type": "AWS::AutoScaling::LaunchConfiguration",
 			"Properties": {
-				"InstanceId": {"Ref": "Server"},
-				"Domain": "vpc"
-			},
-			"DependsOn": "GatewayToInternet"
-		},
-		"Server": {
-			"Type": "AWS::EC2::Instance",
-			"Properties": {
+				"InstanceMonitoring": false,
 				"ImageId": {"Fn::FindInMap": ["EC2RegionMap", {"Ref": "AWS::Region"}, "AmazonLinuxAMIHVMEBSBacked64bit"]},
-				"InstanceType": "t2.micro",
 				"KeyName": {"Ref": "KeyName"},
-				"SecurityGroupIds": [{"Ref": "SecurityGroup"}],
-				"SubnetId": {"Ref": "Subnet"},
-				"UserData": {"Fn::Base64": {"Fn::Join": ["", [
-					"#!/bin/bash -ex\n",
-					"wget http://pkg.jenkins-ci.org/redhat/jenkins-1.616-1.1.noarch.rpm\n",
-					"rpm --install jenkins-1.616-1.1.noarch.rpm\n",
-					"sed -i -e 's/JENKINS_ARGS=\\\"\\\"/JENKINS_ARGS=\\\"--argumentsRealm.passwd.admin=", {"Ref": "JenkinsAdminPassword"}, " --argumentsRealm.roles.admin=admin\\\"/g' /etc/sysconfig/jenkins\n",
-					"echo \"<?xml version='1.0' encoding='UTF-8'?><hudson><version>1.0</version><useSecurity>true</useSecurity><authorizationStrategy class=\\\"hudson.security.FullControlOnceLoggedInAuthorizationStrategy\\\"/><securityRealm class=\\\"hudson.security.LegacySecurityRealm\\\"/></hudson>\" > /var/lib/jenkins/config.xml\n",
-					"service jenkins start\n"
-				]]}},
+				"SecurityGroups": [{"Ref": "SecurityGroupJenkins"}],
+				"AssociatePublicIpAddress": true,
+				"InstanceType": "t2.micro",
+				"UserData": {
+					"Fn::Base64": {
+						"Fn::Join": [
+							"",
+							[
+								"#!/bin/bash -ex\n",
+								"wget http://pkg.jenkins-ci.org/redhat/jenkins-1.616-1.1.noarch.rpm\n",
+								"rpm --install jenkins-1.616-1.1.noarch.rpm\n",
+								"sed -i -e 's/JENKINS_ARGS=\\\"\\\"/JENKINS_ARGS=\\\"--argumentsRealm.passwd.admin=", {"Ref": "JenkinsAdminPassword"}, " --argumentsRealm.roles.admin=admin\\\"/g' /etc/sysconfig/jenkins\n",
+								"echo \"<?xml version='1.0' encoding='UTF-8'?><hudson><version>1.0</version><useSecurity>true</useSecurity><authorizationStrategy class=\\\"hudson.security.FullControlOnceLoggedInAuthorizationStrategy\\\"/><securityRealm class=\\\"hudson.security.LegacySecurityRealm\\\"/></hudson>\" > /var/lib/jenkins/config.xml\n",
+								"service jenkins start\n"
+							]
+						]
+					}
+				}
+			}
+		},
+		"AutoScalingGroup": {
+			"Type": "AWS::AutoScaling::AutoScalingGroup",
+			"Properties": {
+				"LaunchConfigurationName": {"Ref": "LaunchConfiguration"},
 				"Tags": [
 					{
 						"Key": "Name",
-						"Value": "jenkins-recovery"
+						"Value": "jenkins",
+						"PropagateAtLaunch": true
 					}
-				]
+				],
+				"DesiredCapacity": 1,
+				"MinSize": 1,
+				"MaxSize": 1,
+				"VPCZoneIdentifier": [{"Ref": "SubnetA"}, {"Ref": "SubnetB"}],
+				"HealthCheckGracePeriod": 600,
+				"HealthCheckType": "EC2"
 			},
 			"DependsOn": "GatewayToInternet"
-		},
-		"RecoveryAlarm": {
-			"Type": "AWS::CloudWatch::Alarm",
-			"Properties": {
-				"AlarmDescription": "Recover server when underlying hardware fails.",
-				"Namespace": "AWS/EC2" ,
-				"MetricName": "StatusCheckFailed_System",
-				"Statistic": "Minimum",
-				"Period": "60",
-				"EvaluationPeriods": "5",
-				"ComparisonOperator": "GreaterThanThreshold",
-				"Threshold": "0",
-				"AlarmActions": [{"Fn::Join": ["", ["arn:aws:automate:", { "Ref": "AWS::Region"}, ":ec2:recover"]]}],
-				"Dimensions": [{"Name": "InstanceId", "Value": {"Ref": "Server"}}]
-			}
-	    }
-	},
-	"Outputs": {
-		"JenkinsURL": {
-			"Description": "URL to access web interface of Jenkins server.",
-			"Value": {"Fn::Join": ["", ["http://", {"Ref": "ElasticIP"}, ":8080"]]}
-		},
-		"User": {
-			"Description": "Administrator user for Jenkins.",
-			"Value": "admin"
-		},
-		"Password": {
-			"Description": "Password for Jenkins administrator user.",
-			"Value": {"Ref": "JenkinsAdminPassword"}
 		}
 	}
 }

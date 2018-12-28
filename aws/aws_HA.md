@@ -63,6 +63,7 @@ Sample CloudWatch alarm:
 
 ![cloudwatch alarm](img/cloudwatch_alarm.jpg)
 
+<br>
 
 ## Monitoring and recovering a jenkins server based on a CloudWatch alarm
 
@@ -91,6 +92,10 @@ $
 
 <br>
 
+![jenkins setup 3](img/jenkins_setup_4.jpeg)
+
+<br>
+
 Alarm in the CLoudWatch
 
 ![alarm cloudwatch](img/jenkins_cloudwatch_alarm.jpeg)
@@ -108,6 +113,88 @@ Recovery
 <br>
 
 ##  Availability zones: multiple data centers per region
+
+AWS operates multiple locations worldwide, called regions.
+
+* Each region consists of multiple availability zones. 
+* A*vailability zone are isolated data centers and a region as an area where multiple isolated data centers are located at a sufficient distance. 
+* The availability zones are connected through low-latency links, so requests between different availability zones aren’t as expensive as requests across the internet in terms of latency.
+
+![availablity zones 1](img/availability_zones_1.jpg)
+
+<br>
+
+AWS services can operate in a single availability zone, over multiple availability zones within a region, or even globally.
+
+- There are services operating globally over multiple regions: Route 53 (DNS) and CloudFront (CDN).
+- Some services are using multiple availability zones within a region so they can recover from a data center outage: S3 (object store) and DynamoDB (NoSQL database).
+- The relational database service (RDS) offers the ability to deploy a master-standby setup, called Multi-AZ deployment, so you can failover into another availability zone if necessary.
+- A virtual server runs in a single availability zone. But AWS offers tools to build an architecture based on EC2 instances that can failover into another availability zone.
+
+![availablity zone 2](img/availability_zones_2.jpg)
+
+<br>
+
+List of availability [zones](https://howto.lintel.in/list-of-aws-regions-and-availability-zones/):
+
+![availability zones list](img/availability_zones_list.jpeg)
+
+<br>
+
+## Dependencies of VPC service on availability zone
+
+1. A VPC is always bound to a region.
+2. A subnet within a VPC is linked to an availability zone.
+3. A virtual server is launched into a single subnet.
+
+![VPC dependencies](img/availability_zones_3.jpg)
+
+
+## Auto-scaling
+
+Auto-scaling is part of the EC2 service and helps us to ensure that a specified number of virtual servers is running.
+
+To configure auto-scaling, you need to create two parts of the configuration:
+
+1. A launch configuration contains all information needed to launch a virtual server: 
+    - instance type (size of virtual server) and 
+    - image (AMI) to start from.
+2. An auto-scaling group tells the EC2 service how many virtual servers should be started with a specific launch configuration, how to monitor the instances, and in which subnets virtual servers should be started.
+
+![autoscaling](img/atuo_scaling_flow.jpg)
+
+<br>
+
+![autoscaling paramters](img/auotscaling_2.jpeg)
+
+<br>
+
+![autoscaling config](img/auotscaling_config.jpeg)
+
+<br>
+
+Jenkins CI server with auto-scaling in two availability zones
+
+![autoscaling az](img/auotscaling_3.jpg)
+
+<br>
+
+![autoscaling az 2](img/autoscaling_4.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
