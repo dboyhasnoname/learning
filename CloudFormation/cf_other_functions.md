@@ -483,6 +483,96 @@ The combined string.
 - Fn::Sub
 - Ref
 
+## Fn::Select
+
+The intrinsic function Fn::Select returns a single object from a list of objects by index.
+_Fn::Select does not check for null values or if the index is out of bounds of the array. Both conditions will result in a stack error._
+
+##### JSON
+`{ "Fn::Select" : [ index, listOfObjects ] }`
+
+##### YAML
+`Fn::Select: [ index, listOfObjects ]`
+
+##### Syntax for the short form:
+`!Select [ index, listOfObjects ]`
+
+#### Parameters
+* index
+The index of the object to retrieve. This must be a value from zero to N-1, where N represents the number of elements in the array.
+* listOfObjects
+The list of objects to select from. This list must not be null, nor can it have null entries.
+
+#### Return Value
+The selected object.
+
+#### Example
+
+The following example returns: "grapes".
+
+JSON
+`{ "Fn::Select" : [ "1", [ "apples", "grapes", "oranges", "mangoes" ] ] }`
+
+YAML
+
+`!Select [ "1", [ "apples", "grapes", "oranges", "mangoes" ] ]`
+
+#### Supported Functions
+* For the Fn::Select index value, you can use the Ref and Fn::FindInMap functions.
+
+* For the Fn::Select list of objects, you can use the following functions:
+
+- Fn::FindInMap
+- Fn::GetAtt
+- Fn::GetAZs
+- Fn::If
+- Fn::Split
+- Ref
+
+## Fn::Split
+
+This function is used to split a string into a list of string values so that we can select an element from the resulting string list.
+
+##### JSON
+`{ "Fn::Split" : [ "delimiter", "source string" ] }`
+
+##### YAML
+`Fn::Split: [ delimiter, source string ]`
+
+##### Syntax for the short form:
+`!Split [ delimiter, source string ]`
+
+#### Examples
+JSON
+```
+{ "Fn::Select" : [ "2", { "Fn::Split": [",", {"Fn::ImportValue": "AccountSubnetIDs"}]}] }
+```
+
+YAML
+```
+!Select [2, !Split [",", !ImportValue AccountSubnetIDs]]
+```
+
+#### Supported Functions
+* For the Fn::Split delimiter, you cannot use any functions. You must specify a string value.
+
+* For the Fn::Split list of values, you can use the following functions:
+
+- Fn::Base64
+- Fn::FindInMap
+- Fn::GetAtt
+- Fn::GetAZs
+- Fn::If
+- Fn::ImportValue
+- Fn::Join
+- Fn::Select
+- Fn::Sub
+- Ref
+
+
+
+
+
 
 
 
