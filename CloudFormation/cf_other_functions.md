@@ -569,7 +569,64 @@ YAML
 - Fn::Sub
 - Ref
 
+## Fn::Sub
 
+The intrinsic function Fn::Sub substitutes variables in an input string with values that we specify.
+
+##### JSON
+`{ "Fn::Sub" : [ String, { Var1Name: Var1Value, Var2Name: Var2Value } ] }`
+
+##### YAML
+```
+Fn::Sub:
+  - String
+  - { Var1Name: Var1Value, Var2Name: Var2Value }
+```
+
+#### Syntax for the short form:
+```
+!Sub
+  - String
+  - { Var1Name: Var1Value, Var2Name: Var2Value }
+```
+
+#### Example
+
+JSON
+```
+"UserData": { "Fn::Base64": { "Fn::Join": ["\n", [
+  "#!/bin/bash -xe",
+  "yum update -y aws-cfn-bootstrap",
+  { "Fn::Sub": "/opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource LaunchConfig --configsets wordpress_install --region ${AWS::Region}" },
+  { "Fn::Sub": "/opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WebServerGroup --region ${AWS::Region}" }]]
+}}
+```
+
+YAML
+```
+UserData:
+  Fn::Base64:
+    !Sub |
+      #!/bin/bash -xe
+      yum update -y aws-cfn-bootstrap
+      /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource LaunchConfig --configsets wordpress_install --region ${AWS::Region}
+      /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource WebServerGroup --region ${AWS::Region}
+```
+
+#### Supported Functions
+* For the String parameter, you cannot use any functions. You must specify a string value.
+
+* For the VarName and VarValue parameters, you can use the following functions:
+
+- Fn::Base64
+- Fn::FindInMap
+- Fn::GetAtt
+- Fn::GetAZs
+- Fn::If
+- Fn::ImportValue
+- Fn::Join
+- Fn::Select
+- Ref
 
 
 
