@@ -210,6 +210,112 @@ _We can't nest two instances of two functions in short form._
 
 ## Fn::GetAtt
 
+The Fn::GetAtt intrinsic function returns the value of an attribute from a resource in the template.
+
+##### JSON
+
+`{ "Fn::GetAtt" : [ "logicalNameOfResource", "attributeName" ] }`
+
+##### YAML
+
+`Fn::GetAtt: [ logicalNameOfResource, attributeName ]`
+
+##### Syntax for the short form:
+
+`!GetAtt logicalNameOfResource.attributeName`
+
+
+##### Parameters:
+* logicalNameOfResource
+The logical name (also called logical ID) of the resource that contains the attribute that you want.
+
+* attributeName
+The name of the resource-specific attribute whose value you want. See the resource's reference page for details about the attributes available for that resource type.
+
+##### Return Value
+The attribute value.
+
+##### Example:
+
+JSON
+
+```
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "myELB": {
+            "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+            "Properties": {
+                "AvailabilityZones": [
+                    "eu-west-1a"
+                ],
+                "Listeners": [
+                    {
+                        "LoadBalancerPort": "80",
+                        "InstancePort": "80",
+                        "Protocol": "HTTP"
+                    }
+                ]
+            }
+        },
+        "myELBIngressGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "ELB ingress group",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "SourceSecurityGroupOwnerId": {
+                            "Fn::GetAtt": [
+                                "myELB",
+                                "SourceSecurityGroup",
+                                "OwnerAlias"
+                            ]
+                        },
+                        "SourceSecurityGroupName": {
+                            "Fn::GetAtt": [
+                                "myELB",
+                                "SourceSecurityGroup",
+                                "GroupName"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+YAML
+
+```
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  myELB:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      AvailabilityZones:
+        - eu-west-1a
+      Listeners:
+        - LoadBalancerPort: '80'
+          InstancePort: '80'
+          Protocol: HTTP
+  myELBIngressGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ELB ingress group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          SourceSecurityGroupOwnerId: !GetAtt myELB.SourceSecurityGroup.OwnerAlias
+          SourceSecurityGroupName: !GetAtt myELB.SourceSecurityGroup.GroupName
+```          
+
+
 
 
 
