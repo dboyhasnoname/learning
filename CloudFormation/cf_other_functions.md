@@ -669,7 +669,52 @@ YAML
 'Fn::Transform':
     Name: 'AWS::Include'
     Parameters: {Location: {'Fn::FindInMap': [RegionMap, us-east-1, s3Location]}}
-```    
+```
+
+## Ref
+
+The intrinsic function Ref returns the value of the specified parameter or resource.
+
+* When we specify a parameter's logical name, it returns the value of the parameter.
+* When we specify a resource's logical name, it returns a value that you can typically use to refer to that resource, such as a physical ID.
+
+##### JSON
+`{ "Ref" : "logicalName" }`
+
+##### YAML
+`Ref: logicalName`
+
+##### Syntax for the short form:
+`!Ref logicalName`
+
+#### Example
+JSON
+
+```
+"MyEIP" : {
+   "Type" : "AWS::EC2::EIP",
+   "Properties" : {
+      "InstanceId" : { "Ref" : "MyEC2Instance" }
+   }
+}
+```
+
+YAML
+
+```
+MyEIP:
+  Type: "AWS::EC2::EIP"
+  Properties:
+    InstanceId: !Ref MyEC2Instance
+```
+
+#### Supported Functions
+
+We cannot use any functions in the Ref function. We must specify a string that is a resource logical ID.
+
+
+
+
 
 
 
