@@ -628,6 +628,49 @@ UserData:
   - Fn::Select
   - Ref
 
+## Fn::Transform
+
+The intrinsic function Fn::Transform specifies a macro to perform custom processing on part of a stack template. Macros enable us to perform custom processing on templates, from simple actions like find-and-replace operations to extensive transformations of entire templates. 
+
+We can also use Fn::Transform to call the AWS::Include Transform transform, which is a macro hosted by AWS CloudFormation.
+
+##### JSON
+`{ "Fn::Transform" : { "Name" : macro name, "Parameters" : {key : value, ... } } }`
+
+##### YAML
+```
+Fn::Transform:
+  Name : macro name
+  Parameters :
+          Key : value
+```
+
+##### Syntax for the short form:
+`!Transform { "Name" : macro name, "Parameters" : {key : value, ... } }`
+
+#### Example
+
+The following example calls the AWS::Include transform, specifying that the location to retrieve a template snippet from is located in the RegionMap mapping, under the key us-east-1 and nested key s3Location.
+
+JSON
+```
+{
+   "Fn::Transform" : {
+       "Name" : "AWS::Include",
+       "Parameters" : {
+           "Location" : {"Fn::FindInMap" : ["RegionMap", "us-east-1", "s3Location"] }
+        }
+    }
+}
+```
+
+YAML
+```
+'Fn::Transform':
+    Name: 'AWS::Include'
+    Parameters: {Location: {'Fn::FindInMap': [RegionMap, us-east-1, s3Location]}}
+```    
+
 
 
 
