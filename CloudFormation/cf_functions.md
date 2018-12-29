@@ -24,11 +24,11 @@ The intrinsic function Fn::Base64 returns the Base64 representation of the input
 
 We can use any function that returns a string inside the Fn::Base64 function.
 
-### JSON
+#### JSON
 
 `{ "Fn::Base64" : valueToEncode }`
 
-## YAML
+#### YAML
 
 `Fn::Base64: valueToEncode`
 
@@ -43,12 +43,12 @@ We can use the following functions in a Fn::Cidr function:
 
 It returns an array of CIDR address blocks.
 
-### JSON
+#### JSON
 
 `{ "Fn::Cidr" : [ipBlock, count, cidrBits]}`
 `{ "Fn::Cidr" : [ "192.168.0.0/24", "6", "5"] }`
 
-###YAML
+#### YAML
 
 ```
 Fn::Cidr: 
@@ -59,11 +59,11 @@ Fn::Cidr:
 
 `!Cidr [ "192.168.0.0/24", 6, 5 ]`
 
-Syntax for shot form:
+Syntax for short form:
 
 `!Cidr [ ipBlock, count, cidrBits ]`
 
-example:
+Example:
 
 ```
 {
@@ -94,6 +94,8 @@ example:
   }
 }
 ```
+
+
 
 
 
