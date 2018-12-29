@@ -257,8 +257,8 @@ Following are the guarantees of the AWS services covered in this book in detail.
 Highly available (HA) means that when a failure occurs the service won’t be available for a short time but will come back automatically:
 
 1. **Elastic Network Interface (ENI)** — A network interface is bound to an AZ (availability zone), so if this AZ goes down, our network interface is down.
-2. **Amazon Virtual Private Cloud (VPC) subnet** — A VPC subnet is bound to an AZ, so if this AZ goes down, your subnet is down. Use multiple subnets in different AZs to remove the dependency on a single AZ.
-3. **Amazon Elastic Block Store (EBS) volume**— An EBS volume is bound to an AZ, so if this AZ goes down, your volume is unavailable (your data won’t be lost). You can create EBS snapshots from time to time so you can recreate an EBS volume in another AZ.
+2. **Amazon Virtual Private Cloud (VPC) subnet** — A VPC subnet is bound to an AZ, so if this AZ goes down, our subnet is down. Use multiple subnets in different AZs to remove the dependency on a single AZ.
+3. **Amazon Elastic Block Store (EBS) volume**— An EBS volume is bound to an AZ, so if this AZ goes down, our volume is unavailable (our data won’t be lost). We can create EBS snapshots from time to time so you can recreate an EBS volume in another AZ.
 4. **Amazon Relational Database Service (RDS) Multi-AZ instance** — When running in Multi-AZ mode, a short downtime (one minute) is expected if an issue occurs with the master instance while changing DNS records to switch to the standby instance.
 
 

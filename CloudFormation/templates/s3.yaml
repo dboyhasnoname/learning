@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "mukund-learning-aws-s3-template"
+Parameters:
+  BucketName:
+    Description: "Bucket name to be created"
+    Type: "String" 
+Resources:
+  MyBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      AccessControl: "PublicRead"
+      BucketName:
+        Ref: "BucketName"
