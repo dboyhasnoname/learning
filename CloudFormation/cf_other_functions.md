@@ -316,7 +316,58 @@ Resources:
 ```          
 
 
+## Fn::GetAZs
+
+The intrinsic function Fn::GetAZs returns an array that lists Availability Zones for a specified region. Because customers have access to different Availability Zones, the intrinsic function Fn::GetAZs enables template authors to write templates that adapt to the calling user's access. 
+
+#### IAM permissions
+
+The permissions that we need in order to use the Fn::GetAZs function depend on the platform in which we're launching Amazon EC2 instances. 
+
+##### JSON
+
+`{ "Fn::GetAZs" : "region" }`
+
+##### YAML
+
+`Fn::GetAZs: region`
+
+##### Syntax for the short form:
+
+`!GetAZs region`
+
+#### Parameters
+* region
+The name of the region for which you want to get the Availability Zones.
 
 
+#### Return Value
+The list of Availability Zones for the region.
+
+##### Examples:
+
+AWS CloudFormation evaluates Fn::GetAZs to the following array—assuming that the user has created the stack in the us-east-1 region:
+
+[ "us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d" ]
+
+JSON
+
+```
+{ "Fn::GetAZs" : "" }
+{ "Fn::GetAZs" : { "Ref" : "AWS::Region" } }
+{ "Fn::GetAZs" : "us-east-1" }
+```
+
+YAML
+
+```
+Fn::GetAZs: ""
+Fn::GetAZs:
+  Ref: "AWS::Region"
+Fn::GetAZs: us-east-1
+```
+
+#### Supported Functions
+We can use the Ref function in the Fn::GetAZs function.
 
 
