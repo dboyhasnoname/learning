@@ -338,7 +338,7 @@ The permissions that we need in order to use the Fn::GetAZs function depend on t
 
 #### Parameters
 * region
-The name of the region for which you want to get the Availability Zones.
+The name of the region for which we want to get the Availability Zones.
 
 
 #### Return Value
@@ -368,6 +368,82 @@ Fn::GetAZs: us-east-1
 ```
 
 #### Supported Functions
-We can use the Ref function in the Fn::GetAZs function.
+We can use the **Ref** function in the **Fn::GetAZs** function.
+
+## Fn::ImportValue
+
+The intrinsic function Fn::ImportValue returns the value of an output exported by another stack. We typically use this function to create cross-stack references.
+
+##### JSON
+`{ "Fn::ImportValue" : sharedValueToImport }`
+
+##### Fn::ImportValue: sharedValueToImport
+`Fn::ImportValue: sharedValueToImport`
+
+##### short form:
+`!ImportValue sharedValueToImport`
+
+#### Parameters
+* sharedValueToImport
+The stack output value that you want to import.
+
+#### Return Value
+The stack output value.
+
+_We can't use the short form of !ImportValue when it contains a !Sub in YAML format_
+
+#### Example:
+
+Stack A:
+
+```
+"Outputs" : {
+  "PublicSubnet" : {
+    "Description" : "The subnet ID to use for public web servers",
+    "Value" :  { "Ref" : "PublicSubnet" },
+    "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-SubnetID" }}
+  },
+  "WebServerSecurityGroup" : {
+    "Description" : "The security group ID to use for public web servers",
+    "Value" :  { "Fn::GetAtt" : ["WebServerSecurityGroup", "GroupId"] },
+    "Export" : { "Name" : {"Fn::Sub": "${AWS::StackName}-SecurityGroupID" }}
+  }
+}
+```
+
+Stack B:
+
+```
+"Resources" : {
+  "WebServerInstance" : {
+    "Type" : "AWS::EC2::Instance",
+    "Properties" : {
+      "InstanceType" : "t2.micro",
+      "ImageId" : "ami-a1b23456",
+      "NetworkInterfaces" : [{
+        "GroupSet" : [{"Fn::ImportValue" : {"Fn::Sub" : "${NetworkStackNameParameter}-SecurityGroupID"}}],
+        "AssociatePublicIpAddress" : "true",
+        "DeviceIndex" : "0",
+        "DeleteOnTermination" : "true",
+        "SubnetId" : {"Fn::ImportValue" : {"Fn::Sub" : "${NetworkStackNameParameter}-SubnetID"}}
+      }]
+    }
+  }
+}
+```
+
+#### Supported Functions
+We can use the following functions in the Fn::ImportValue function. The value of these functions can't depend on a resource.
+
+- Fn::Base64
+- Fn::FindInMap
+- Fn::If
+- Fn::Join
+- Fn::Select
+- Fn::Split
+- Fn::Sub
+- Ref
+
+
 
 
