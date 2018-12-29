@@ -471,17 +471,17 @@ The combined string.
 * For the Fn::Join delimiter, we cannot use any functions. We must specify a string value.
 * For the Fn::Join list of values, we can use the following functions:
 
-- Fn::Base64
-- Fn::FindInMap
-- Fn::GetAtt
-- Fn::GetAZs
-- Fn::If
-- Fn::ImportValue
-- Fn::Join
-- Fn::Split
-- Fn::Select
-- Fn::Sub
-- Ref
+  - Fn::Base64
+  - Fn::FindInMap
+  - Fn::GetAtt
+  - Fn::GetAZs
+  - Fn::If
+  - Fn::ImportValue
+  - Fn::Join
+  - Fn::Split
+  - Fn::Select
+  - Fn::Sub
+  - Ref
 
 ## Fn::Select
 
@@ -558,16 +558,16 @@ YAML
 
 * For the Fn::Split list of values, you can use the following functions:
 
-- Fn::Base64
-- Fn::FindInMap
-- Fn::GetAtt
-- Fn::GetAZs
-- Fn::If
-- Fn::ImportValue
-- Fn::Join
-- Fn::Select
-- Fn::Sub
-- Ref
+  - Fn::Base64
+  - Fn::FindInMap
+  - Fn::GetAtt
+  - Fn::GetAZs
+  - Fn::If
+  - Fn::ImportValue
+  - Fn::Join
+  - Fn::Select
+  - Fn::Sub
+  - Ref
 
 ## Fn::Sub
 
@@ -618,15 +618,15 @@ UserData:
 
 * For the VarName and VarValue parameters, you can use the following functions:
 
-- Fn::Base64
-- Fn::FindInMap
-- Fn::GetAtt
-- Fn::GetAZs
-- Fn::If
-- Fn::ImportValue
-- Fn::Join
-- Fn::Select
-- Ref
+  - Fn::Base64
+  - Fn::FindInMap
+  - Fn::GetAtt
+  - Fn::GetAZs
+  - Fn::If
+  - Fn::ImportValue
+  - Fn::Join
+  - Fn::Select
+  - Ref
 
 
 
