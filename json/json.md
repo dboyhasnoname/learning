@@ -13,8 +13,8 @@ For instance, we can define a JSON object for the Employee data. We can write th
 ```
 {
  "id": 1,
- "name": "michael",
- "country": "us"
+ "name": "mukund",
+ "country": "india"
 }
 ```
 
@@ -26,18 +26,18 @@ Each object is defined in {}. We can write the scripts as follows:
 [
  {
   "id": 1,
-  "name": "michael",
-  "country": "us"
+  "name": "govind",
+  "state": "up"
  },
  {
   "id": 2,
   "name": "jason",
-  "country": "uk"
+  "state": "goa"
  },
  {
   "id": 3,
-  "name": "ryu",
-  "country": "jp"
+  "name": "lingdo",
+  "state": "assam"
  }
 ]
 ```
@@ -47,18 +47,18 @@ JSON supports unlimited parent-child attributes. For instance, each Employee obj
 ```
 {
  "id": 1,
- "name": "michael",
+ "name": "modi",
  "address":[
       {
         "street": "abc street",
-        "city": "new york"
+        "city": "new delhi"
       },
       {
-        "street": "vue street",
-        "city": "hoston"
+        "street": "harding street",
+        "city": "delhi"
       }
  ],
- "country": "us"
+ "country": "India"
 }
 
 ```
