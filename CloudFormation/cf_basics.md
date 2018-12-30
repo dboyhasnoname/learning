@@ -3,13 +3,13 @@
 * Amazon AWS is a cloud-based platform that provides cloud services.
 * AWS CloudFormation is designed to implement IaC. We can write scripts to build a custom infrastructure.
 * AWS CloudFormation is a solution for dynamic infrastructures.
-* AWS CloudFormation allows us to model your entire infrastructure in a text file. 
+* AWS CloudFormation allows us to model our entire infrastructure in a text file. 
 
 * AWS CloudFormation is available at no additional charge, and we pay only for the AWS resources needed to run our applications.
 
 ### benefits:
 
-- **MODEL IT ALL:** AWS CloudFormation allows us to model your entire infrastructure in a text file. This template becomes the single source of truth for your infrastructure. This helps to standardize infrastructure components used across the organization, enabling configuration compliance and faster troubleshooting.
+- **MODEL IT ALL:** AWS CloudFormation allows us to model our entire infrastructure in a text file. This template becomes the single source of truth for our infrastructure. This helps to standardize infrastructure components used across the organization, enabling configuration compliance and faster troubleshooting.
 
 - **AUTOMATE AND DEPLOY:** AWS CloudFormation provision resources in a safe, repeatable manner, allowing us to build and rebuild our infrastructure and applications, without having to perform manual actions or write custom scripts. CloudFormation takes care of determining the right operations to perform when managing the stack, and rolls back changes automatically if errors are detected.
 
@@ -50,7 +50,7 @@ We can use Git to manage IaC scripts. Once the scripts are released, we can push
 
 * Write and go: Use any method to launch a stack without having to register the template with AWS CloudFormation beforehand.   
 
-* Visualize your stack: CloudFormation Designer lets us visualize our templates in a diagram. We can easily view our AWS resources and their relationships, and arrange their layout so that the diagram makes sense. We can edit the templates using the drag-and-drop interface and the integrated JSON editor. The modifications we make to the diagram automatically modify the template’s JSON.    
+* Visualize our stack: CloudFormation Designer lets us visualize our templates in a diagram. We can easily view our AWS resources and their relationships, and arrange their layout so that the diagram makes sense. We can edit the templates using the drag-and-drop interface and the integrated JSON editor. The modifications we make to the diagram automatically modify the template’s JSON.    
 
 ![tempalte designer](img/cf_template_designer.jpeg)
 
