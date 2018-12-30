@@ -67,6 +67,27 @@ Outputs:
     * We can specify a default value to make the parameter optional so that we don’t need to pass in a value when creating a stack; AWS CloudFormation will use the default value.
     * For each parameter, we must declare a logical name, which must be alphanumeric and unique among all logical names within the template. 
     * _For sensitive parameter values (such as passwords), set the NoEcho property to true._
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html).
+
+    ```
+    Parameters:
+      <ParameterLogicalID>:
+         Type: <DataType>
+        <ParameterProperty>: <value>
+    ```
+
+    * Paramter Type:
+        1. AWS::EC2::AvailabilityZone::Name
+        2. AWS::EC2::Image::Id
+        3. AWS::EC2::Instance::Id
+        4. AWS::EC2::KeyPair::KeyName
+        5. AWS::EC2::SecurityGroup::GroupName
+        6. AWS::EC2::SecurityGroup::Id
+        7. AWS::EC2::Subnet::Id
+        8. AWS::EC2::Volume::Id
+        9. AWS::EC2::VPC::Id
+        10. AWS::Route53::HostedZone::Id
+
     * Parameter’s Properties:
         1. AllowedPattern
             - A regular expression that represents the patterns you want to allow for String types.
@@ -79,17 +100,77 @@ Outputs:
             - Required: No
             -  For example, without a constraint description, a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user specifies an invalid value:
             `"Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+"`
-        4. 
+        4. Default
+            - A value of the appropriate type for the template to use if no value is specified when a stack is created. 
+            - If we define constraints for the parameter, we must specify a value that adheres to those constraints.
+            - Required: No
+        5. Description
+            - A string of up to 4000 characters that describes the parameter.
+            - Required: No 
+        6. NoEcho
+            - Whether to mask the parameter value whenever anyone makes a call that describes the stack.
+            - If we set the value to true, the parameter value is masked with asterisks (*****).
+            - Required: No
+        7. Type 
+            - The data type for the parameter (DataType).
+            - Required:Yes
 
-5. **Mappings:** <s>Required</s>. This is a mapping of keys and associated values that we can use to specify conditional parameter values. We can match a key to a corresponding value by using the Fn::FindInMap intrinsic function in the Resources and Outputs. This attribute is optional.
+5. **Mappings:** <s>Required</s>. 
+    * This is a mapping of keys and associated values that we can use to specify conditional parameter values. 
+    * We can match a key to a corresponding value by using the Fn::FindInMap intrinsic function in the Resources and Outputs. 
+    * This attribute is optional.
+    * We cannot include parameters, pseudo parameters, or intrinsic functions in the Mappings section.
+    * The Mappings section consists of the key name Mappings. 
+    * The keys and values in mappings must be literal strings. 
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/mappings-section-structure.html).
 
-6. **Conditions:** <s>Required</s>. This defines conditions that control whether certain resources are created or whether certain resource properties are assigned a value during stack-creation or stack-update. This attribute is optional.
 
-6. **Transform:** This helps simplify template authoring by condensing the expression of AWS infrastructure as code and enabling the reuse of template components.
+6. **Conditions:** <s>Required</s>. 
+    * This defines conditions that control whether certain resources are created or whether certain resource properties are assigned a value during stack-creation or stack-update. 
+    * This attribute is optional.
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html).
 
-7. **Resources:** This specifies the stack resources and their properties, such as EC2 and Amazon S3. ***This attribute is required.***
+6. **Transform:** <s>Required</s>. 
+    * This helps simplify template authoring by condensing the expression of AWS infrastructure as code and enabling the reuse of template components.
+    * This is optional.
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html).
 
-8. **Output:** <s>Required</s>. This describes the values that are returned whenever we view our stack's properties. This attribute is optional.
+7. **Resources:** 
+    * This specifies the stack resources and their properties, such as EC2 and Amazon S3. 
+    * ***This attribute is required.***
+    ```
+    "Resources" : {
+        "Logical ID" : {
+            "Type" : "Resource type",
+            "Properties" : {
+                Set of properties
+            }
+        }
+    }
+    ```
+    * Resource Fields:
+        1. Logical ID
+            - The logical ID must be alphanumeric (A-Za-z0-9) and unique within the template. 
+            - Use the logical name to reference the resource in other parts of the template. 
+        2. Resource type
+            - The resource type identifies the type of resource that you are declaring. 
+        3. Resource properties
+            - Resource properties are additional options that you can specify for a resource. 
+            - For example, for each EC2 instance, we must specify an Amazon Machine Image (AMI) ID for that instance. 
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html).
+    
+        
+
+8. **Output:** <s>Required</s>. 
+    * This describes the values that are returned whenever we view our stack's properties. 
+    * This attribute is optional.
+    * Ouput Fields:
+        1. Logical ID: Required
+            - An identifier for this output. 
+            - The logical ID must be alphanumeric (A-Za-z0-9) and unique within the template.
+        2. Value: required
+            - The value of the property that is returned by the aws cloudformation describe-stacks command. 
+    * Official [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html).
 
 
 ## Creating a template
