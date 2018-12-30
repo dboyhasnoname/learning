@@ -6,7 +6,7 @@ An AWS CloudFormation template consists of various AWS resource types, depending
 
 The template consists of various attributes, such as AWSTemplateFormatVersion, Description, Metadata, and Parameters._The Resources section is the only required section._
 
-![CF template structure](img/cf_template_structure.jpeg)
+![CF template structure](img/cf_template_anatomy.jpeg)
 
 <br>
 
