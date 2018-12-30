@@ -32,54 +32,54 @@ Outputs:
 ```
 
 1. **AWSTemplateFormatVersion:** <s>Required</s>. 
-*  This is the AWS CloudFormation template version that is not the same as the API or WSDL version. 
-*  The latest template format version is 2010-09-09 and is currently the only valid value. 
-* This attribute is optional. 
+    *  This is the AWS CloudFormation template version that is not the same as the API or WSDL version. 
+    *  The latest template format version is 2010-09-09 and is currently the only valid value. 
+    * This attribute is optional. 
 
 2. **Description:** <s>Required</s>. 
-* This defines a text string that describes the template. 
-* The Description must follow the AWSTemplateFormatVersion section. 
-* The value for the description declaration must be a literal string that is between 0 and 1024 bytes in length. 
-* This attribute is optional. The following snippet is an example of a description declaration:
-```
-Description: >
-  Here are some
-  details about
-  the template.
-```
+    * This defines a text string that describes the template. 
+    * The Description must follow the AWSTemplateFormatVersion section. 
+    * The value for the description declaration must be a literal string that is between 0 and 1024 bytes in length. 
+    * This attribute is optional. The following snippet is an example of a description declaration:
+    ```
+    Description: >
+    Here are some
+    details about
+    the template.
+    ```
 3. **Metadata:** <s>Required</s>. 
-* This defines objects that provide additional information about the template. 
-* This attribute is optional. 
-* For example, we can include template implementation details about specific resources, as shown in the following snippet:
-```
-Metadata:
-  Instances:
-    Description: "Information about the instances"
-  Databases:
-    Description: "Information about the databases"
-```    
+    * This defines objects that provide additional information about the template. 
+    * This attribute is optional. 
+    * For example, we can include template implementation details about specific resources, as shown in the following snippet:
+    ```
+    Metadata:
+    Instances:
+        Description: "Information about the instances"
+    Databases:
+        Description: "Information about the databases"
+    ```    
 
 4. **Parameters:** <s>Required</s>. 
-* This defines values to pass to your template at runtime. 
-* We can refer to parameters from the Resources and Outputs sections of the template. 
-* This attribute is optional.
-* _We can have a maximum of 60 parameters in an AWS CloudFormation template._ 
-* We can specify a default value to make the parameter optional so that we don’t need to pass in a value when creating a stack; AWS CloudFormation will use the default value.
-* For each parameter, we must declare a logical name, which must be alphanumeric and unique among all logical names within the template. 
-* _For sensitive parameter values (such as passwords), set the NoEcho property to true._
-* Parameter’s Properties:
-    1. AllowedPattern
-        - A regular expression that represents the patterns you want to allow for String types.
-        - Required: No
-    2. AllowedValues
-        - An array containing the list of values allowed for the parameter.
-        - Required: No
-    3. ConstraintDescription
-        - A string that explains the constraint when the constraint is violated
-        - Required: No
-        -  For example, without a constraint description, a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user specifies an invalid value:
-        `"Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+"`
-    4. 
+    * This defines values to pass to your template at runtime. 
+    * We can refer to parameters from the Resources and Outputs sections of the template. 
+    * This attribute is optional.
+    * _We can have a maximum of 60 parameters in an AWS CloudFormation template._ 
+    * We can specify a default value to make the parameter optional so that we don’t need to pass in a value when creating a stack; AWS CloudFormation will use the default value.
+    * For each parameter, we must declare a logical name, which must be alphanumeric and unique among all logical names within the template. 
+    * _For sensitive parameter values (such as passwords), set the NoEcho property to true._
+    * Parameter’s Properties:
+        1. AllowedPattern
+            - A regular expression that represents the patterns you want to allow for String types.
+            - Required: No
+        2. AllowedValues
+            - An array containing the list of values allowed for the parameter.
+            - Required: No
+        3. ConstraintDescription
+            - A string that explains the constraint when the constraint is violated
+            - Required: No
+            -  For example, without a constraint description, a parameter that has an allowed pattern of [A-Za-z0-9]+ displays the following error message when the user specifies an invalid value:
+            `"Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+"`
+        4. 
 
 5. **Mappings:** <s>Required</s>. This is a mapping of keys and associated values that we can use to specify conditional parameter values. We can match a key to a corresponding value by using the Fn::FindInMap intrinsic function in the Resources and Outputs. This attribute is optional.
 
