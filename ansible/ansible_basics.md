@@ -104,13 +104,13 @@
 10. Templates
 11. Meta
 
-#### Ansible directory structure
-
-![ansible directory structure](img/ansible_dir_structure.jpeg)
-
 #### Ansible structs explained:
 
 ![ansible structs explaination](img/ansible_struct_explaination.jpeg)
+
+#### Ansible directory structure
+
+![ansible directory structure](img/ansible_dir_structure.jpeg)
 
 ## How ansible works?
 
@@ -232,6 +232,23 @@ log_path = /var/log/ansible.log
 7. `timeout`: This is the default value for the timeout of SSH connection attempts.
 
 8. `log_path`: By default, Ansible doesn't log anything; if we would like to send the Ansible output to a logfile, then set the value of log_path to the file you would like to store the Ansible logs in.
+
+
+## Playbooks
+
+* Playbooks are one of the core features of Ansible and tell Ansible what to execute. 
+* They are like a to-do list for Ansible that contains a list of tasks; each task internally links to a piece of code called a module. 
+* Playbooks are simple human-readable YAML files, whereas modules are a piece of code that can be written in any language with the condition that its _output should be in the JSON format._
+* Palybook can be single file or seprated over multiple roles which can perform different set of tasks.
+
+### Play
+* A playbook can consists multiple plays.
+* Each play conisists of multiple taks.
+* Different plays can run on different host groups.
+
+### Anatomy of playbook:
+
+![playbook structure](img/playbook_structure.jpeg)         
 
 
 
