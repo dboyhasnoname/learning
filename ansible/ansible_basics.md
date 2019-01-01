@@ -102,5 +102,5 @@ Ansible directory structure
 
 Ansible structs explained:
 
-![ansible structs explained](img/ansible_struct_explaination.jpeg)
+![ansible structs explaination](img/ansible_struct_explaination.jpeg)
 
