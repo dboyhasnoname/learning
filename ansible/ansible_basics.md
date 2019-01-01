@@ -69,19 +69,26 @@
 * As with application deployment, sitewide security policies (such as firewall rules or locking down users) can be implemented along with other automated processes. 
 * If we configure the security details on the control machine and run the associated playbook, all the remote hosts will automatically be updated with those details.
 
-## How ansible works?
+## Ansible Architecture
 
-![ansible flow diagram](img/ansible_workflow.jpeg)
+![ansible architecture](img/ansible_architecure.jpg)
 
-Ansible dependencies: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/packaging/rpm/ansible.spec)
-
-Playbook execution code: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/executor/playbook_executor.py)
-
-Playbook libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/playbook)
-
-Inventory libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/inventory)
-
-Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/modules)
+1. **Inventory:**
+    - The host inventory file determines the target machines where these plays will be executed.
+2. **Playbooks:**
+    - The playbooks consist of one or more tasks that are expressed either with core modules that come with Ansible or custom modules that you can write for specific situations. 
+    - The plays are executed sequentially from top to bottom, so there is no explicit order that you have to define. 
+3. **Plugins:**
+    - Plugins are pieces of code that augment Ansible’s core functionality.
+    - Action, cache and callback plugins are three examples.
+4. **Modules:**    
+    - Modules are like small programs that Ansible pushes out from a control machine to all the nodes, or remote hosts. 
+    - Ansible then executes these modules (over SSH by default), and removes them when finished.
+    - Ansible provides more than 450 modules for common tasks.
+    - list of moudles: [link](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html)
+5. **APIs:**
+    - Various APIs (application programming interfaces) are available so we can extend Ansible’s connection types (meaning more than just SSH for transport), callbacks and more.
+    - Python API: [link](https://docs.ansible.com/ansible/latest/dev_guide/developing_api.html)
 
 ## Ansible Structs
 
@@ -95,6 +102,7 @@ Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d
 8. Handlers
 9. Variables
 10. Templates
+11. Meta
 
 Ansible directory structure
 
@@ -103,4 +111,29 @@ Ansible directory structure
 Ansible structs explained:
 
 ![ansible structs explaination](img/ansible_struct_explaination.jpeg)
+
+## How ansible works?
+
+![ansible flow diagram](img/ansible_workflow.jpeg)
+
+___
+
+* Ansible dependencies: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/packaging/rpm/ansible.spec)
+* Playbook execution code: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/executor/playbook_executor.py)
+* Playbook libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/playbook)
+* Inventory libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/inventory)
+* Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/modules)
+
+___
+
+
+
+
+
+
+
+
+
+
+
 
