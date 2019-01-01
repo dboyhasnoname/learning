@@ -106,7 +106,7 @@
 
 Ansible directory structure
 
-![ansible directory structure](img/ansible_dir_struct.jpeg)
+![ansible directory structure](img/ansible_dir_structure.jpeg)
 
 Ansible structs explained:
 
