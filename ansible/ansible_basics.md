@@ -101,9 +101,6 @@ Ansible directory structure
 ![ansible directory structure](img/ansible_dir_struct.jpeg)
 
 
-![sample playbook layout](img/ansible_structure.jpeg)
-
-
 
 
 
