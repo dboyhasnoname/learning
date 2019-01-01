@@ -68,12 +68,6 @@
 ## How ansible works?
 
 
-![ansible flow diagram](ansible_flow.xml)
-
-
-
-
-
-
+![ansible flow diagram](ansible_workflow.jpeg)
 
 
