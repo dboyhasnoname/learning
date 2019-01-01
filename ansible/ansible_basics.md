@@ -289,22 +289,17 @@ mukund@ubuntu:~/all/Ansible$ tree -I "ntc-templates|library"
 
 ```
 ---
-- hosts: aws 
+- hosts: terraform 
   pre_tasks:
     - name: Load Environment Variables for Production vCenter
       include_vars:
         file: group_vars/all.yml
   roles:
-    - role: aws-user-setup
-    - role: aws-prerequisites
-    - role: ec2-install
-    - role: rds-db-setup
-    - role: client-config
+    - role: vm-setup
     - role: dns-mgmt
       vars:
         dnsip: "{{ output.ansible_facts.hw_eth0.ipaddresses[0] }}" 
-      ignore_errors: yes
-      
+      ignore_errors: yes          
   tasks:
      - name: Wait until the DNS name is resolving  
        wait_for: 
@@ -312,7 +307,13 @@ mukund@ubuntu:~/all/Ansible$ tree -I "ntc-templates|library"
          port: 22 
          state: started 
          timeout: 600 
-         delay: 5   
+         delay: 5  
+  roles:          
+    - role: user-setup        
+    - role: app-prerequisites
+    - role: app-install
+    - role: db-setup
+    - role: client-config 
 
 - hosts: localhost
   roles:
@@ -330,6 +331,97 @@ mukund@ubuntu:~/all/Ansible$ tree -I "ntc-templates|library"
   roles:
     - role: app-repo-creation
 ```    
+
+### Anatomy of playbook:
+
+* Playbooks can have a list of remote hosts, user variables, tasks, handlers and so on.
+
+![ansible apache play](img/ansible_apache_play.jpg)
+
+1. `hosts`:  This lists the host or host group against which we want to run the task. The hosts field is mandatory and every playbook should have it (except roles).
+
+2. `remote_user`: This is one of the configuration parameters of Ansible  that tells Ansible to use a particular user while logging into the system.
+
+3. `tasks`: All playbooks should contain tasks. Tasks are a list of actions we want to perform. A tasks field contains the name of the task, a module that should be executed, and arguments that are required for the module. 
+
+#### Directory would look like below:
+
+![apache dir](img/ansibel_apaceh_dir_tree.jpg)
+
+#### Host file:
+
+```
+[mukund@ununtu]# cat hosts
+host1
+```
+
+#### Command to run playbook
+`#ansible-playbook -i hosts playbooks/setup_apache.yml`
+
+#### Output: 
+
+![output](img/ansible_apache_output.jpg)
+
+##### Gathering Facts
+
+```
+GATHERING FACTS ***************************************************************
+ok: [host1]
+```
+
+* The aim of this task is to gather useful metadata about the machine in the form of variables; these variables can then be used as a part of tasks that follow in the playbook.
+
+* Gathering facts task obtain information regarding a particular component of the system and do not necessarily change anything on the system
+
+* It almost equivalent:
+```
+ansible -m setup host1 -i hosts
+```
+
+* It can be disabled:
+```
+hosts: host1
+gather_facts: False
+```
+
+##### PLAY RECAP
+
+* Shows the changed state of system.
+* In a large infrastructure, it is highly recommended to monitor or track the number of changed tasks in your infrastructure and alert the concerned tasks if you find oddities; this applies to any configuration management tool in general. 
+* In an ideal state, the only time you should see changes is when you're introducing a new change in the form of any Create, Remove, Update, or Delete (CRUD) operation on various system components. 
+
+#### Verbose
+
+`ansible-playbook -i hosts playbooks/setup_apache.yml -vv`
+
+* -v : provides the default output
+* -vv:  adds a little more information in JSON format.
+
+![-vv option](img/ansible-vv.jpg)
+
+* -vvv: option adds a lot more information, as shown in the following screenshot. This shows the SSH command Ansible uses to create a temporary file on the remote host and run the script remotely.
+
+![-vvv option](img/ansible-vvv.jpg)
+
+
+#### listing tasks in playbook
+
+`ansible-playbook -i hosts playbooks/setup_apache.yml --list-tasks`
+
+![list tasks](img/ansible_playbook_list_tasks.jpg)
+
+#### start-at option
+
+It will start executing the task we specify.
+
+![start at task](img/ansible_playbook_start-at.jpg)
+
+
+
+
+
+
+
 
 
 
