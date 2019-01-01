@@ -100,7 +100,7 @@ Ansible directory structure
 
 ![ansible directory structure](img/ansible_dir_struct.jpeg)
 
+Ansible structs explained:
 
-
-
+![ansible structs expalined](img/ansible_struct_explaination.jpeg)
 
