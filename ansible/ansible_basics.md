@@ -104,11 +104,11 @@
 10. Templates
 11. Meta
 
-Ansible directory structure
+#### Ansible directory structure
 
 ![ansible directory structure](img/ansible_dir_structure.jpeg)
 
-Ansible structs explained:
+#### Ansible structs explained:
 
 ![ansible structs explaination](img/ansible_struct_explaination.jpeg)
 
@@ -125,6 +125,60 @@ ___
 * Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/modules)
 
 ___
+
+
+## Ansible ad-hoc commands
+
+* Ad hoc commands are commands which can be run individually to perform quick functions. 
+* These ad-hoc commands are not used for configuration management and deployment, because these commands are of one time usage.
+
+#### Syntax
+
+```
+ansible <host-group> -m <ansible-moudle> -a <OPT_ARGS>
+```
+
+e.g Copy SSH key manually
+```
+ansible <HOST_GROUP> -m authorized_key -a "user=root key='ssh-rsa AAAA...XXX == root@hostname'"
+```
+
+
+#### use-cases of [ad-hoc](https://docs.ansible.com/ansible/latest/user_guide/intro_adhoc.html) commands
+
+An ad-hoc command is something that we might type in to do something really quick, but don’t want to save for later.
+
+
+1. Parallelism and Shell Commands:
+    - To run reboot for all servers in a group, `webservers` in inventory, in 12 parallel forks
+    ```
+    ansible webservers -a "/sbin/reboot" -f 12
+    ```
+2. File Transfer:
+    - Transferring file to many servers/machines
+    ```
+    ansible webservers -m copy -a "src = /etc/yum.conf dest = /tmp/yum.conf"
+    ```
+3. Managing Packages:
+    - The Ad-hoc commands are available for yum and apt
+    ```
+    ansible webservers -m yum -a "name = demo-tomcat-1 state = present"
+    ```
+4. Gathering Facts
+    - Facts can be used for implementing conditional statements in playbook.
+    ```
+    ansible all -m setup 
+    ```
+
+* ansible-adhoc commands should not used for configuration management and deployment, use playbook instead.
+
+
+
+
+
+            
+
+
 
 
 
