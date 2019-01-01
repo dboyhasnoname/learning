@@ -16,6 +16,7 @@
 * Developers: Ansible Community/ Ansible Inc./ Red Hat Inc.
 
 * Repository: [github.com/ansible/ansible](https://github.com/ansible/ansible)
+* Written in: Python, PowerShell, Shell, Ruby
 
 <br>
 
@@ -59,12 +60,17 @@
 
 ![ansible provisoning](img/ansible_provisoning.jpeg)
 
-<br>
-
 ### Security and Compliance
 
 * As with application deployment, sitewide security policies (such as firewall rules or locking down users) can be implemented along with other automated processes. 
 * If we configure the security details on the control machine and run the associated playbook, all the remote hosts will automatically be updated with those details.
+
+## How ansible works?
+
+
+![ansible flow diagram](ansible_flow.xml)
+
+
 
 
 
