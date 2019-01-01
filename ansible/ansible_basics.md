@@ -96,6 +96,11 @@ Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d
 9. Variables
 10. Templates
 
+Ansible directory structure
+
+![ansible directory structure](img/ansible_dir_struct.jpeg)
+
+
 ![sample playbook layout](img/ansible_structure.jpeg)
 
 
