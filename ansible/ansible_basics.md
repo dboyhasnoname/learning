@@ -135,8 +135,16 @@ ___
 #### Syntax
 
 ```
-ansible <host-group> -m <ansible-moudle> -a <OPT_ARGS>
+ansible <host-group> -m <ansible-moudle> -a <OPT_ARGS> <flags>
 ```
+* flags:
+    - `-u {username}`
+    - `--ask-pass`, `-k`
+    - `-f {n}`: run command in n paralle forks
+    - `--become`, `-b`: run command thorugh sudo
+    - `--ask-become-pass`, `-K`: interactive prompt to pass password
+    - `-i {invenotry file{`
+    - `--ask-vault-pass`: to pass vault password in interactive mode  
 
 e.g Copy SSH key manually
 ```
