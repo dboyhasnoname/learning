@@ -246,9 +246,92 @@ log_path = /var/log/ansible.log
 * Each play conisists of multiple taks.
 * Different plays can run on different host groups.
 
-### Anatomy of playbook:
+### Directory layout:
 
-![playbook structure](img/playbook_structure.jpeg)         
+![playbook structure](img/directory_layout.jpeg)     
+
+```
+mukund@ubuntu:~/all/Ansible$ tree -I "ntc-templates|library"
+.
+├── group_vars
+│   ├── all.yml
+├── hosts
+├── host_vars
+├── roles
+│   ├── common
+│   │   ├── defaults
+│   |   │   ├── main.yml
+│   │   ├── files
+│   │   ├── handlers
+│   |   │   ├── main.yml
+│   │   ├── tasks
+│   |   │   ├── main.yml
+│   │   ├── meta
+│   │   ├── templates
+│   │   └── vars
+│   └── apache
+│       ├── defaults
+│       ├── files
+│       ├── handlers
+│       ├── meta
+│       ├── tasks
+│       │   ├── main.yml
+│       ├── templates
+│       └── vars
+│           ├── main.yml
+├── site.retry
+├── webservers.yml
+├── DBservers.yml
+└── master_playbook.yml
+```
+
+#### Sample playbook with plays:
+
+```
+---
+- hosts: aws 
+  pre_tasks:
+    - name: Load Environment Variables for Production vCenter
+      include_vars:
+        file: group_vars/all.yml
+  roles:
+    - role: aws-user-setup
+    - role: aws-prerequisites
+    - role: ec2-install
+    - role: rds-db-setup
+    - role: client-config
+    - role: dns-mgmt
+      vars:
+        dnsip: "{{ output.ansible_facts.hw_eth0.ipaddresses[0] }}" 
+      ignore_errors: yes
+      
+  tasks:
+     - name: Wait until the DNS name is resolving  
+       wait_for: 
+         host: "{{ inventory_hostname }}" 
+         port: 22 
+         state: started 
+         timeout: 600 
+         delay: 5   
+
+- hosts: localhost
+  roles:
+    - role: app-config
+  post_tasks:
+    - name: create Backup job to run at 22.30 daily
+      cron:
+        job: '/bin/dsmc i /etc/opt/conf /var/opt/conf'
+        hour: '22'
+        minute: '30'
+        state: present
+        user: root    
+
+- hosts: localhost
+  roles:
+    - role: app-repo-creation
+```    
+
+
 
 
 
