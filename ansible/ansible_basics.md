@@ -12,11 +12,15 @@
 * Stable release: 2.7.4 / November 30, 2018
 * Original Author: [Michael DeHaan](https://www.linkedin.com/in/michaeldehaan/)
 
-* OS: Linux, Unix-like, MacOS, Windows
-* Developers: Ansible Community/ Ansible Inc./ Red Hat Inc.
+* OS:  Red Hat Enterprise Linux, Debian, CentOS, macOS, BSD, Ubuntu, MacOS, Windows
+* Integration: Ansible can deploy to **bare metal hosts**, virtualized systems and cloud environments, including **AWS**, Atomic, CenturyLink, Cloudscale, CloudStack, DigitalOcean, Dimension Data, Docker, Google Cloud Platform, KVM, Linode, LXC, LXD, **Microsoft Azure**, OpenStack, OVH, oVirt, Packet, Profitbricks, PubNub, Rackspace, Scaleway, SmartOS, SoftLayer, Univention, VMware, Webfaction, and XenServer.
 
+* Developers: Ansible Community/ Ansible Inc./ Red Hat Inc.
 * Repository: [github.com/ansible/ansible](https://github.com/ansible/ansible)
+
 * Written in: Python, PowerShell, Shell, Ruby
+* Requirement: Python 2.7 or higher
+* Syntax: YAML
 
 <br>
 
@@ -67,7 +71,34 @@
 
 ## How ansible works?
 
-
 ![ansible flow diagram](img/ansible_workflow.jpeg)
+
+Ansible dependencies: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/packaging/rpm/ansible.spec)
+
+Playbook execution code: [link](https://github.com/ansible/ansible/blob/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/executor/playbook_executor.py)
+
+Playbook libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/playbook)
+
+Inventory libraries: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/inventory)
+
+Ansible modules: [link](https://github.com/ansible/ansible/tree/a8d4bf86421d151d8df7132e8e87d04b6662f45a/lib/ansible/modules)
+
+## Ansible Structs
+
+1. Controller
+2. Playbook
+3. Play
+4. Facts
+5. Inventory
+6. Tasks
+7. Role
+8. Handlers
+9. Variables
+10. Templates
+
+![sample playbook layout](img/ansible_structure.jpeg)
+
+
+
 
 
