@@ -178,16 +178,61 @@ An ad-hoc command is something that we might type in to do something really quic
     ansible all -m setup 
     ```
 
-_**ansible-adhoc commands should not used for configuration management and deployment, use playbook instead.**_
+_**ansible-adhoc commands should not be used for configuration management and deployment, use playbook instead.**_
 
 ## Configuring ansible
 
 * Ansible configuration file uses an INI format to store its configuration data. 
-* We can overwrite nearly all of the configuration settings either through Ansible playbook options or environment variables. \
+* We can overwrite nearly all of the configuration settings either through Ansible playbook options or environment variables.
 
 * While running an Ansible command, the command looks for its configuration file in a predefined order, as follows:
 
     ![ansible_cfg_fallback](img/ansible_cfg_fall_back.jpeg)
+
+* Configuration can be done in two ways:
+    1. Configuration using environment variables
+    2. Configuration using ansible.cfg
+
+### Configuration using environment variables
+
+We can use most of the configuration parameters directly via environment variables by appending ANSIBLE_ to the configuration parameter.
+
+e.g `export ANSIBLE_SUDO_USER=root`
+
+### Configuration using ansible.cfg
+
+Ansible has many configuration parameters. We will consider some of the configuration parameters, as follows, and see how to use them:
+
+Default ansible.cfg:
+
+```
+hostfile = /etc/ansible/hosts
+library = /usr/share/ansible
+forks = 5
+sudo_user = root
+remote_port = 22
+host_key_checking = False
+timeout = 60
+log_path = /var/log/ansible.log
+```
+
+
+1. `hostfile`: This parameter indicates the path to the inventory file. The inventory file consists of a list of hosts that Ansible can connect to.
+
+2. `library`: Whenever Ansible performs any action, whether it is a local action or a remote one, it uses a piece of code to perform the action; this piece of code is called a **module**. The library parameter points to the path of the directory where Ansible modules are stored. 
+
+3. `forks`: This parameter is the default number of processes that you want Ansible to spawn. It defaults to _five maximum processes in parallel._
+
+4. `sudo_user`: This parameter specifies the default user that should be used against the issued commands.
+
+5. `remote_port`: This parameter is used to specify the port used for SSH connections, which defaults to 22. 
+
+6. `host_key_checking`:  This parameter is used to disable the SSH host key checking; this is set to True by default. 
+
+7. `timeout`: This is the default value for the timeout of SSH connection attempts.
+
+8. `log_path`: By default, Ansible doesn't log anything; if we would like to send the Ansible output to a logfile, then set the value of log_path to the file you would like to store the Ansible logs in.
+
 
 
 
