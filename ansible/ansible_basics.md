@@ -138,12 +138,12 @@ ___
 ansible <host-group> -m <ansible-moudle> -a <OPT_ARGS> <flags>
 ```
 * flags:
-    - `-u {username}`
-    - `--ask-pass`, `-k`
+    - `-u {username}`: run command as different user
+    - `--ask-pass`, `-k`: prompts for password
     - `-f {n}`: run command in n paralle forks
     - `--become`, `-b`: run command thorugh sudo
     - `--ask-become-pass`, `-K`: interactive prompt to pass password
-    - `-i {invenotry file{`
+    - `-i {invenotry file}`
     - `--ask-vault-pass`: to pass vault password in interactive mode  
 
 e.g Copy SSH key manually
@@ -178,7 +178,18 @@ An ad-hoc command is something that we might type in to do something really quic
     ansible all -m setup 
     ```
 
-* ansible-adhoc commands should not used for configuration management and deployment, use playbook instead.
+_**ansible-adhoc commands should not used for configuration management and deployment, use playbook instead.**_
+
+## Configuring ansible
+
+* Ansible configuration file uses an INI format to store its configuration data. 
+* We can overwrite nearly all of the configuration settings either through Ansible playbook options or environment variables. \
+
+* While running an Ansible command, the command looks for its configuration file in a predefined order, as follows:
+
+    ![ansible_cfg_fallback](img/ansible_cfg_fall_back.jpeg)
+
+
 
 
 
