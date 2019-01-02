@@ -570,6 +570,104 @@ dev-test-lx01.xyz.com cpu=4 memory=4096 node=master
 dev-test-lx02.xyz.com cpu=4 memory=4096 node=slave
 ```
 
+## EXTERNAL VARIABLES
+
+Ansible allows us to define external variables in many ways, from an external variable file within a playbook, by passing it from the Ansible command using the -e / --extra-vars option, or by passing it to an inventory file.
+
+## Inventory file
+
+* An inventory file is the source of truth for Ansible.
+* It follows the INI format and tells Ansible whether the remote host or hosts provided by the user are genuine or not.
+* Inventory file can be [Dynamic](https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html) too.
+
+* Inventory file can be passed with  -i or --inventory-file option followed by the path to the file.
+* If we do not explicitly specify any inventory file to Ansible, it will take the default path from the host_file parameter of ansible.cfg, which defaults to /etc/ansible/hosts.
+
+* Ansible can take either a hostname or an IP address within the inventory file.
+* The default number of parallel threads is five. For a larger number of hosts, we can increase the number of parallel processes with the -f or --forks=< value > option.
+
+#### Basic inventory file
+
+![basic inv file](img/ansible_basic_inv_file.jpg)
+
+#### Groups in an inventory file
+
+![groups in inv file](img/ansible_group_inv_file.jpg)
+
+When Ansible runs its tasks against a group, it will take all the hosts that fall under that group. To run Ansible against the application group:
+
+![group inv example](img/ansible_group_inv_run.jpg)
+
+#### Groups of groups
+
+![group of groups](img/ansible_groupofgroups_inv.jpg)
+
+![group of groups run](img/ansible_groupof_group_inv_run.jpg)
+
+#### Regular expressions with an inventory file
+
+![regular exp](img/ansible_inv_regular_exp.jpg)
+
+- web[001:200] will match web001, web002, web003, web004, …, web199, web200 for the application group
+- db[001:020] will match db001, db002, db003, …, db019, db020 for the db group
+- 192.168.2.[1:3] will match 192.168.2.1, 192.168.2.2, 192.168.2.3 for the jump group
+
+### HOST VARIABLES
+
+![host var](img/ansible_host-var.jpg)
+
+### GROUP VARIABLES
+
+![group vars](img/ansible_group_vars.jpg)
+
+**Host variables will override group variables.**
+
+## VARIABLE FILES
+
+* Apart from host and group variables, we can also have variable files. 
+* Variable files can be either for hosts or groups that reside in the folder of your inventory file. 
+* All of the host variable files will go under the **host_vars directory**, whereas all group variable files will go under the **group_vars directory**.
+
+Host vars:
+
+```
+cat /etc/ansible/host_vars/web001
+app_type=search
+app_port=9898
+```
+
+Group vars:
+
+```
+cat /etc/ansible/group_vars/db
+db_name=redis
+db_port=6380
+```
+
+___
+
+Inventory variables follow a hierarchy; at the top of this is the common variable file that will override any of the host variables, group variables, and inventory variable files. After this, comes the host variables, which will override group variables; lastly, group variables will override inventory variable files.
+___
+
+## Overriding configuration parameters with an inventory file
+
+* We can override some of Ansible's configuration parameters directly through the inventory file. 
+* These configuration parameters will override all the other parameters that are set either through ansible.cfg, environment variables, or passed to the ansible-playbook/ansible command.
+
+The following is the list of parameters you can override from an inventory file:
+
+1. `ansible_ssh_user`: This parameter is used to override the user that will be used for communicating with the remote host.
+2. `ansible_ssh_port`: This parameter will override the default SSH port with the user-specified port. It's a general, recommended sysadmin practice to not run SSH on the standard port 22.
+3. `ansible_ssh_host`: This parameter is used to override the host for an alias.
+4. `ansible_connection`: This specifies the connection type that should be used to connect to the remote host. The values are SSH, paramiko, or local.
+5. `ansible_ssh_private_key_file:` This parameter will override the private key used for SSH; this will be useful if you want to use some specific keys for a specific host. A common use case is if you have hosts spread across multiple data centers, multiple AWS regions, or different kinds of applications. Private keys can potentially be different in such scenarios.
+6. `ansible_shell_type`: By default, Ansible uses the sh shell; you can override this using the ansible_shell_type parameter. Changing this to csh, ksh, and so on will make Ansible use the commands of that shell.
+7. `ansible_python_interpreter`: Ansible, by default, tries to look for a Python interpreter within /usr/bin/python; you can override the default Python interpreter using this parameter.
+
+
+
+
+
 
 
 
