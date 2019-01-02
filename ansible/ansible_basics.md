@@ -419,6 +419,70 @@ It will start executing the task we specify.
 
 ![start at task](img/ansible_playbook_start-at.jpg)
 
+## Ansible Variables
+
+* Variables are used to store values that can be later used in playbook. 
+* They can be set and overridden in multiple ways. 
+* Facts of machines can also be fetched as variables and used. 
+
+* Ansible allows you to set variables in many different ways:
+    - by passing a variable file, 
+    - declaring it in a playbook, 
+    - passing it to the ansible-playbook command using -e / --extra-vars, 
+    - by declaring it in an inventory file,
+    - prompting in runtime of playbook.
+
+    ```
+    - name: Package to install
+      pause: prompt="Provide the package name which you want to install "
+      register: package_name   
+    ```
+### The types of variables that Ansible supports are:
+1. String, 
+2. Numbers, 
+3. Float, 
+4. List, 
+5. Dictionary, 
+6. Boolean.      
+
+### Variable names
+
+* All variable names in Ansible should start with a letter. 
+* The name can have letters, numbers, and an underscore.
+
+#### VALID VARIABLE NAMES IN ANSIBLE
+```
+package_name
+package_name2
+user_input_package
+Package
+```
+
+#### INVALID VARIABLE NAMES IN ANSIBLE
+```
+mysql version (multiple words)
+mysql.port (a dot)
+5 (a number)
+user-input (a hyphen)
+```
+
+### Ansible variables at different hierarchy levels
+
+1. Variables in an included task file
+2. Variables in a playbook
+3. Variables in a global file
+4. Facts as variables
+5. Command-line variables
+6. Variables in an inventory file
+
+Precedence of variables:
+
+![variables precedence](img/ansible_vars_precedence.jpeg)
+
+
+
+
+
 
 
 
