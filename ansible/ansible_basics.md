@@ -480,6 +480,99 @@ Precedence of variables:
 ![variables precedence](img/ansible_vars_precedence.jpeg)
 
 
+### Variables in an included task file
+
+* Variables in an included task file will override any other variables defined at different levels of hierarchy except the extra variables passed through the command line. 
+
+![ansible variable in task file](img/ansible_var_included_in_task_file.jpg)
+
+First playbook will set a fact for the package name and install Apache depending on the OS distribution; the second one will actually be executed by Ansible, which will first call install_apache.yml and make sure the Apache service is running on the remote host. 
+To fetch the package name, we will directly use the package_name variable that was set by the install_apache.yml playbook.
+
+## Variables in a playbook
+
+* Variables in a playbook are set by the vars: key. 
+* This key takes a key-value pair, where the key is the variable name and the value is the actual value of the variable. 
+* This variable will overwrite other variables that are set by a global variable file or from an inventory file. 
+
+![varibales in playbook](img/ansible_Variables_in_playbook.jpg)
+
+## Variables in a global file
+
+* Variables in Ansible can also be defined in a separate file; this allows us to separate the data (that is, variables) from our playbook. 
+
+![Variables in global file](img/ansible_Variables_in_global_file.jpg)
+
+The preceding example defines some variables where we directly pass a default value, whereas, for AWS_ACCESS_KEY and AWS_SECRET_KEY, we fetch the value from an environment variable using the lookup plugin of the Jinja templating language 
+
+* Variable file precedence:
+
+Ansible will check for a variable in a bottom-to-top manner in-case multiple variable files are present.
+
+![variables files precedence](img/ansible_Variables_in_global_file_1.jpg)
+
+Ansible will first check for a variable named package_name in the var1.yml file. It will stop further lookup if it finds the variable in var3.yml; if not, it will try searching for the variable in var2.yml, and other files if there are any more.
+
+
+## Facts as variables
+
+```
+$ ansible 192.168.33.10 -i inventory -m setup
+192.168.33.10 | success >> {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.0.2.15",
+            "192.168.33.10"
+        ], 
+        "ansible_all_ipv6_addresses": [
+            "fe80::a00:27ff:fec9:399e",
+            "fe80::a00:27ff:fe72:5c55"
+        ], 
+        "ansible_architecture": "x86_64",
+----
+        "ansible_distribution_major_version": "6",
+        "ansible_distribution_release": "Final",
+        "ansible_distribution_version": "6.4",
+        "ansible_domain": "localdomain"
+----
+        "ansible_swapfree_mb": 2559,
+        "ansible_swaptotal_mb": 2559,
+        "ansible_system": "Linux",
+        "ansible_system_vendor": "innotek GmbH",
+        "ansible_user_id": "vagrant",
+        "ansible_userspace_architecture": "x86_64",
+        "ansible_userspace_bits": "64",
+```
+
+These facts are now exposed as variables and can be used as part of playbooks by registering them in a ouput variable.
+
+## Command-line variables
+
+* Best to overwrite file/playbook variables.
+* We can use the -e or --extra-vars options of the ansible-playbook command by passing a string of key-value pairs, separated by a whitespace.
+
+```
+ansible-playbook -i hosts --private-key=~/.ssh/ansible_key playbooks/apache.yml 
+--extra-vars "package_name=apache2"
+```
+
+* The preceding ansible-playbook command will overwrite the package_name variable if it is mentioned in any of the variable files. 
+* **Command-line variables will not override the variables that are set by the set_fact module.** To prevent this type of overriding, we can use Ansible's conditional statements, which will override a variable only if it is not defined. 
+
+## Variables in an inventory file
+
+* We might sometimes need to use a specific list of variables for a specific host. Ansible supports this by declaring your variables inside an inventory file. 
+
+```
+
+[apache]
+dev-test-lx01.xyz.com cpu=4 memory=4096 node=master
+dev-test-lx02.xyz.com cpu=4 memory=4096 node=slave
+```
+
+
+
+
 
 
 
