@@ -670,6 +670,7 @@ The following is the list of parameters you can override from an inventory file:
 * All modules technically return JSON format data.
 * Ansible provides more than 200 modules under top-level modules, such as System, Network, Database, and Files.
 * [List](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html) of modules.
+* [Index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html) of modules.
 
 
 
