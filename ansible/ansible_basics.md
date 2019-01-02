@@ -242,9 +242,10 @@ log_path = /var/log/ansible.log
 * Palybook can be single file or seprated over multiple roles which can perform different set of tasks.
 
 ### Play
-* A playbook can consists multiple plays.
+* A playbook can consist multiple plays.
 * Each play conisists of multiple taks.
 * Different plays can run on different host groups.
+* The function of a play is to map a set of instructions defined against a particular host.
 
 ### Directory layout:
 
@@ -344,6 +345,8 @@ mukund@ubuntu:~/all/Ansible$ tree -I "ntc-templates|library"
 
 3. `tasks`: All playbooks should contain tasks. Tasks are a list of actions we want to perform. A tasks field contains the name of the task, a module that should be executed, and arguments that are required for the module. 
 
+4. `vars`: Vars tag lets us define the variables which we can use in our playbook. 
+
 #### Directory would look like below:
 
 ![apache dir](img/ansibel_apaceh_dir_tree.jpg)
@@ -373,7 +376,7 @@ ok: [host1]
 
 * Gathering facts task obtain information regarding a particular component of the system and do not necessarily change anything on the system
 
-* It almost equivalent:
+* It is almost equivalent to:
 ```
 ansible -m setup host1 -i hosts
 ```
