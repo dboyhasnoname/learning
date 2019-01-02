@@ -646,7 +646,7 @@ db_port=6380
 
 ___
 
-Inventory variables follow a hierarchy; at the top of this is the common variable file that will override any of the host variables, group variables, and inventory variable files. After this, comes the host variables, which will override group variables; lastly, group variables will override inventory variable files.
+_Inventory variables follow a hierarchy; at the top of this is the common variable file that will override any of the host variables, group variables, and inventory variable files. After this, comes the host variables, which will override group variables; lastly, group variables will override inventory variable files._
 ___
 
 ## Overriding configuration parameters with an inventory file
