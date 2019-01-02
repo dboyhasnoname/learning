@@ -664,6 +664,15 @@ The following is the list of parameters you can override from an inventory file:
 6. `ansible_shell_type`: By default, Ansible uses the sh shell; you can override this using the ansible_shell_type parameter. Changing this to csh, ksh, and so on will make Ansible use the commands of that shell.
 7. `ansible_python_interpreter`: Ansible, by default, tries to look for a Python interpreter within /usr/bin/python; you can override the default Python interpreter using this parameter.
 
+## Ansible modules
+
+* Modules (also referred to as “task plugins” or “library plugins”) are discrete units of code that can be used from the command line or in a playbook task.
+* All modules technically return JSON format data.
+* Ansible provides more than 200 modules under top-level modules, such as System, Network, Database, and Files.
+* [List](https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html) of modules.
+
+
+
 
 
 
