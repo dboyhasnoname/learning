@@ -236,6 +236,53 @@ The USER at line 2 evaluates to some_user as the user variable is defined on the
     ```
 * We can use an ARG or an ENV instruction to specify variables that are available to the RUN instruction. Environment variables defined using the ENV instruction always override an ARG instruction of the same name.     
 
+### ONBUILD
+
+* The ONBUILD instruction adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build. 
+* The trigger will be executed in the context of the downstream build, as if it had been inserted immediately after the FROM instruction in the downstream Dockerfile.
+* Any build instruction can be registered as a trigger.
+* Chaining ONBUILD instructions using ONBUILD ONBUILD isn’t allowed.
+* The ONBUILD instruction may not trigger FROM or MAINTAINER instructions.
+
+```
+[...]
+ONBUILD ADD . /app/src
+ONBUILD RUN /usr/local/bin/python-build --dir /app/src
+[...]
+```
+
+### STOPSIGNAL
+
+* The STOPSIGNAL instruction sets the system call signal that will be sent to the container to exit. 
+* This signal can be a valid unsigned number that matches a position in the kernel’s syscall table, for instance 9, or a signal name in the format SIGNAME, for instance SIGKILL.
+
+### HEALTHCHECK
+
+* The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working. 
+* This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running.
+* The HEALTHCHECK instruction has two forms:
+
+    1. HEALTHCHECK [OPTIONS] CMD command (check container health by running a command inside the container)
+    2. HEALTHCHECK NONE (disable any healthcheck inherited from the base image)
+
+```
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl -f http://localhost/ || exit 1
+```
+
+### SHELL
+* The SHELL instruction allows the default shell used for the shell form of commands to be overridden. The default shell on Linux is ["/bin/sh", "-c"], and on Windows is ["cmd", "/S", "/C"]. 
+* The SHELL instruction must be written in JSON form in a Dockerfile.
+* The SHELL instruction can appear multiple times. Each SHELL instruction overrides all previous SHELL instructions, and affects all subsequent instructions.
+* The SHELL instruction can also be used on Linux should an alternate shell be required such as zsh, csh, tcsh and others.
+```
+SHELL ["executable", "parameters"]
+```
+
+
+
+
+
 
 
 
