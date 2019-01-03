@@ -174,6 +174,71 @@ Both CMD and ENTRYPOINT instructions define what command gets executed when runn
 
 ![docker cmd vs entrypoint](img/docker_cmd_vs_entrypoint.jpeg)
 
+### VOLUME
+* The VOLUME instruction creates a mount point with the specified name and marks it as holding externally mounted volumes from native host or other containers. 
+* The value can be a JSON array, VOLUME ["/var/log/"], or a plain string with multiple arguments, such as VOLUME /var/log or VOLUME /var/log /var/db.
+
+```
+FROM centos
+RUN mkdir /dockder
+RUN echo "hello docker" > /docker/greeting
+VOLUME /docker
+```
+
+### USER
+* The USER instruction sets the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.
+* When the user doesn’t have a primary group then the image (or the next instructions) will be run with the root group.
+
+```
+USER <user>[:<group>] or
+USER <UID>[:<GID>]
+```
+
+### WORKDIR
+* The WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. 
+* If the WORKDIR doesn’t exist, it will be created even if it’s not used in any subsequent Dockerfile instruction.
+* The WORKDIR instruction can be used multiple times in a Dockerfile. 
+* If a relative path is provided, it will be relative to the path of the previous WORKDIR instruction. 
+* The WORKDIR instruction can resolve environment variables previously set using ENV.
+
+```
+ENV DIRPATH /path
+WORKDIR $DIRPATH/$DIRNAME
+RUN pwd
+```
+
+## ARG
+* The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. 
+* A Dockerfile may include one or more ARG instructions.
+* If an ARG instruction has a default value and if there is no value passed at build-time, the builder uses the default.
+* An ARG variable definition comes into effect from the line on which it is defined in the Dockerfile not from the argument’s use on the command-line or elsewhere. 
+
+```
+    1 FROM busybox
+    2 USER ${user:-some_user}
+    3 ARG user
+    4 USER $user
+    ...
+```
+```
+    $ docker build --build-arg user=what_user .
+```
+The USER at line 2 evaluates to some_user as the user variable is defined on the subsequent line 3. The USER at line 4 evaluates to what_user as user is defined and the what_user value was passed on the command line. Prior to its definition by an ARG instruction, any use of a variable results in an empty string.
+
+* An ARG instruction goes out of scope at the end of the build stage where it was defined. To use an arg in multiple stages, each stage must include the ARG instruction.
+    ```
+    ARG SETTINGS
+    RUN ./run/setup $SETTINGS
+
+    FROM busybox
+    ARG SETTINGS
+    RUN ./run/other $SETTINGS
+    ```
+* We can use an ARG or an ENV instruction to specify variables that are available to the RUN instruction. Environment variables defined using the ENV instruction always override an ARG instruction of the same name.     
+
+
+
+
 
 
 
