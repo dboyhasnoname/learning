@@ -1,6 +1,6 @@
 # Docker overview
 
-* Docker is an open platform for developing, shipping, and running applications. 
+* Docker is a open platform for developers and sysadmins to develop, deploy, and run applications with containers. The use of Linux containers to deploy applications is called **containerization.**
 * Docker enable us to separate applications from the infrastructure so we can deliver software quickly.
 
 * Author: [Solomon Hykes](https://www.linkedin.com/in/solomonhykes/)
@@ -139,6 +139,31 @@ When we run this command, the following happens:
     - none: disables all networking.
     - macvlan: assigns a MAC address to a container, making it appear as a physical device on your network. 
     - Third-party network
+
+## Installation
+
+## Docker commands:
+```
+## List Docker CLI commands
+docker
+docker container --help
+
+## Display Docker version and info
+docker --version
+docker version
+docker info
+
+## Execute Docker image
+docker run hello-world
+
+## List Docker images
+docker image ls
+
+## List Docker containers (running, all, all in quiet mode)
+docker container ls
+docker container ls --all
+docker container ls -aq
+```
 
 
 
