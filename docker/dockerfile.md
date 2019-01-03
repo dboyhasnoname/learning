@@ -49,6 +49,8 @@ _When we run an image and generate a container, we add a new writable layer (the
 
 ![container layers](img/docker_container_layer.jpeg)
 
+Layers in container:
+
 ![docker layers](img/docker_layers.jpeg)
 
 ## Instructions in Dockerfile
@@ -72,16 +74,17 @@ _When we run an image and generate a container, we add a new writable layer (the
 17. [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#healthcheck)
 18. [SHELL](https://docs.docker.com/engine/reference/builder/#shell)
 
-### FROM
+### [FROM]((https://docs.docker.com/engine/reference/builder/#from))
 * FROM instruction initializes a new build stage and sets the Base Image for subsequent instructions.
-* [ARG](https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact) is the only instruction that may precede FROM in the Dockerfile. 
+* [ARG](https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact) is the only instruction that may precede FROM in the Dockerfile, but Dockerfile must start with FROM.
 * FROM can appear multiple times within a single Dockerfile to create multiple images or use one build stage as a dependency for another.
 * The tag or digest values are optional. 
+
 Syntax:
 
 `FROM <image> [AS <name>]` OR `FROM <image>[:<tag>] [AS <name>]` OR `FROM <image>[@<digest>] [AS <name>]`
 
-### RUN
+### [RUN](https://docs.docker.com/engine/reference/builder/#run)
 * RUN instruction executes any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile.
 * RUN has 2 forms:
 
@@ -90,7 +93,7 @@ Syntax:
 * The cache for RUN instructions isn’t invalidated automatically during the next build. The cache for an instruction like `RUN apt-get dist-upgrade -y` will be reused during the next build. 
 * The cache for RUN instructions can be invalidated by using the `--no-cache` flag, for example `docker build --no-cache`.  
 
-### CMD
+### [CMD](https://docs.docker.com/engine/reference/builder/#cmd)
 * The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
 * The CMD instruction has three forms:
 
@@ -101,7 +104,7 @@ Syntax:
 * _If we want container to run the same executable every time, then we should consider using ENTRYPOINT in combination with CMD._
 * If the user specifies arguments to docker run then they will override the default specified in CMD.
 
-## LABEL
+## [LABEL](https://docs.docker.com/engine/reference/builder/#label)
 * The LABEL instruction adds metadata to an image. 
 * A LABEL is a key-value pair. 
 * To include spaces within a LABEL value, use quotes and backslashes as you would in command-line parsing. 
@@ -116,7 +119,7 @@ LABEL multi.label1="value1" \
       other="value3"
 ```      
 
-### EXPOSE
+### [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose)
 * The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime. 
 * Ports can be TCP or UDP, and the default is TCP if the protocol is not specified.
 * The EXPOSE instruction does not actually publish the port.
@@ -128,7 +131,7 @@ EXPOSE 80/udp
 ```
 * Regardless of the EXPOSE settings, we can override them at runtime by using the -p flag.
 
-### ENV
+### [ENV](https://docs.docker.com/engine/reference/builder/#env)
 * The ENV instruction sets the environment variable `<key>` to the value `<value>`. 
 * This value will be in the environment for all subsequent instructions in the build stage and can be replaced inline in many as well.
 * The environment variables set using ENV will persist when a container is run from the resulting image. 
@@ -137,7 +140,7 @@ ENV myName="John Doe" myDog=Rex\ The\ Dog \
     myCat=fluffy
 ```    
 
-### ADD
+### [ADD](https://docs.docker.com/engine/reference/builder/#add)
 * The ADD instruction copies new files, directories or remote file URLs from `<src>` and adds them to the filesystem of the image at the path `<dest>`.
 * `<src>` may contain wildcards and matching will be done using [Go’s filepath.Match rules](https://golang.org/pkg/path/filepath/#Match).
 * The `<dest>` is an absolute path, or a path relative to WORKDIR, into which the source will be copied inside the destination container.
@@ -147,7 +150,7 @@ ADD [--chown=<user>:<group>] <src>... <dest>
 ADD [--chown=<user>:<group>] ["<src>",... "<dest>"]
 ```
 
-### COPY
+### [COPY](https://docs.docker.com/engine/reference/builder/#copy)
 * The COPY instruction copies new files or directories from `<src>` and adds them to the filesystem of the container at the path `<dest>`.
 
 ```
@@ -159,7 +162,7 @@ COPY [--chown=<user>:<group>] ["<src>",... "<dest>"]
 
 ![comp add vs copy](img/docker_add_vs_copy.jpg)
 
-### ENTRYPOINT
+### [ENTRYPOINT](https://docs.docker.com/engine/reference/builder/#entrypoint)
 
 * An ENTRYPOINT allows you to configure a container that will run as an executable.
 * If CMD is defined from the base image, setting ENTRYPOINT will reset CMD to an empty value. In this scenario, CMD must be defined in the current image to have a value.
@@ -196,7 +199,7 @@ Both CMD and ENTRYPOINT instructions define what command gets executed when runn
 
 ![docker cmd vs entrypoint](img/docker_cmd_vs_entrypoint.jpeg)
 
-### VOLUME
+### [VOLUME](https://docs.docker.com/engine/reference/builder/#volume)
 * The VOLUME instruction creates a mount point with the specified name and marks it as holding externally mounted volumes from native host or other containers. 
 * The value can be a JSON array, VOLUME ["/var/log/"], or a plain string with multiple arguments, such as VOLUME /var/log or VOLUME /var/log /var/db.
 
@@ -207,7 +210,7 @@ RUN echo "hello docker" > /docker/greeting
 VOLUME /docker
 ```
 
-### USER
+### [USER](https://docs.docker.com/engine/reference/builder/#user)
 * The USER instruction sets the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.
 * When the user doesn’t have a primary group then the image (or the next instructions) will be run with the root group.
 
@@ -216,7 +219,7 @@ USER <user>[:<group>] or
 USER <UID>[:<GID>]
 ```
 
-### WORKDIR
+### [WORKDIR](https://docs.docker.com/engine/reference/builder/#workdir)
 * The WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. 
 * If the WORKDIR doesn’t exist, it will be created even if it’s not used in any subsequent Dockerfile instruction.
 * The WORKDIR instruction can be used multiple times in a Dockerfile. 
@@ -229,7 +232,7 @@ WORKDIR $DIRPATH/$DIRNAME
 RUN pwd
 ```
 
-## ARG
+## [ARG](https://docs.docker.com/engine/reference/builder/#arg)
 * The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the `--build-arg <varname>=<value>` flag. 
 * A Dockerfile may include one or more ARG instructions.
 * If an ARG instruction has a default value and if there is no value passed at build-time, the builder uses the default.
@@ -258,7 +261,7 @@ The USER at line 2 evaluates to some_user as the user variable is defined on the
     ```
 * We can use an ARG or an ENV instruction to specify variables that are available to the RUN instruction. Environment variables defined using the ENV instruction always override an ARG instruction of the same name.     
 
-### ONBUILD
+### [ONBUILD](https://docs.docker.com/engine/reference/builder/#onbuild)
 
 * The ONBUILD instruction adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build. 
 * The trigger will be executed in the context of the downstream build, as if it had been inserted immediately after the FROM instruction in the downstream Dockerfile.
@@ -273,12 +276,12 @@ ONBUILD RUN /usr/local/bin/python-build --dir /app/src
 [...]
 ```
 
-### STOPSIGNAL
+### [STOPSIGNAL](https://docs.docker.com/engine/reference/builder/#stopsignal)
 
 * The STOPSIGNAL instruction sets the system call signal that will be sent to the container to exit. 
 * This signal can be a valid unsigned number that matches a position in the kernel’s syscall table, for instance 9, or a signal name in the format SIGNAME, for instance SIGKILL.
 
-### HEALTHCHECK
+### [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#healthcheck)
 
 * The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working. 
 * This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running.
@@ -292,7 +295,7 @@ HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost/ || exit 1
 ```
 
-### SHELL
+### [SHELL](https://docs.docker.com/engine/reference/builder/#shell)
 * The SHELL instruction allows the default shell used for the shell form of commands to be overridden. The default shell on Linux is ["/bin/sh", "-c"], and on Windows is ["cmd", "/S", "/C"]. 
 * The SHELL instruction must be written in JSON form in a Dockerfile.
 * The SHELL instruction can appear multiple times. Each SHELL instruction overrides all previous SHELL instructions, and affects all subsequent instructions.
