@@ -56,24 +56,25 @@ _When we run an image and generate a container, we add a new writable layer (the
 * FROM can appear multiple times within a single Dockerfile to create multiple images or use one build stage as a dependency for another.
 * The tag or digest values are optional. 
 Syntax:
+
 `FROM <image> [AS <name>]` OR `FROM <image>[:<tag>] [AS <name>]` OR `FROM <image>[@<digest>] [AS <name>]`
 
 ### RUN
 * RUN instruction executes any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile.
 * RUN has 2 forms:
 
-    1. RUN <command> (shell form, the command is run in a shell, which by default is /bin/sh -c on Linux or cmd /S /C on Windows)
-    2. RUN ["executable", "param1", "param2"] (exec form)
-* The cache for RUN instructions isn’t invalidated automatically during the next build. The cache for an instruction like RUN apt-get dist-upgrade -y will be reused during the next build. 
-* The cache for RUN instructions can be invalidated by using the --no-cache flag, for example docker build --no-cache.  
+    1. `RUN <command>` (shell form, the command is run in a shell, which by default is `/bin/sh -c` on Linux or cmd /S /C on Windows)
+    2. `RUN ["executable", "param1", "param2"]` (exec form)
+* The cache for RUN instructions isn’t invalidated automatically during the next build. The cache for an instruction like `RUN apt-get dist-upgrade -y` will be reused during the next build. 
+* The cache for RUN instructions can be invalidated by using the `--no-cache` flag, for example `docker build --no-cache`.  
 
 ### CMD
 * The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
 * The CMD instruction has three forms:
 
-    1. CMD ["executable","param1","param2"] (exec form, this is the preferred form)
-    2. CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
-    3. CMD command param1 param2 (shell form)
+    1. `CMD ["executable","param1","param2"]` (exec form, this is the preferred form)
+    2. `CMD ["param1","param2"]` (as default parameters to ENTRYPOINT)
+    3. `CMD command param1 param2` (shell form)
 * _RUN actually runs a command and commits the result; CMD does not execute anything at build time, but specifies the intended command for the image._
 * _If we want container to run the same executable every time, then we should consider using ENTRYPOINT in combination with CMD._
 * If the user specifies arguments to docker run then they will override the default specified in CMD.
