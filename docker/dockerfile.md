@@ -4,6 +4,26 @@
 * A Docker image consists of read-only layers each of which represents a Dockerfile instruction. The layers are stacked and each one is a delta of the changes from the previous layer. 
 
 * The Docker daemon runs the instructions in the Dockerfile one-by-one i.e each instruction is run independently, and causes a new image to be created, committing the result of each instruction to a new image if necessary, before finally outputting the ID of the new image. 
+* **A Dockerfile must start with a `FROM` instruction.**
+
+## Format
+* Docker treats lines that begin with # as a comment, unless the line is a valid parser directive. A # marker anywhere else in a line is treated as an argument. 
+* The escape directive sets the character used to escape characters in a Dockerfile. If not specified, the default escape character is \.  
+```
+# escape=\ (backslash)
+# escape=` (backtick)
+```
+* The escape character is used both to escape characters in a line, and to escape a newline.
+* Environment variables are notated in the Dockerfile either with $variable_name or ${variable_name}
+
+---
+
+The ${variable_name} syntax also supports a few of the standard bash modifiers as specified below:
+
+1. ${variable:-word} indicates that if variable is set then the result will be that value. If variable is not set then word will be the result.
+2. ${variable:+word} indicates that if variable is set then word will be the result, otherwise the result is the empty string.
+
+---
 
 ## docker build
 
