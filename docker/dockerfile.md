@@ -7,8 +7,8 @@
 * **A Dockerfile must start with a `FROM` instruction.**
 
 ## Format
-* Docker treats lines that begin with # as a comment, unless the line is a valid parser directive. A # marker anywhere else in a line is treated as an argument. 
-* The escape directive sets the character used to escape characters in a Dockerfile. If not specified, the default escape character is \.  
+* Docker treats lines that begin with `#` as a comment, unless the line is a valid parser directive. A `#`  marker anywhere else in a line is treated as an argument. 
+* The escape directive sets the character used to escape characters in a Dockerfile. If not specified, the default escape character is `\`.  
 ```
 # escape=\ (backslash)
 # escape=` (backtick)
@@ -34,7 +34,7 @@ The ${variable_name} syntax also supports a few of the standard bash modifiers a
 ```
 FROM centos:7.5
 COPY . /app
-RUN make /app
+RUN yum install httpd -y
 CMD python /app/config.py
 ```
 
@@ -42,10 +42,12 @@ Each instruction creates one layer:
 
 1. FROM creates a layer from the centos version 7.5 Docker image.
 2. COPY adds files from the Docker client’s current directory.
-3. RUN builds our application with make.
+3. RUN install httpd package use yum package manager.
 4. CMD specifies what command to run within the container.
 
 _When we run an image and generate a container, we add a new writable layer (the “container layer”) on top of the underlying layers. All changes made to the running container, such as writing new files, modifying existing files, and deleting files, are written to this thin writable container layer._
+
+![container layers](img/docker_container_layer.jpeg)
 
 ![docker layers](img/docker_layers.jpeg)
 
@@ -316,6 +318,28 @@ SHELL ["executable", "parameters"]
     - While building an image, Docker will step through the instructions mentioned in the Dockerfile, executing them in chronological order. 
     - As each instruction is examined Docker will look for an existing image layer in its cache that it can reuse, rather than creating a new image layer.
     - _If we do not want to use the cache at all, then use the--no-cache=true option with the docker build command._
+
+
+## [Multiple stage build ](https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage)
+
+```
+FROM golang:1.7.3
+WORKDIR /go/src/github.com/alexellis/href-counter/
+RUN go get -d -v golang.org/x/net/html  
+COPY app.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+FROM alpine:latest  
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/alexellis/href-counter/app .
+CMD ["./app"]  
+```
+
+- The second FROM instruction starts a new build stage with the alpine:latest image as its base. 
+- The COPY --from=0 line copies just the built artifact from the previous stage into this new stage. 
+- The Go SDK and any intermediate artifacts are left behind, and not saved in the final image.
+
 
 
 
