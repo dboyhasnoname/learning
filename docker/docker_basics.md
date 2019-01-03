@@ -26,6 +26,7 @@
 2. Decoupling allows container-based applications to be deployed easily and consistently, regardless of whether the target environment is a private data center, the public cloud, or even a developer’s personal laptop. This gives developers the ability to create predictable environments that are isolated from rest of the applications and can be run anywhere.
 3. Unlike virtual machines, containers do not have the high overhead and hence enable more efficient usage of the underlying system and resources.
 4. From an operations standpoint, apart from portability containers also give more granular control over resources giving your infrastructure improved efficiency which can result in better utilization of the compute resources.
+5. Docker is lightweight and fast. It provides a viable, cost-effective alternative to hypervisor-based virtual machines.
 
 ## Docker container vs VMs
 
@@ -45,6 +46,32 @@ Docker Engine is a client-server application with these major components:
 ![Docker engine](img/docker_engine.jpeg)
 
 ## Docker architecture
+
+* Docker uses a client-server architecture. 
+* The Docker client talks to the Docker daemon, which does the heavy lifting of building, running, and distributing Docker containers. 
+* The Docker client and daemon can run on the same system, or we can connect a Docker client to a remote Docker daemon. 
+* The Docker client and daemon communicate using a REST API, over UNIX sockets or a network interface.
+
+![docker arch](img/docker_arch.jpeg)
+
+1. **Docker Daemon**
+    * The Docker daemon (dockerd) listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes. 
+    * A daemon can also communicate with other daemons to manage Docker services.
+
+2. **The Docker client**
+    * The Docker client (docker) is the primary way that many Docker users interact with Docker. 
+    * Docker client sends docker commands to dockerd, which carries them out.
+    * The docker command uses the Docker API. 
+    * _The Docker client can communicate with more than one daemon._
+3. **Docker registries**
+    * A Docker registry stores Docker images
+    * Docker Hub is a public registry that anyone can use, and Docker is configured to look for images on Docker Hub by default.
+    * `docker pull` or `docker run` commands,  pull required images form configured registry. When we use the `docker push` command, the image is pushed to configured registry.    
+
+
+
+
+
 
 
 
