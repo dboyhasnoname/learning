@@ -27,6 +27,25 @@
 3. Unlike virtual machines, containers do not have the high overhead and hence enable more efficient usage of the underlying system and resources.
 4. From an operations standpoint, apart from portability containers also give more granular control over resources giving your infrastructure improved efficiency which can result in better utilization of the compute resources.
 
+## Docker container vs VMs
+
+![VM vs docker](img/vmvs_docker.jpeg)
+
+### Docker Engine
+
+Docker Engine is a client-server application with these major components:
+
+* A server which is a type of long-running program called a daemon process (the dockerd command).
+* A REST API which specifies interfaces that programs can use to talk to the daemon and instruct it what to do.
+* A command line interface (CLI) client (the docker command).
+
+* The CLI uses the Docker REST API to control or interact with the Docker daemon through scripting or direct CLI commands. Many other Docker applications use the underlying API and CLI.
+* The daemon creates and manages Docker objects, such as images, containers, networks, and volumes.
+
+![Docker engine](img/docker_engine.jpeg)
+
+## Docker architecture
+
 
 
 
