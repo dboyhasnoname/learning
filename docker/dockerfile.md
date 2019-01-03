@@ -137,3 +137,44 @@ COPY [--chown=<user>:<group>] ["<src>",... "<dest>"]
 
 ![comp add vs copy](img/docker_add_vs_copy.jpg)
 
+### ENTRYPOINT
+
+* An ENTRYPOINT allows you to configure a container that will run as an executable.
+* If CMD is defined from the base image, setting ENTRYPOINT will reset CMD to an empty value. In this scenario, CMD must be defined in the current image to have a value.
+* ENTRYPOINT has two forms:
+
+    1. `ENTRYPOINT ["executable", "param1", "param2"]` (exec form, preferred)
+    2. `ENTRYPOINT command param1 param2` (shell form)
+* Command line arguments to `docker run <image>` will be appended after all elements in an exec form **ENTRYPOINT, and will override all elements specified using CMD.**
+* The shell form prevents any CMD or run command line arguments from being used, but has the disadvantage that your ENTRYPOINT will be started as a subcommand of /bin/sh -c, which does not pass signals.
+* Only the last ENTRYPOINT instruction in the Dockerfile will have an effect.
+* We you can override the ENTRYPOINT setting using --entrypoint, but this can only set the binary to exec.
+
+___
+
+#### Exec form ENTRYPOINT
+
+* The exec form is parsed as a JSON array, which means that you must use double-quotes (“) around words not single-quotes (‘).
+* Unlike the shell form, the exec form does not invoke a command shell. This means that normal shell processing does not happen. For example, ENTRYPOINT [ "echo", "$HOME" ] will not do variable substitution on $HOME
+
+#### Shell form ENTRYPOINT 
+
+* We can specify a plain string for the ENTRYPOINT and it will execute in /bin/sh -c. 
+* This form will use shell processing to substitute shell environment variables, and will ignore any CMD or docker run command line arguments. 
+
+___
+
+#### Understand how CMD and ENTRYPOINT interact
+Both CMD and ENTRYPOINT instructions define what command gets executed when running a container. There are few rules that describe their co-operation.
+
+1. Dockerfile should specify at least one of CMD or ENTRYPOINT commands.
+2. ENTRYPOINT should be defined when using the container as an executable.
+3. CMD should be used as a way of defining default arguments for an ENTRYPOINT command or for executing an ad-hoc command in a container.
+4. CMD will be overridden when running the container with alternative arguments.
+
+![docker cmd vs entrypoint](img/docker_cmd_vs_entrypoint.jpeg)
+
+
+
+
+
