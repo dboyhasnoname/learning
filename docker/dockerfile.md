@@ -279,6 +279,26 @@ HEALTHCHECK --interval=5m --timeout=3s \
 SHELL ["executable", "parameters"]
 ```
 
+## Best practices of Dockerfile
+
+1. Use a .dockerignore file
+    - The best way is to put the Dockerfile inside the empty directory and then add only the application and configuration files required for building the docker image. 
+    - To increase the build’s performance, you can exclude files and directories by adding a .dockerignore file to that directory as well.
+2. Containers should be immutable & ephemeral
+    - The container created with the image produced by Dockerfile should be ephemeral and immutable. 
+    - In other words, the container should be destroyed and a new one built and put in place with an absolute minimum set-up and configuration.
+3. Minimize the number of layers / Consolidate instructions
+    - Each instruction in the Dockerfile adds an extra layer to the docker image. 
+    - The number of instructions and layers should be kept to a minimum as this ultimately affects build performance and time.
+4. Avoid installing unnecessary packages
+5. Sort multi-line arguments
+6. Build cache:
+    - While building an image, Docker will step through the instructions mentioned in the Dockerfile, executing them in chronological order. 
+    - As each instruction is examined Docker will look for an existing image layer in its cache that it can reuse, rather than creating a new image layer.
+    - _If we do not want to use the cache at all, then use the--no-cache=true option with the docker build command._
+
+
+
 
 
 
