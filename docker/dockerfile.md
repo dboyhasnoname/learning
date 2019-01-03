@@ -74,7 +74,7 @@ Layers in container:
 17. [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#healthcheck)
 18. [SHELL](https://docs.docker.com/engine/reference/builder/#shell)
 
-### [FROM]((https://docs.docker.com/engine/reference/builder/#from))
+### [FROM](https://docs.docker.com/engine/reference/builder/#from)
 * FROM instruction initializes a new build stage and sets the Base Image for subsequent instructions.
 * [ARG](https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact) is the only instruction that may precede FROM in the Dockerfile, but Dockerfile must start with FROM.
 * FROM can appear multiple times within a single Dockerfile to create multiple images or use one build stage as a dependency for another.
@@ -170,19 +170,19 @@ COPY [--chown=<user>:<group>] ["<src>",... "<dest>"]
 
     1. `ENTRYPOINT ["executable", "param1", "param2"]` (exec form, preferred)
     2. `ENTRYPOINT command param1 param2` (shell form)
-* Command line arguments to `docker run <image>` will be appended after all elements in an exec form **ENTRYPOINT, and will override all elements specified using CMD.**
+* Command line arguments to `docker run <image>` will be appended after all elements in an exec form ENTRYPOINT, and **will override all elements specified using CMD.**
 * The shell form prevents any CMD or run command line arguments from being used, but has the disadvantage that your ENTRYPOINT will be started as a subcommand of /bin/sh -c, which does not pass signals.
 * Only the last ENTRYPOINT instruction in the Dockerfile will have an effect.
 * We you can override the ENTRYPOINT setting using --entrypoint, but this can only set the binary to exec.
 
 ___
 
-#### Exec form ENTRYPOINT
+#### 1. Exec form ENTRYPOINT
 
 * The exec form is parsed as a JSON array, which means that you must use double-quotes (“) around words not single-quotes (‘).
 * Unlike the shell form, the exec form does not invoke a command shell. This means that normal shell processing does not happen. For example, ENTRYPOINT [ "echo", "$HOME" ] will not do variable substitution on $HOME
 
-#### Shell form ENTRYPOINT 
+#### 2. Shell form ENTRYPOINT 
 
 * We can specify a plain string for the ENTRYPOINT and it will execute in /bin/sh -c. 
 * This form will use shell processing to substitute shell environment variables, and will ignore any CMD or docker run command line arguments. 
