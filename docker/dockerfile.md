@@ -157,8 +157,23 @@ ADD [--chown=<user>:<group>] ["<src>",... "<dest>"]
 COPY [--chown=<user>:<group>] <src>... <dest>
 COPY [--chown=<user>:<group>] ["<src>",... "<dest>"]
 ```
+___
 
 #### Comparison of ADD and COPY
+
+* COPY and ADD are both Dockerfile instructions that serve similar purposes. They let us copy files from a specific location into a Docker image.
+
+* COPY takes in a src and destination. It only let us copy in a local file or directory from our host (the machine building the Docker image) into the Docker image itself.
+
+* ADD let us do that too, but it also supports 2 other sources. First, **we can use a URL instead of a local file / directory**. Secondly, we can **extract a tar file from the source directly into the destination.**
+
+* In most cases if we’re using a URL, we’re downloading a zip file and are then using the RUN command to extract it. However, we might as well just use RUN with curl instead of ADD here so you chain everything into 1 RUN command to make a smaller Docker image.
+
+* A valid use case for ADD is when we want to extract a local tar file into a specific directory in our Docker image. This is exactly what the Alpine image does with ADD rootfs.tar.gz /.
+
+* If we’re copying in local files to your Docker image, always use COPY because it’s more explicit.
+
+___
 
 ![comp add vs copy](img/docker_add_vs_copy.jpg)
 
