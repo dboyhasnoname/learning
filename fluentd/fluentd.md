@@ -245,6 +245,30 @@ root@splunk-connect:/fluentd/etc# cat fluent.conf
 * The @include directive supports regular file path, glob pattern, and http URL conventions.
 * _For glob pattern, files are expanded in the alphabetical order._
 
+## How match patterns work?
+
+### Wildcards and Expansions
+
+The following match patterns can be used in <match> and <filter> tags.
+
+* matches a single tag part.
+
+    - For example, the pattern a.* matches a.b, but does not match a or a.b.c
+
+* ** matches zero or more tag parts.
+
+    - For example, the pattern a.** matches a, a.b and a.b.c
+
+* {X,Y,Z} matches X, Y, or Z, where X, Y, and Z are match patterns.
+
+    - For example, the pattern {a,b} matches a and b, but does not match c
+    - This can be used in combination with the * or ** patterns. Examples include a.{b,c}.* and a.{b,c.**}
+
+* When multiple patterns are listed inside a single tag (delimited by one or more whitespaces), it matches any of the listed patterns. For example:
+
+    -  The patterns <match a b> match a and b.
+    - The patterns <match a.** b.*> match a, a.b, a.b.c (from the first pattern) and b.d (from the second pattern).
+
 
 
 
