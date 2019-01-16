@@ -61,6 +61,10 @@
 
 * /etc/fluent/fluent.conf if installed using ruby gems.
 
+### Check configuration file
+
+ fluentd --dry-run -c fluent.conf
+
 ### FLUENT_CONF environment variable
 We can change default configuration file location via FLUENT_CONF. 
 
@@ -172,7 +176,7 @@ Received event, `{"event":"data"}`, goes to record_transformer filter first. `re
 
 Following configurations are set by system directive:
 
-1. log_level
+1. log_level: fatal, error, warn, info, debug,trace.
 2. suppress_repeated_stacktrace
 3. emit_error_log_interval
 4. suppress_config_dump
@@ -269,7 +273,42 @@ The following match patterns can be used in <match> and <filter> tags.
     -  The patterns <match a b> match a and b.
     - The patterns <match a.** b.*> match a, a.b, a.b.c (from the first pattern) and b.d (from the second pattern).
 
+### Match Order
 
+Fluentd tries to match tags in the order that they appear in the config file
+
+```
+# ** matches all tags. Bad :(
+<match **>
+  @type blackhole_plugin
+</match>
+
+<match myapp.access>
+  @type file
+  path /var/log/fluent/access
+</match>
+```
+
+In above example  myapp.access is never matched. Wider match patterns should be defined after tight match patterns.
+
+_If we use two same patterns, second match is never matched!_
+
+```
+# You should NOT put this <filter> block after the <match> block below.
+# If you do, Fluentd will just emit events without applying the filter.
+<filter myapp.access>
+  @type record_transformer
+  ...
+</filter>
+
+<match myapp.access>
+  @type file
+  path /var/log/fluent/access
+</match>
+
+```
+
+**The common pitfall is when we put a <filter> block after <match>. It will never work as supposed, since events never go through the filter for the reason explained above.**
 
 
 
