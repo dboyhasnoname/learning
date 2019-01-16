@@ -71,7 +71,7 @@ For this Makefile to execute successfully, Dockerfile must exist in the current 
 
 ### Execution order
 
-- The order in which commands are executed by make are nearly the opposite to the order they occur in the makefile. This top-down style is common in makefiles. 
+- makefiles are written top-down but the commands are executed by make bottom-up. 
 - Usually the most general form of target is specified first in the makefile and the details are left for later.
 
 
@@ -83,7 +83,7 @@ For this Makefile to execute successfully, Dockerfile must exist in the current 
 hello: ; @echo "hello" 
 ```
 
-* Each command is executed by a separate shell or command-line interpreter instance. 
+* **Each command is executed by a separate shell or command-line interpreter instance.**
 * _Since operating systems use different command-line interpreters this can lead to unportable makefiles. For instance, GNU make by default executes commands with /bin/sh, which is the shell where Unix commands like cp are normally used._
 
 * A rule may have no command lines defined. The dependency line can consist solely of components that refer to targets, for example:
@@ -136,4 +136,65 @@ target: component1 component2
              (i.e. they ARE YOUNGER than current TARGET).
      echo $@ evaluates to current TARGET name from among those left of the colon.
 ```
+
+### Wildcards
+
+* A makefile often contains long lists of files. To simplify this process make supports wildcards (also known as globbing). 
+* make’s wildcards are identical to the Bourne shell’s: ~, *, ?, [...], and [^...]. 
+
+___
+
+* For instance, *.* expands to all the files containing a period. 
+* A question mark represents any single character, and [...] represents a character class.
+* To select the “opposite” (negated) character class use [^...].
+* In addition, the tilde (~) character can be used to represent the current user’s home directory. A tilde followed by a user name represents that user’s home directory.
+
+___
+
+Wildcards are automatically expanded by make whenever a wildcard appears in a target, prerequisite, or command script context.
+
+### PHONY Targets
+
+* Targets that do not represent files are known as phony targets. Another standard phony target is clean:
+
+```
+clean:
+        rm -f *.o lexer.c
+```
+
+* We can have multiple phony targets:
+
+```
+.PHONY: make-documentation
+make-documentation: df
+        javadoc ...
+
+.PHONY: df
+df:
+        df -k . | awk 'NR =  = 2 { printf( "%d available\n", $$4 ) }'
+```
+
+* Normally, phony targets will always be executed because the commands associated with the rule do not create the target name.
+* _make cannot distinguish between a file target and phony target._To avoid this problem, GNU make includes a special target, .PHONY, to tell make that a target is not a real file. Any target can be declared phony by including it as a prerequisite of .PHONY:
+
+```
+.PHONY: clean
+clean:
+        rm -f *.o lexer.c
+```
+
+Now make will always execute the commands associated with clean even if a file named clean exists
+
+* Phony targets can also be thought of as shell scripts embedded in a makefile. 
+
+```
+.PHONY: make-documentation
+make-documentation:
+        df -k . | awk 'NR =  = 2 { printf( "%d available\n", $$4 ) }'
+        javadoc ...
+```        
+
+Standard phony targets:
+
+![phony target](img/phony.jpeg)
 
