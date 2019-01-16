@@ -35,15 +35,22 @@ CONTAINER ID        IMAGE                  COMMAND                  CREATED     
     - **command(s):** shell commands that will create the target from the prerequisites.
 
     ```
-    target: prereq1 prereq2
-        commands
+        target: prereq1 prereq2
+            commands
     ```   
-```
+
 ```
 jenkins: Dockerfile
 	docker build -t biharimukund/jenkins .
 ```            
+For this Makefile to execute successfully, Dockerfile must exist in the current directory.
 
+### Execution order
+
+- The order in which commands are executed by make are nearly the opposite to the order they occur in the makefile. This top-down style is common in makefiles. 
+- Usually the most general form of target is specified first in the makefile and the details are left for later.
+
+## Dependency Checking
 
 
 
